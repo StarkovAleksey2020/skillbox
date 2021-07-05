@@ -118,15 +118,15 @@ p.error-browser
         <div class="wrap">
             <nav class="menuModal" id="navigate">
                 <ul class="menu menu_main">
-                    <li class="menu-item menu-item_ACTIVE"><a class="menu-link" href="/index.html">Главная</a>
+                    <li class="menu-item menu-item_ACTIVE"><a class="menu-link" th:href="@{/main}">Главная</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="/genres/index.html">Жанры</a>
+                    <li class="menu-item"><a class="menu-link" th:href="@{/genres}">Жанры</a>
                     </li>
                     <li class="menu-item"><a class="menu-link" href="/books/recent.html">Новинки</a>
                     </li>
                     <li class="menu-item"><a class="menu-link" href="/books/popular.html">Популярное</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="/authors/index.html">Авторы</a>
+                    <li class="menu-item"><a class="menu-link" th:href="@{/authors}">Авторы</a>
                     </li>
                 </ul>
             </nav>
