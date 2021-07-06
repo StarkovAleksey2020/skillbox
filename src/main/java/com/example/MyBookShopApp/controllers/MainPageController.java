@@ -18,7 +18,7 @@ public class MainPageController {
         this.bookService = bookService;
     }
 
-    @GetMapping("/main")
+    @GetMapping("/")
     public String mainPage(Model model) {
         model.addAttribute("bookData", bookService.getBooksData());
         return "index";

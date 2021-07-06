@@ -9,24 +9,13 @@ import javax.persistence.Table;
 
 @Data
 @Entity
-@Table(name = "books")
-public class Book {
+@Table(name = "authors")
+public class Author {
 
     @Id
     @JoinColumn(name = "id")
     private Long id;
 
     @JoinColumn(name = "author")
-    private Long author;
-
-    private String authorName;
-
-    @JoinColumn(name = "title")
-    private String title;
-
-    @JoinColumn(name = "priceOld")
-    private String priceOld;
-
-    @JoinColumn(name = "price")
-    private String price;
+    private String author;
 }

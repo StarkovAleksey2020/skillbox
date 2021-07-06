@@ -118,7 +118,7 @@ p.error-browser
         <div class="wrap">
             <nav class="menuModal" id="navigate">
                 <ul class="menu menu_main">
-                    <li class="menu-item menu-item_ACTIVE"><a class="menu-link" th:href="@{/main}">Главная</a>
+                    <li class="menu-item menu-item_ACTIVE"><a class="menu-link" th:href="@{/}">Главная</a>
                     </li>
                     <li class="menu-item"><a class="menu-link" th:href="@{/genres}">Жанры</a>
                     </li>
@@ -148,12 +148,14 @@ p.error-browser
                                 <div class="Card"><a class="Card-picture" href="/books/slug.html"><img
                                         src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
                                     <div class="Card-content">
-                                        <strong class="Card-title"><a href="/books/slug.html" th:text="${book.title}">Техника</a>
+                                        <strong class="Card-title"><a href="/books/slug.html"
+                                                                      th:text="${book.title}"></a>
                                         </strong>
-                                        <div class="Card-description" th:text="${book.author}">Кондратенко Валерий Петрович
+                                        <div class="Card-description" th:text="${book.authorName}">
                                         </div>
-                                        <div class="Card-cost"><span class="Card-priceOld" th:text="${book.priceOld}">₽300.00</span><span
-                                                class="Card-price" th:text="${book.price}">₽190.00</span>
+                                        <div class="Card-cost"><span class="Card-priceOld"
+                                                                     th:text="${book.priceOld}"></span><span
+                                                class="Card-price" th:text="${book.price}"></span>
                                         </div>
                                     </div>
                                 </div>
