@@ -16,9 +16,13 @@ public class GenresPageController {
     }
 
     @GetMapping("/genres/slug")
-    public String slugPage(@RequestParam(value = "genresName", required = false) String genresName,
+    public String slugPage(@RequestParam(value = "sectionName", required = false) String sectionName,
+                           @RequestParam(value = "genresName", required = false) String genresName,
+                           @RequestParam(value = "subSectionName", required = false) String subSectionName,
                            Model model) {
+        model.addAttribute("sectionName", sectionName);
         model.addAttribute("genresName", genresName);
+        model.addAttribute("subSectionName", subSectionName);
         return "slug_genres";
     }
 

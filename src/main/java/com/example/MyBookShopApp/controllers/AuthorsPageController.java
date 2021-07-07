@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/")
@@ -25,6 +26,9 @@ public class AuthorsPageController {
     }
 
     @GetMapping("/authors/slug")
-    public String slugPage() { return "slug_authors"; }
+    public String slugPage(@RequestParam(value = "authorName", required = false) String authorName, Model model) {
+        model.addAttribute("authorName", authorName);
+        return "slug_authors";
+    }
 
 }
