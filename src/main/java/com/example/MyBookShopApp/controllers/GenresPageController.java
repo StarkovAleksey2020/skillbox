@@ -13,4 +13,7 @@ public class GenresPageController {
         return "genres";
     }
 
+    @GetMapping("/genres/slug")
+    public String slugPage() { return "slug_genres"; }
+
 }

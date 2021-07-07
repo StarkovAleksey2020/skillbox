@@ -29,4 +29,10 @@ public class Book {
 
     @JoinColumn(name = "price")
     private String price;
+
+    public Book(long id, long author, String authorName, String title, String priceOld, String price) {
+    }
+
+    public Book() {
+    }
 }

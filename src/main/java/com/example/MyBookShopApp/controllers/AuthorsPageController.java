@@ -24,4 +24,7 @@ public class AuthorsPageController {
         return "authors";
     }
 
+    @GetMapping("/authors/slug")
+    public String slugPage() { return "slug_authors"; }
+
 }

@@ -18,4 +18,10 @@ public class Author {
 
     @JoinColumn(name = "author")
     private String author;
+
+    public Author(long id, String author) {
+    }
+
+    public Author() {
+    }
 }
