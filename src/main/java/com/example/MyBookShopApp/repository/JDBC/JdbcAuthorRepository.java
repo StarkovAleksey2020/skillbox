@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.repository.JDBC;
 
 import com.example.MyBookShopApp.entity.Author;
 import com.example.MyBookShopApp.mapper.AuthorMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -14,9 +15,11 @@ import java.util.Map;
 public class JdbcAuthorRepository implements AuthorRepository {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
+    private JdbcTemplate template;
 
-    public JdbcAuthorRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+    public JdbcAuthorRepository(NamedParameterJdbcTemplate jdbcTemplate, JdbcTemplate template) {
         this.jdbcTemplate = jdbcTemplate;
+        this.template = template;
     }
 
     @Override

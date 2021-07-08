@@ -22,9 +22,7 @@ public class AuthorService {
 
     public List<Author> getAuthorsData() {
         List<Author> authors = authorRepository.findAll();
-
         HashMap<String, List<Author>> listHashMap = createAuthorsHashMap(authors);
-
         return authors;
     }
 
