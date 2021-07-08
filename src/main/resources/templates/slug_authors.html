@@ -101,10 +101,10 @@
           </li>
           <li class="breadcrumbs-item"><a th:href="@{/authors}">Авторы</a>
           </li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span>Борис Васильевич Бедный</span>
+          <li class="breadcrumbs-item breadcrumbs-item_current"><span th:text="${authorName}">Борис Васильевич Бедный</span>
           </li>
         </ul>
-        <h1 class="Middle-title">Борис Васильевич Бедный
+        <h1 class="Middle-title" th:text="${authorName}">Борис Васильевич Бедный
         </h1>
         <article class="Article">
           <div class="sdf">

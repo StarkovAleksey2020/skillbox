@@ -26,9 +26,9 @@ public class AuthorsPageController {
     }
 
     @GetMapping("/authors/slug")
-    public String slugPage(@RequestParam(value = "authorName", required = false) String authorName, Model model) {
+    public String slugPage(@RequestParam(value = "authorName", required = false) String authorName,
+                           Model model) {
         model.addAttribute("authorName", authorName);
         return "slug_authors";
     }
-
 }

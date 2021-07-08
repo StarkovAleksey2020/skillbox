@@ -161,7 +161,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='А'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -170,7 +170,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Б'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -179,7 +179,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='В'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -188,7 +188,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Г'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -197,7 +197,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Д'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -206,7 +206,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Е'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -215,7 +215,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Ж'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -224,7 +224,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='З'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -233,7 +233,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='И'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -242,7 +242,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Й'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -251,7 +251,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='К'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -260,7 +260,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Л'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -269,7 +269,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='М'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -278,7 +278,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Н'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -287,7 +287,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='О'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -296,7 +296,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='П'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -305,7 +305,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Р'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -314,7 +314,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='С'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -323,7 +323,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Т'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -332,7 +332,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='У'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -341,7 +341,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Ф'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -350,7 +350,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Х'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -359,7 +359,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Ц'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -368,7 +368,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Ч'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -377,7 +377,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Ш'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -386,7 +386,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Щ'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -395,7 +395,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Э'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -404,7 +404,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Ю'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
@@ -413,7 +413,7 @@
                         </h2>
                         <div class="Authors-letter" th:with="letter='Я'">
                             <div class="Authors-item" th:each="author : ${authorsData}">
-                                <a th:href="@{/authors/slug}"
+                                <a th:href="@{/authors/slug(authorName=${author.author})}"
                                    th:if="${#strings.startsWith(author.author, letter)}"
                                    th:text="${author.author}"></a>
                             </div>
