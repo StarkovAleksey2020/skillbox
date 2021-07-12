@@ -78,18 +78,29 @@
         <div class="wrap">
             <nav class="menuModal" id="navigate">
                 <ul class="menu menu_main">
-                    <li class="menu-item" id="mainId"><a class="menu-link" th:href="@{/}" href="/index.html"
-                                                         th:onclick="testFunc('mainId')">Главная</a>
+                    <li class="menu-item" id="mainId">
+                        <a class="menu-link" th:href="@{/}" href="/index.html"
+                           th:onclick="testFunc('mainId')">Главная</a>
                     </li>
-                    <li class="menu-item" id="genresId"><a class="menu-link" href="/genres/index.html">Жанры</a>
+                    <li class="menu-item" id="genresId">
+                        <a class="menu-link" href="/genres/index.html"
+                           th:href="@{/genres}"
+                           th:onclick="testFunc('genresId')">Жанры</a>
                     </li>
-                    <li class="menu-item" id="newId"><a class="menu-link" href="/books/recent.html">Новинки</a>
+                    <li class="menu-item" id="recentId">
+                        <a class="menu-link" href="/books/recent.html"
+                           th:href="@{/recent}"
+                           th:onclick="testFunc('recentId')">Новинки</a>
                     </li>
-                    <li class="menu-item" id="popularId"><a class="menu-link" href="/books/popular.html">Популярное</a>
+                    <li class="menu-item" id="popularId">
+                        <a class="menu-link" href="/books/popular.html"
+                           th:href="@{/popular}"
+                           th:onclick="testFunc('popularId')">Популярное</a>
                     </li>
-                    <li class="menu-item" id="authorsId"><a class="menu-link" href="/authors/index.html"
-                                                            th:href="@{/authors}"
-                                                            th:onclick="testFunc('authorsId')">Авторы</a>
+                    <li class="menu-item" id="authorsId">
+                        <a class="menu-link" href="/authors/index.html"
+                           th:href="@{/authors}"
+                           th:onclick="testFunc('authorsId')">Авторы</a>
                     </li>
                 </ul>
             </nav>

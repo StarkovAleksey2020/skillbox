@@ -24,9 +24,34 @@ public class MainPageController {
         return bookService.getBooksData();
     }
 
+    @ModelAttribute("popularBooks")
+    public List<Book> getPopularBook() {
+        return bookService.getBooksData();
+    }
+
+    @ModelAttribute("recentBooks")
+    public List<Book> getRecentBook() {
+        return bookService.getBooksData();
+    }
+
     @GetMapping("/")
     public String mainPage() {
         return "/index";
+    }
+
+    @GetMapping("/popular")
+    public String getPopularBooksPage() {
+        return "/books/popular";
+    }
+
+    @GetMapping("/recent")
+    public String getRecentBooksPage() {
+        return "/books/recent";
+    }
+
+    @GetMapping("/slug")
+    public String getBookInfo() {
+        return "/books/slug";
     }
 }
 

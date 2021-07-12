@@ -38,6 +38,6 @@ public class AuthorsPageController {
     public String slugPage(@RequestParam(value = "authorName", required = false) String authorName,
                            Model model) {
         model.addAttribute("authorName", authorName);
-        return "slug_authors";
+        return "authors/slug";
     }
 }

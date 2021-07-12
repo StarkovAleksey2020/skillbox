@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/")
+//@RequestMapping("/")
 public class GenresPageController {
 
     @GetMapping("/genres")
     public String genresPage() {
-        return "genres";
+        return "genres/index";
     }
 
     @GetMapping("/genres/slug")
@@ -23,7 +23,7 @@ public class GenresPageController {
         model.addAttribute("sectionName", sectionName);
         model.addAttribute("genresName", genresName);
         model.addAttribute("subSectionName", subSectionName);
-        return "slug_genres";
+        return "genres/slug";
     }
 
 }
