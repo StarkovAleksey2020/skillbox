@@ -21,19 +21,4 @@ public class BookService {
         return jdbcBookRepository.findAll();
     }
 
-//    public List<Book> getBooksData() {
-//        List<Book> books = jdbcTemplate.query("SELECT * FROM books", (ResultSet rs, int rowNum) -> {
-//
-//            Author author = authorRepository.findByIdForShure(rs.getLong("id"));
-//
-//            Book book = new Book();
-//            book.setId(rs.getLong("id"));
-//            book.setAuthorName(author.getAuthor());
-//            book.setTitle(rs.getString("title"));
-//            book.setPriceOld(rs.getString("priceOld"));
-//            book.setPrice(rs.getString("price"));
-//            return book;
-//        });
-//        return new ArrayList<>(books);
-//    }
 }
