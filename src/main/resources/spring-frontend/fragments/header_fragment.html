@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 <header class="Header" th:fragment="headFragment">
     <div class="Header-rowMain">
@@ -79,16 +78,18 @@
         <div class="wrap">
             <nav class="menuModal" id="navigate">
                 <ul class="menu menu_main">
-                    <li class="menu-item"><a class="menu-link" th:href="@{/books}" href="/index.html">Главная</a>
+                    <li class="menu-item" id="mainId"><a class="menu-link" th:href="@{/}" href="/index.html"
+                                                         th:onclick="testFunc('mainId')">Главная</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="/genres/index.html">Жанры</a>
+                    <li class="menu-item" id="genresId"><a class="menu-link" href="/genres/index.html">Жанры</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="/books/recent.html">Новинки</a>
+                    <li class="menu-item" id="newId"><a class="menu-link" href="/books/recent.html">Новинки</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" href="/books/popular.html">Популярное</a>
+                    <li class="menu-item" id="popularId"><a class="menu-link" href="/books/popular.html">Популярное</a>
                     </li>
-                    <li class="menu-item menu-item_ACTIVE"><a class="menu-link" href="/authors/index.html"
-                                                              th:href="@{/authors}">Авторы</a>
+                    <li class="menu-item" id="authorsId"><a class="menu-link" href="/authors/index.html"
+                                                            th:href="@{/authors}"
+                                                            th:onclick="testFunc('authorsId')">Авторы</a>
                     </li>
                 </ul>
             </nav>

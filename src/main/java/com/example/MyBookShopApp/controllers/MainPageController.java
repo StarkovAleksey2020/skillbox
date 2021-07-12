@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import java.util.List;
 
 @Controller
-//@RequestMapping("/")
 public class MainPageController {
 
     private final BookService bookService;
@@ -25,9 +24,8 @@ public class MainPageController {
         return bookService.getBooksData();
     }
 
-    @GetMapping("/books")
+    @GetMapping("/")
     public String mainPage() {
-//        model.addAttribute("bookData", bookService.getBooksData());
         return "/index";
     }
 }
