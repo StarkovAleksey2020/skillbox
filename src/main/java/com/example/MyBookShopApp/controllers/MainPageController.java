@@ -53,5 +53,10 @@ public class MainPageController {
     public String getBookInfo() {
         return "/books/slug";
     }
+
+    @GetMapping("/postponed")
+    public String getPostponedBooks() {
+        return "/postponed";
+    }
 }
 

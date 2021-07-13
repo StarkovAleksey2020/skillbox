@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="row-block Header-cart">
-                    <div class="CartBlock"><a class="CartBlock-block" href="/postponed.html">
+                    <div class="CartBlock"><a class="CartBlock-block" th:href="@{/postponed}">
                         <svg class="CartBlock-img" xmlns="http://www.w3.org/2000/svg" height="23" width="23"
                              viewBox="0 0 512 512">
                             <g>
@@ -107,5 +107,10 @@
         </div>
     </div>
 </header>
+<script>
+    const itemActive = document.getElementById(localStorage.getItem('clickedPoint'));
+    itemActive.classList.add('menu-item_ACTIVE');
+</script>
+
 </body>
 </html>

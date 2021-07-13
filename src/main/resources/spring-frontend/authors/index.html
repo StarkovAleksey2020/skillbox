@@ -59,8 +59,9 @@ p.error-browser
                            href="#a">А</a>
                     </div>
                     <div class="Authors-block" th:each="authorList : ${authorsMap}">
-                        <h2 class="Authors-title" id="a"
-                            th:href="${#strings.toLowerCase(authorList.key)}">А
+                        <h2 class="Authors-title" th:id="${#strings.toLowerCase(authorList.key)}"
+                            th:href="${#strings.toLowerCase(authorList.key)}"
+                            th:text="${#strings.toUpperCase(authorList.key)}">А
                         </h2>
                         <div class="Authors-letter">
                             <div class="Authors-item" th:each="author : ${authorList.value}">
