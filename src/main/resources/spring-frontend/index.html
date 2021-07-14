@@ -9,8 +9,7 @@
 <html class="ie9" lang="ru">
 <![endif]-->
 <!--[if gt IE 9]><!-->
-<html lang="ru" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
 <head>
     <title>Тут название страницы написать</title>
     <meta name="description" content="Описание страницы">
@@ -314,9 +313,9 @@ p.error-browser
     itemActive.classList.add('menu-item_ACTIVE');
 
     const scrollElementId = localStorage.getItem('scrollElement');
-    if (scrollElementId !== '') {
+    if (scrollElementId !== null) {
         document.getElementById(scrollElementId).scrollIntoView();
-        localStorage.removeItem(scrollElementId);
+        localStorage.removeItem('scrollElement');
     }
 </script>
 

@@ -14,3 +14,10 @@ function setScrollElement(elementId) {
     localStorage.setItem('scrollElement', elementId);
 }
 
+function changeLocale(lang) {
+    window.location.replace('?lang='+lang);
+}
+
+window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+}
