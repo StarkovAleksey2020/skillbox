@@ -48,7 +48,7 @@ p.error-browser
             <ul class="breadcrumbs">
                 <li class="breadcrumbs-item"><a th:href="@{/}" th:onclick="testFunc('mainId')">Главная</a>
                 </li>
-                <li class="breadcrumbs-item"><a th:href="@{/genres}" th:onclick="testFunc('genresId')">Книги</a>
+                <li class="breadcrumbs-item"><a th:href="@{/genres}" th:onclick="testFunc('genresId')">Жанры</a>
                 </li>
                 <li class="breadcrumbs-item breadcrumbs-item_current"><span>Новинки</span>
                 </li>
@@ -77,13 +77,19 @@ p.error-browser
                     </form>
                 </div>
                 <div class="Cards Cards_refresh">
-                    <div class="Card"  th:each="book : ${recentBooks}">
-                        <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg"
-                                                                   alt="card.jpg"/></a>
+                    <div class="Card" th:each="book : ${recentBooks}">
+                        <div class="Card-picture">
+                            <a th:href="@{/slug(bookTitle=${book.title},
+                             bookAuthor=${book.author},
+                             bookPriceOld=${book.priceOld},
+                             bookPrice=${book.price})}">
+                                <img src="/assets/img/content/main/card.jpg"
+                                     alt="card.jpg"/></a>
                         </div>
                         <div class="Card-content">
                             <strong class="Card-title">
                                 <a href="#"
+                                   th:href="@{/slug}"
                                    th:text="${book.title}">Техника</a>
                             </strong>
                             <div class="Card-description"

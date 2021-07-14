@@ -23,7 +23,7 @@
                     </div>
                     <div class="Header-search">
                         <div class="search">
-                            <form class="form form_search" action="#" method="post" data-searchlimit="20">
+                            <form class="form form_search" th:action="@{/search}" method="post" data-searchlimit="20">
                                 <input class="search-input" id="query" name="query" type="text"
                                        placeholder="Search over 30 million book titles" value=""/>
                                 <button class="search-button" type="submit" name="search" id="search">Поиск
@@ -43,7 +43,7 @@
                                 </g>
                             </g>
                         </svg>
-                        <span class="CartBlock-amount">0</span></a><a class="CartBlock-block" href="/cart.html">
+                        <span class="CartBlock-amount">0</span></a><a class="CartBlock-block" th:href="@{/cart}">
                         <svg class="CartBlock-img" xmlns="http://www.w3.org/2000/svg" width="30" height="23"
                              viewBox="0 0 30 23">
                             <g>
@@ -53,7 +53,7 @@
                                 </g>
                             </g>
                         </svg>
-                        <span class="CartBlock-amount">0</span></a><a class="CartBlock-block" href="/signin.html">
+                        <span class="CartBlock-amount">0</span></a><a class="CartBlock-block" th:href="@{/signin}">
                         <svg class="CartBlock-img" xmlns="http://www.w3.org/2000/svg" width="22" height="23"
                              viewBox="0 0 22 23">
                             <g>

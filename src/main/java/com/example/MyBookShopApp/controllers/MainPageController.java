@@ -4,8 +4,10 @@ import com.example.MyBookShopApp.entity.Book;
 import com.example.MyBookShopApp.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -21,6 +23,16 @@ public class MainPageController {
 
     @ModelAttribute("recommendedBooks")
     public List<Book> getRecommendedBooks() {
+        return bookService.getBooksData();
+    }
+
+    @ModelAttribute("recentBooks")
+    public List<Book> getRecentBooks() {
+        return bookService.getBooksData();
+    }
+
+    @ModelAttribute("popularBooks")
+    public List<Book> getPopularBooks() {
         return bookService.getBooksData();
     }
 
@@ -50,7 +62,15 @@ public class MainPageController {
     }
 
     @GetMapping("/slug")
-    public String getBookInfo() {
+    public String getBookInfo(@RequestParam(value = "bookTitle", required = false) String bookTitle,
+                              @RequestParam(value = "bookAuthorName", required = false) String bookAuthorName,
+                              @RequestParam(value = "bookPriceOld", required = false) String bookPriceOld,
+                              @RequestParam(value = "bookPrice", required = false) String bookPrice,
+                              Model model) {
+        model.addAttribute("bookTitle", bookTitle);
+        model.addAttribute("bookAuthorName", bookAuthorName);
+        model.addAttribute("bookPriceOld", bookPriceOld);
+        model.addAttribute("bookPrice", bookPrice);
         return "/books/slug";
     }
 
@@ -58,5 +78,31 @@ public class MainPageController {
     public String getPostponedBooks() {
         return "/postponed";
     }
+
+    @GetMapping("/cart")
+    public String getCart() {
+        return "/cart";
+    }
+
+    @GetMapping("/signin")
+    public String getSignInPage() {
+        return "/signin";
+    }
+
+    @GetMapping("/about")
+    public String getAboutPage() {
+        return "/about";
+    }
+
+    @GetMapping("/contacts")
+    public String getContactsPage() {
+        return "/contacts";
+    }
+
+    @GetMapping("/faq")
+    public String getFAQPage() {
+        return "/faq";
+    }
 }
+
 

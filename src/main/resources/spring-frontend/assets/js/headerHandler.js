@@ -10,3 +10,7 @@ function testFunc(pointId) {
     itemActive.classList.add('menu-item_ACTIVE');
 }
 
+function setScrollElement(elementId) {
+    localStorage.setItem('scrollElement', elementId);
+}
+
