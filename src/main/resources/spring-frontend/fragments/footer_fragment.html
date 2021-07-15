@@ -73,33 +73,38 @@
             <div class="row-block">
                 <ul class="menu menu_vt Footer-menu">
                     <li class="menu-item"><a class="menu-link" th:href="@{/}" href="/index.html"
-                                             th:onclick="testFunc('mainId')">Главная</a>
+                                             th:onclick="testFunc('mainId')"
+                                             th:text="#{topbar.main}">Главная</a>
                     </li>
                     <li class="menu-item"><a class="menu-link" th:href="@{/genres}"
-                                             th:onclick="testFunc('genresId')">Жанры</a>
+                                             th:onclick="testFunc('genresId')"
+                                             th:text="#{topbar.genres}">Жанры</a>
                     </li>
                     <li class="menu-item"><a class="menu-link" th:href="@{/recent}"
-                                             th:onclick="testFunc('recentId')">Новинки</a>
+                                             th:onclick="testFunc('recentId')"
+                                             th:text="#{topbar.recent}">Новинки</a>
                     </li>
                     <li class="menu-item"><a class="menu-link" th:href="@{/popular}"
-                                             th:onclick="testFunc('popularId')">Популярное</a>
+                                             th:onclick="testFunc('popularId')"
+                                             th:text="#{topbar.popular}">Популярное</a>
                     </li>
                     <li class="menu-item"><a class="menu-link" th:href="@{/authors}"
-                                             th:onclick="testFunc('authorsId')">Авторы</a>
+                                             th:onclick="testFunc('authorsId')"
+                                             th:text="#{topbar.authors}">Авторы</a>
                     </li>
                 </ul>
             </div>
             <div class="row-block">
                 <ul class="menu menu_vt Footer-menu">
-                    <li class="menu-item"><a class="menu-link" th:href="@{/signin}">Войти</a>
+                    <li class="menu-item"><a class="menu-link" th:href="@{/signin}" th:text="#{footer.signin}">Войти</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" th:href="@{/documents}">Документы</a>
+                    <li class="menu-item"><a class="menu-link" th:href="@{/documents}" th:text="#{footer.docs}">Документы</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" th:href="@{/about}">О компании</a>
+                    <li class="menu-item"><a class="menu-link" th:href="@{/about}" th:text="#{footer.about}">О компании</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" th:href="@{/faq}">Помощь</a>
+                    <li class="menu-item"><a class="menu-link" th:href="@{/faq}" th:text="#{footer.help}">Помощь</a>
                     </li>
-                    <li class="menu-item"><a class="menu-link" th:href="@{/contacts}">Контакты</a>
+                    <li class="menu-item"><a class="menu-link" th:href="@{/contacts}"th:text="#{footer.contacts}">Контакты</a>
                     </li>
                 </ul>
             </div>

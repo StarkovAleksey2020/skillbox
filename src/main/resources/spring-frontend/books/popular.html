@@ -46,17 +46,19 @@ p.error-browser
     <div class="wrap">
         <main class="Middle-main">
             <ul class="breadcrumbs">
-                <li class="breadcrumbs-item"><a th:href="@{/}" th:onclick="testFunc('mainId')">Главная</a>
+                <li class="breadcrumbs-item"><a th:href="@{/}" th:onclick="testFunc('mainId')"
+                                                th:text="#{topbar.main}">Главная</a>
                 </li>
-                <li class="breadcrumbs-item"><a th:href="@{/genres}" th:onclick="testFunc('genresId')">Жанры</a>
+                <li class="breadcrumbs-item"><a th:href="@{/genres}" th:onclick="testFunc('genresId')"
+                                                th:text="#{topbar.genres}">Жанры</a>
                 </li>
 
-                <li class="breadcrumbs-item breadcrumbs-item_current"><span>Популярное</span>
+                <li class="breadcrumbs-item breadcrumbs-item_current"><span th:text="#{popular.title}">Популярное</span>
                 </li>
             </ul>
             <div class="Section">
                 <div class="Section-header">
-                    <h1 class="Section-title">Популярное
+                    <h1 class="Section-title" th:text="#{popular.title}">Популярное
                     </h1>
                 </div>
                 <div class="Cards Cards_refresh">
@@ -84,7 +86,8 @@ p.error-browser
                     </div>
                     <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
                                                                      data-refreshshow="popular" data-refreshoffset="20"
-                                                                     data-refreshlimit="20">Показать еще</a>
+                                                                     data-refreshlimit="20"
+                                                                     th:text="#{recent.show}">Показать еще</a>
                     </div>
                 </div>
             </div>

@@ -46,9 +46,11 @@ p.error-browser
     <div class="wrap">
         <main class="Middle-main">
             <ul class="breadcrumbs">
-                <li class="breadcrumbs-item"><a th:href="@{/}" th:onclick="testFunc('mainId')">Главная</a>
+                <li class="breadcrumbs-item"><a th:href="@{/}" th:onclick="testFunc('mainId')"
+                                                th:text="#{topbar.main}">Главная</a>
                 </li>
-                <li class="breadcrumbs-item"><a th:href="@{/genres}" th:onclick="testFunc('genresId')">Жанры</a>
+                <li class="breadcrumbs-item"><a th:href="@{/genres}" th:onclick="testFunc('genresId')"
+                                                th:text="#{topbar.genres}">Жанры</a>
                 </li>
 
                 <li th:if="${genresName.length() > 0}" class="breadcrumbs-item">
@@ -73,7 +75,11 @@ p.error-browser
                 </li>
             </ul>
             <header class="Middle-header">
-                <h1 class="Middle-title">Детективы
+                <h1 class="Middle-title" th:if="${genresName.length() == 0} and ${subSectionName.length() == 0}" th:text="${sectionName}">Детективы
+                </h1>
+                <h1 class="Middle-title" th:if="${genresName.length() > 0} and ${subSectionName.length() == 0}" th:text="${genresName}">Детективы
+                </h1>
+                <h1 class="Middle-title" th:if="${subSectionName.length() > 0}" th:text="${subSectionName}">Детективы
                 </h1>
             </header>
             <div class="Section">
@@ -227,8 +233,7 @@ p.error-browser
                     </div>
                     <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
                                                                      data-refreshshow="genre" data-refreshoffset="10"
-                                                                     data-refreshlimit="20" data-refreshid="1020">Показать
-                        еще</a>
+                                                                     data-refreshlimit="20" data-refreshid="1020" th:text="#{recent.show}">Показать еще</a>
                     </div>
                 </div>
             </div>

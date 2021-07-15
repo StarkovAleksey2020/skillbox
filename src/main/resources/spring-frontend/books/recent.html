@@ -46,20 +46,22 @@ p.error-browser
     <div class="wrap">
         <main class="Middle-main">
             <ul class="breadcrumbs">
-                <li class="breadcrumbs-item"><a th:href="@{/}" th:onclick="testFunc('mainId')">Главная</a>
+                <li class="breadcrumbs-item"><a th:href="@{/}" th:onclick="testFunc('mainId')"
+                                                th:text="#{topbar.main}">Главная</a>
                 </li>
-                <li class="breadcrumbs-item"><a th:href="@{/genres}" th:onclick="testFunc('genresId')">Жанры</a>
+                <li class="breadcrumbs-item"><a th:href="@{/genres}" th:onclick="testFunc('genresId')"
+                                                th:text="#{topbar.genres}">Жанры</a>
                 </li>
-                <li class="breadcrumbs-item breadcrumbs-item_current"><span>Новинки</span>
+                <li class="breadcrumbs-item breadcrumbs-item_current"><span th:text="#{topbar.recent}">Новинки</span>
                 </li>
             </ul>
             <div class="Section">
                 <div class="Section-header">
-                    <h1 class="Section-title">Новинки
+                    <h1 class="Section-title" th:text="#{topbar.recent}">Новинки
                     </h1>
                     <form class="form form_inline Section-header-form" action="#" method="post">
                         <div class="form-group">
-                            <label class="form-label">с
+                            <label class="form-label" th:text="#{recent.from}">с
                             </label>
                             <input class="form-input form-input_date form-input_date_uninit" id="fromdaterecent"
                                    name="fromdaterecent" type="text" placeholder="Дата" data-refreshoffset="20"
@@ -67,7 +69,7 @@ p.error-browser
                                    autocomplete="off"/>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">по
+                            <label class="form-label" th:text="#{recent.to}">по
                             </label>
                             <input class="form-input form-input_date form-input_date_uninit" id="enddaterecent"
                                    name="enddaterecent" type="text" placeholder="Дата" data-refreshoffset="20"
@@ -103,7 +105,8 @@ p.error-browser
                     </div>
                     <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
                                                                      data-refreshshow="recent" data-refreshoffset="20"
-                                                                     data-refreshlimit="20">Показать еще</a>
+                                                                     data-refreshlimit="20"
+                                                                     th:text="#{recent.show}">Показать еще</a>
                     </div>
                 </div>
             </div>

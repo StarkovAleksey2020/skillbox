@@ -25,8 +25,9 @@
                         <div class="search">
                             <form class="form form_search" th:action="@{/search}" method="post" data-searchlimit="20">
                                 <input class="search-input" id="query" name="query" type="text"
+                                       th:placeholder="#{topbar.search.placeholder}"
                                        placeholder="Search over 30 million book titles" value=""/>
-                                <button class="search-button" type="submit" name="search" id="search">Поиск
+                                <button class="search-button" type="submit" name="search" id="search" th:text="#{topbar.search}">Поиск
                                 </button>
                             </form>
                         </div>

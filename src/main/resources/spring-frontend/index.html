@@ -47,7 +47,7 @@ p.error-browser
         <main class="Middle-main">
             <div class="Section">
                 <div class="Section-header">
-                    <h2 class="Section-title">Рекомендуемое
+                    <h2 class="Section-title" th:text="#{main.recommended}">Рекомендуемое
                     </h2>
                 </div>
                 <div class="Slider Slider_carousel">
@@ -97,7 +97,7 @@ p.error-browser
                     </div>
                 </div>
                 <div class="Section-header">
-                    <h2 class="Section-title">Новинки
+                    <h2 class="Section-title" th:text="#{main.recent}">Новинки
                     </h2>
                 </div>
                 <div class="Slider Slider_carousel">
@@ -149,7 +149,7 @@ p.error-browser
                     </div>
                 </div>
                 <div class="Section-header">
-                    <h2 class="Section-title">Популярное
+                    <h2 class="Section-title" th:text="#{main.popular}">Популярное
                     </h2>
                 </div>
                 <div class="Slider Slider_carousel">
@@ -196,111 +196,160 @@ p.error-browser
                         </div>
                     </div>
                     <div class="Slider-load">
-                        <div class="Slider-load-text">Идет загрузка данных
+                        <div class="Slider-load-text" th:text="#{main.loading}">Идет загрузка данных
                         </div>
                     </div>
                 </div>
             </div>
-            <h2 class="Middle-title">Книги по тегам
+            <h2 class="Middle-title" th:text="#{main.tags.title}">Книги по тегам
             </h2>
             <div class="Tags" id="tags">
-                <div class="Tag Tag_xs"><a th:href="@{/tags(tagName='современная литература')}">современная литература</a>
+                <div class="Tag Tag_xs"><a th:href="@{/tags(tagName='современная литература')}"
+                th:text="#{main.tags.item.0}">современная литература</a>
                 </div>
-                <div class="Tag Tag_sm"><a th:href="@{/tags(tagName='классическая литература')}">классическая литература</a>
+                <div class="Tag Tag_sm"><a th:href="@{/tags(tagName='классическая литература')}"
+                                           th:text="#{main.tags.item.1}">классическая литература</a>
                 </div>
-                <div class="Tag"><a th:href="@{/tags(tagName='зарубежная литература')}">зарубежная литература</a>
+                <div class="Tag"><a th:href="@{/tags(tagName='зарубежная литература')}"
+                                    th:text="#{main.tags.item.2}">зарубежная литература</a>
                 </div>
-                <div class="Tag Tag_md"><a th:href="@{/tags(tagName='фэнтези')}">фэнтези</a>
+                <div class="Tag Tag_md"><a th:href="@{/tags(tagName='фэнтези')}"
+                                           th:text="#{main.tags.item.3}">фэнтези</a>
                 </div>
-                <div class="Tag Tag_lg"><a th:href="@{/tags(tagName='английская литература')}">английская литература</a>
+                <div class="Tag Tag_lg"><a th:href="@{/tags(tagName='английская литература')}"
+                                           th:text="#{main.tags.item.4}">английская литература</a>
                 </div>
-                <div class="Tag"><a th:href="@{/tags(tagName='русская литература')}">русская литература</a>
+                <div class="Tag"><a th:href="@{/tags(tagName='русская литература')}"
+                                    th:text="#{main.tags.item.5}">русская литература</a>
                 </div>
-                <div class="Tag"><a th:href="@{/tags(tagName='американская литература')}">американская литература</a>
+                <div class="Tag"><a th:href="@{/tags(tagName='американская литература')}"
+                                    th:text="#{main.tags.item.6}">американская литература</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='фантастика')}">фантастика</a>
+                <div class="Tag"><a th:href="@{tags(tagName='фантастика')}"
+                                    th:text="#{main.tags.item.7}">фантастика</a>
                 </div>
-                <div class="Tag Tag_md"><a th:href="@{tags(tagName='детская литература')}">детская литература</a>
+                <div class="Tag Tag_md"><a th:href="@{tags(tagName='детская литература')}"
+                                           th:text="#{main.tags.item.8}">детская литература</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='детектив')}">детектив</a>
+                <div class="Tag"><a th:href="@{tags(tagName='детектив')}"
+                                    th:text="#{main.tags.item.9}">детектив</a>
                 </div>
-                <div class="Tag Tag_sm"><a th:href="@{tags(tagName='любовь')}">любовь</a>
+                <div class="Tag Tag_sm"><a th:href="@{tags(tagName='любовь')}"
+                                           th:text="#{main.tags.item.10}">любовь</a>
                 </div>
-                <div class="Tag Tag_sm"><a th:href="@{tags(tagName='мистика')}">мистика</a>
+                <div class="Tag Tag_sm"><a th:href="@{tags(tagName='мистика')}"
+                                           th:text="#{main.tags.item.11}">мистика</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='юмор')}">юмор</a>
+                <div class="Tag"><a th:href="@{tags(tagName='юмор')}"
+                                    th:text="#{main.tags.item.12}">юмор</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='приключения')}">приключения</a>
+                <div class="Tag"><a th:href="@{tags(tagName='приключения')}"
+                                    th:text="#{main.tags.item.13}">приключения</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='сказка')}">сказка</a>
+                <div class="Tag"><a th:href="@{tags(tagName='сказка')}"
+                                    th:text="#{main.tags.item.14}">сказка</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='французская литература')}">французская литература</a>
+                <div class="Tag"><a th:href="@{tags(tagName='французская литература')}"
+                                    th:text="#{main.tags.item.15}">французская литература</a>
                 </div>
-                <div class="Tag Tag_xs"><a th:href="@{tags(tagName='англия')}">англия</a>
+                <div class="Tag Tag_xs"><a th:href="@{tags(tagName='англия')}"
+                                           th:text="#{main.tags.item.16}">англия</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='художественная литература')}">художественная литература</a>
+                <div class="Tag"><a th:href="@{tags(tagName='художественная литература')}"
+                                    th:text="#{main.tags.item.17}">художественная литература</a>
                 </div>
-                <div class="Tag Tag_xs"><a th:href="@{tags(tagName='психология')}">психология</a>
+                <div class="Tag Tag_xs"><a th:href="@{tags(tagName='психология')}"
+                                           th:text="#{main.tags.item.18}">психология</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='философия')}">философия</a>
+                <div class="Tag"><a th:href="@{tags(tagName='философия')}"
+                                    th:text="#{main.tags.item.19}">философия</a>
                 </div>
-                <div class="Tag Tag_lg"><a th:href="@{tags(tagName='экранизировано')}">экранизировано</a>
+                <div class="Tag Tag_lg"><a th:href="@{tags(tagName='экранизировано')}"
+                                           th:text="#{main.tags.item.20}">экранизировано</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='любимое')}">любимое</a>
+                <div class="Tag"><a th:href="@{tags(tagName='любимое')}"
+                                    th:text="#{main.tags.item.21}">любимое</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='антиутопия')}">антиутопия</a>
+                <div class="Tag"><a th:href="@{tags(tagName='антиутопия')}"
+                                    th:text="#{main.tags.item.22}">антиутопия</a>
                 </div>
-                <div class="Tag Tag_xs"><a th:href="@{tags(tagName='books you must read before you die')}">books you must read before you die</a>
+                <div class="Tag Tag_xs"><a th:href="@{tags(tagName='books you must read before you die')}"
+                                           th:text="#{main.tags.item.23}">books you must read before you die</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='роман')}">роман</a>
+                <div class="Tag"><a th:href="@{tags(tagName='роман')}"
+                                    th:text="#{main.tags.item.24}">роман</a>
                 </div>
-                <div class="Tag Tag_md"><a th:href="@{tags(tagName='франция')}">франция</a>
+                <div class="Tag Tag_md"><a th:href="@{tags(tagName='франция')}"
+                                           th:text="#{main.tags.item.25}">франция</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='дайте две')}">дайте две</a>
+                <div class="Tag"><a th:href="@{tags(tagName='дайте две')}"
+                                    th:text="#{main.tags.item.26}">дайте две</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='young adult')}">young adult</a>
+                <div class="Tag"><a th:href="@{tags(tagName='young adult')}"
+                                    th:text="#{main.tags.item.27}">young adult</a>
                 </div>
-                <div class="Tag Tag_lg"><a th:href="@{tags(tagName='война')}">война</a>
+                <div class="Tag Tag_lg"><a th:href="@{tags(tagName='война')}"
+                                           th:text="#{main.tags.item.28}">война</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='история')}">история</a>
+                <div class="Tag"><a th:href="@{tags(tagName='история')}"
+                                    th:text="#{main.tags.item.29}">история</a>
                 </div>
-                <div class="Tag Tag_sm"><a th:href="@{tags(tagName='флэшмоб 2016')}">флэшмоб 2016</a>
+                <div class="Tag Tag_sm"><a th:href="@{tags(tagName='флэшмоб 2016')}"
+                                           th:text="#{main.tags.item.30}">флэшмоб 2016</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='детство')}">детство</a>
+                <div class="Tag"><a th:href="@{tags(tagName='детство')}"
+                                    th:text="#{main.tags.item.31}">детство</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='жизнь')}">жизнь</a>
+                <div class="Tag"><a th:href="@{tags(tagName='жизнь')}"
+                                    th:text="#{main.tags.item.32}">жизнь</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='драма')}">драма</a>
+                <div class="Tag"><a th:href="@{tags(tagName='драма')}"
+                                    th:text="#{main.tags.item.33}">драма</a>
                 </div>
-                <div class="Tag Tag_md"><a th:href="@{tags(tagName='россия')}">россия</a>
+                <div class="Tag Tag_md"><a th:href="@{tags(tagName='россия')}"
+                                           th:text="#{main.tags.item.34}">россия</a>
                 </div>
-                <div class="Tag Tag_md"><a th:href="@{tags(tagName='книжное путешествие')}">книжное путешествие</a>
+                <div class="Tag Tag_md"><a th:href="@{tags(tagName='книжное путешествие')}"
+                                           th:text="#{main.tags.item.35}">книжное путешествие</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='советская литература')}">советская литература</a>
+                <div class="Tag"><a th:href="@{tags(tagName='советская литература')}"
+                                    th:text="#{main.tags.item.36}">советская литература</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='триллер')}">триллер</a>
+                <div class="Tag"><a th:href="@{tags(tagName='триллер')}"
+                                    th:text="#{main.tags.item.37}">триллер</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='америка')}">америка</a>
+                <div class="Tag"><a th:href="@{tags(tagName='америка')}"
+                                    th:text="#{main.tags.item.38}">америка</a>
                 </div>
-                <div class="Tag Tag_sm"><a th:href="@{tags(tagName='немецкая литература')}">немецкая литература</a>
+                <div class="Tag Tag_sm"><a th:href="@{tags(tagName='немецкая литература')}"
+                                           th:text="#{main.tags.item.39}">немецкая литература</a>
                 </div>
-                <div class="Tag Tag_xs"><a th:href="@{tags(tagName='вампиры')}">вампиры</a>
+                <div class="Tag Tag_xs"><a th:href="@{tags(tagName='вампиры')}"
+                                           th:text="#{main.tags.item.40}">вампиры</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='школьная программа')}">школьная программа</a>
+                <div class="Tag"><a th:href="@{tags(tagName='школьная программа')}"
+                                    th:text="#{main.tags.item.41}">школьная программа</a>
                 </div>
-                <div class="Tag Tag_xs"><a th:href="@{tags(tagName='рассказы')}">рассказы</a>
+                <div class="Tag Tag_xs"><a th:href="@{tags(tagName='рассказы')}"
+                                           th:text="#{main.tags.item.42}">рассказы</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='магия')}">магия</a>
+                <div class="Tag"><a th:href="@{tags(tagName='магия')}"
+                                    th:text="#{main.tags.item.43}">магия</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='дети')}">дети</a>
+                <div class="Tag"><a th:href="@{tags(tagName='дети')}"
+                                    th:text="#{main.tags.item.44}">дети</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='русская классика')}">русская классика</a>
+                <div class="Tag"><a th:href="@{tags(tagName='русская классика')}"
+                                    th:text="#{main.tags.item.45}">русская классика</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='флэшмоб 2015')}">флэшмоб 2015</a>
+                <div class="Tag"><a th:href="@{tags(tagName='флэшмоб 2015')}"
+                                    th:text="#{main.tags.item.46}">флэшмоб 2015</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='биография')}">биография</a>
+                <div class="Tag"><a th:href="@{tags(tagName='биография')}"
+                                    th:text="#{main.tags.item.47}">биография</a>
                 </div>
-                <div class="Tag"><a th:href="@{tags(tagName='english')}">english</a>
+                <div class="Tag"><a th:href="@{tags(tagName='english')}"
+                                    th:text="#{main.tags.item.48}">english</a>
                 </div>
             </div>
         </main>

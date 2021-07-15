@@ -44,7 +44,7 @@
   <div class="Middle">
     <div class="wrap">
       <main class="Middle-main">
-        <h1 class="Middle-title">Корзина
+        <h1 class="Middle-title" th:text="#{cart.title}">Корзина
         </h1>
         <form class="form Cart" action="#" method="post">
           <div class="Cart-product">
@@ -258,10 +258,10 @@
           </div>
           <div class="Cart-total">
             <div class="Cart-block Cart-block_total">
-              <strong class="Cart-title">Итого:
+              <strong class="Cart-title" th:text="#{cart.total}">Итого:
               </strong><span class="Cart-price">534 р.</span><span class="Cart-price_old">658 р.</span>
             </div>
-            <div class="Cart-block"><a class="btn btn_success btn_md" href="/order.html">Купить</a>
+            <div class="Cart-block"><a class="btn btn_success btn_md" href="/order.html" th:text="#{cart.buy}">Купить</a>
             </div>
           </div>
         </form>

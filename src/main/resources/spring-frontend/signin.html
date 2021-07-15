@@ -45,7 +45,7 @@ p.error-browser
 <div class="Middle Middle_form">
     <div class="Middle-top">
         <div class="wrap">
-            <h1 class="Middle-title">Вход
+            <h1 class="Middle-title" th:text="#{signin.title}">Вход
             </h1>
         </div>
     </div>
@@ -55,7 +55,8 @@ p.error-browser
                 <div class="Login-ins">
                     <div class="Login-step">
                         <div class="form-group">
-                            <label class="form-label Login-title">Введите e-mail или телефон
+                            <label class="form-label Login-title" th:text="#{signin.subtitle}">Введите e-mail или
+                                телефон
                             </label>
                         </div>
                         <div class="form-group">
@@ -63,7 +64,8 @@ p.error-browser
                                 <div class="row-block">
                                     <label class="toggle Login-type">
                                         <input type="radio" name="typeauth" value="phonetype" checked="checked"/><span
-                                            class="toggle-box"></span><span class="toggle-text">Телефон</span>
+                                            class="toggle-box"></span><span class="toggle-text"
+                                                                            th:text="#{signin.phone}">Телефон</span>
                                     </label>
                                 </div>
                                 <div class="row-block">
@@ -77,13 +79,14 @@ p.error-browser
                         <div class="form-group">
                             <input class="form-input form-input_phone" id="phone" name="phone" type="text"
                                    placeholder="Введите телефон" data-mask="+7 (999) 999-99-99"
-                                   data-validate="require"/>
+                                   data-validate="require"
+                                   th:placeholder="#{signin.enter.phone}"/>
                             <input class="form-input form-input_mail" id="mail" name="mail" type="text"
                                    placeholder="Введите e-mail" data-validate="mail require"/>
                         </div>
                         <div class="form-group form-group_center">
                             <button class="btn btn_primary form-btn" type="button" name="sendauth" id="sendauth"
-                                    data-type="phone" data-send="">Далее
+                                    data-type="phone" data-send="" th:text="#{signin.more}">Далее
                             </button>
                         </div>
                     </div>
@@ -119,7 +122,8 @@ p.error-browser
                             </button>
                         </div>
                     </div>
-                    <div class="form-group form-group_center"><a class="Login-reg" href="/signup.html">Зарегистрироваться</a>
+                    <div class="form-group form-group_center"><a class="Login-reg" href="/signup.html"
+                                                                 th:text="#{signin.signup}">Зарегистрироваться</a>
                     </div>
                 </div>
             </form>

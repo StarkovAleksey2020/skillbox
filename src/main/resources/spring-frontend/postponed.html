@@ -44,7 +44,7 @@
   <div class="Middle">
     <div class="wrap">
       <main class="Middle-main">
-        <h1 class="Middle-title">Отложенное
+        <h1 class="Middle-title" th:text="#{postponed.title}">Отложенное
         </h1>
         <form class="form Cart Cart_postponed" action="#" method="post">
           <div class="Cart-product">
@@ -260,7 +260,7 @@
             <div class="Cart-block Cart-block_total">
             </div>
             <div class="Cart-block">
-              <button class="btn btn_success btn_md Cart-buyAll" data-sendstatus="CART" data-bookid="[1111, 1122, 1133]">Купить все
+              <button class="btn btn_success btn_md Cart-buyAll" data-sendstatus="CART" data-bookid="[1111, 1122, 1133]" th:text="#{postponed.buyAll}">Купить все
               </button>
             </div>
           </div>
