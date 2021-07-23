@@ -16,14 +16,14 @@ public class BookMapper implements RowMapper<Book> {
     }
 
     public Book mapRow(ResultSet resultSet, int i) throws SQLException {
-        String authorName = authorRepository.findById(resultSet.getLong("author")).getAuthor();
+        String authorName = authorRepository.findById(resultSet.getLong("author_id")).getAuthor();
 
         Book book = new Book();
         book.setId(resultSet.getLong("id"));
-        book.setAuthor(resultSet.getLong("author"));
+//        book.setAuthor(resultSet.getLong("author"));
         book.setAuthorName(authorName);
         book.setTitle(resultSet.getString("title"));
-        book.setPriceOld(resultSet.getString("priceOld"));
+        book.setPriceOld(resultSet.getString("price_old"));
         book.setPrice(resultSet.getString("price"));
 
         return book;

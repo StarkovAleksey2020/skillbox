@@ -1,7 +1,7 @@
 package com.example.MyBookShopApp.services;
 
 import com.example.MyBookShopApp.entity.Book;
-import com.example.MyBookShopApp.repository.JDBC.JdbcBookRepository;
+import com.example.MyBookShopApp.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,15 +10,15 @@ import java.util.List;
 @Service
 public class BookService {
 
-    private JdbcBookRepository jdbcBookRepository;
+    private BookRepository bookRepository;
 
     @Autowired
-    public BookService(JdbcBookRepository jdbcBookRepository) {
-        this.jdbcBookRepository = jdbcBookRepository;
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     public List<Book> getBooksData() {
-        return jdbcBookRepository.findAll();
+        return bookRepository.findAll();
     }
 
 }

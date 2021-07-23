@@ -2,10 +2,7 @@ package com.example.MyBookShopApp.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -13,18 +10,21 @@ import javax.persistence.Table;
 public class Book {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name = "id")
     private Long id;
 
-    @JoinColumn(name = "author")
-    private Long author;
+    @ManyToOne
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    private Author author;
 
+//    @JoinColumn(name = "author_name")
     private String authorName;
 
     @JoinColumn(name = "title")
     private String title;
 
-    @JoinColumn(name = "priceOld")
+    @JoinColumn(name = "price_old")
     private String priceOld;
 
     @JoinColumn(name = "price")

@@ -82,7 +82,7 @@ p.error-browser
                     <div class="Card" th:each="book : ${recentBooks}">
                         <div class="Card-picture">
                             <a th:href="@{/slug(bookTitle=${book.title},
-                             bookAuthor=${book.author},
+                             bookAuthor=${book.author.author},
                              bookPriceOld=${book.priceOld},
                              bookPrice=${book.price})}">
                                 <img src="/assets/img/content/main/card.jpg"
@@ -95,7 +95,7 @@ p.error-browser
                                    th:text="${book.title}">Техника</a>
                             </strong>
                             <div class="Card-description"
-                                 th:text="${book.authorName}">Кондратенко Александр Петрович
+                                 th:text="${book.author.author}">Кондратенко Александр Петрович
                             </div>
                             <div class="Card-cost">
                                 <span class="Card-priceOld" th:text="${book.priceOld}">₽300.00</span>

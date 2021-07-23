@@ -1,52 +1,52 @@
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (1, '', 'Манюня', '$203.23', '$43.37');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (2, '', 'Симфония тьмы', '$260.31', '$35.96');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (3, '', 'Первый закон', '$272.00', '$151.04');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (4, '', 'Исола', '$271.58', '$141.40');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (5, '', 'Блокадная книга', '$278.43', '$54.44');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (6, '', 'Руководство для путешествующих автостопом по Галактике', '$282.54', '$102.61');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (7, '', 'Гувернер', '$295.38', '$181.27');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (8, '', 'Охотники за луной', '$283.08', '$97.96');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (9, '', 'Три закона робототехники', '$258.51', '$52.25');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (10, '', 'До последнего слова', '$260.79', '$33.69');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (11, '', 'Азазель', '$256.54', '$160.98');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (12, '', 'Проклятие пиковой дамы', '$262.07', '$34.06');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (13, '', 'Хроники Придайна', '$257.66', '$32.97');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (14, '', 'Кресло на чердаке', '$288.19', '$90.52');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (15, '', 'Солдаты', '$232.27', '$44.83');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (16, '', 'Птичий путь', '$287.45', '$101.89');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (17, '', 'Язык взаимоотношений', '$281.37', '$146.21');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (18, '', 'Академия в подарок', '$270.99', '$184.76');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (19, '', 'Озерные страти', '$278.36', '$77.71');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (20, '', 'Дом на краю ночи', '$298.94', '$130.01');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (21, '', 'Кровь цветов', '$276.57', '$113.25');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (22, '', 'Искра в ночи', '$254.70', '$115.31');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (23, '', 'Темная тайна', '$279.70', '$77.86');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (24, '', 'Кто прав, кто виноват ?', '$297.83', '$110.15');
-insert into books (author, authorName, title, priceOld, price)
+insert into books (author_id, author_name, title, price_old, price)
 values (26, '', 'Банкомат', '$232.30', '$131.48');
 
 insert into authors (author)
