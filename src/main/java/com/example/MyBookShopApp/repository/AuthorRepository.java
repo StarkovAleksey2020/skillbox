@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query(value = "SELECT u FROM Author u WHERE u.id = :id")
-    Author findByIdForShure(@Param("id") Long id);
+    Author findByIdExactly(@Param("id") Long id);
 }

@@ -1,7 +1,7 @@
 package com.example.MyBookShopApp.services;
 
 import com.example.MyBookShopApp.entity.Author;
-import com.example.MyBookShopApp.repository.JDBC.JdbcAuthorRepository;
+import com.example.MyBookShopApp.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,16 +11,16 @@ import java.util.stream.Collectors;
 @Service
 public class AuthorService {
 
-    private JdbcAuthorRepository authorRepository;
+    private AuthorRepository authorRepository;
 
     @Autowired
-    public AuthorService(JdbcAuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
     }
 
+
     public List<Author> getAuthorsData() {
-        List<Author> authors = authorRepository.findAll();
-        return authors;
+        return authorRepository.findAll();
     }
 
     public Map<String, List<Author>> createAuthorsHashMap() {

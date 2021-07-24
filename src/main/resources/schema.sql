@@ -16,3 +16,4 @@ CREATE TABLE authors
     id     BIGSERIAL PRIMARY KEY,
     author VARCHAR(250) NOT NULL
 );
+
