@@ -1,6 +1,6 @@
 package com.example.MyBookShopApp.controllers;
 
-import com.example.MyBookShopApp.entity.Book;
+import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.services.BookService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,7 @@ public class TagsPageController {
     }
 
     @ModelAttribute("taggedBooks")
-    public List<Book> getTaggedBooks() {
+    public List<BookEntity> getTaggedBooks() {
         return bookService.getBooksData();
     }
 

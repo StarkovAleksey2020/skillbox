@@ -1,11 +1,15 @@
 package com.example.MyBookShopApp.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "books")
 public class Book {
 
@@ -29,10 +33,4 @@ public class Book {
 
     @JoinColumn(name = "price")
     private String price;
-
-    public Book(long id, long author, String authorName, String title, String priceOld, String price) {
-    }
-
-    public Book() {
-    }
 }

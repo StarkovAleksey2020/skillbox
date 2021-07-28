@@ -1,8 +1,15 @@
 package com.example.MyBookShopApp.entity.book.links;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "book2genre")
 public class Book2GenreEntity {
 
