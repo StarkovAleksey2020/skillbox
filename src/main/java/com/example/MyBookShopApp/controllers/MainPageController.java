@@ -48,17 +48,17 @@ public class MainPageController {
 
     @GetMapping("/")
     public String mainPage() {
-        return "/index";
+        return "index";
     }
 
     @GetMapping("/popular")
     public String getPopularBooksPage() {
-        return "/books/popular";
+        return "books/popular";
     }
 
     @GetMapping("/recent")
     public String getRecentBooksPage() {
-        return "/books/recent";
+        return "books/recent";
     }
 
     @GetMapping("/slug")
@@ -71,37 +71,37 @@ public class MainPageController {
         model.addAttribute("bookAuthorName", bookAuthorName);
         model.addAttribute("bookPriceOld", bookPriceOld);
         model.addAttribute("bookPrice", bookPrice);
-        return "/books/slug";
+        return "books/slug";
     }
 
     @GetMapping("/postponed")
     public String getPostponedBooks() {
-        return "/postponed";
+        return "postponed";
     }
 
     @GetMapping("/cart")
     public String getCart() {
-        return "/cart";
+        return "cart";
     }
 
     @GetMapping("/signin")
     public String getSignInPage() {
-        return "/signin";
+        return "signin";
     }
 
     @GetMapping("/about")
     public String getAboutPage() {
-        return "/about";
+        return "about";
     }
 
     @GetMapping("/contacts")
     public String getContactsPage() {
-        return "/contacts";
+        return "contacts";
     }
 
     @GetMapping("/faq")
     public String getFAQPage() {
-        return "/faq";
+        return "faq";
     }
 }
 
