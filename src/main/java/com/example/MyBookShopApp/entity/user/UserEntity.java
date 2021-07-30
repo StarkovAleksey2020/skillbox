@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.entity.user;
 
 import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.entity.book.review.BookReviewLikeEntity;
+import com.example.MyBookShopApp.entity.book.review.MessageEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -55,5 +56,7 @@ public class UserEntity {
     @OneToOne(mappedBy = "user")
     private BookReviewLikeEntity bookReviewLike;
 
+    @OneToOne(mappedBy = "user")
+    private MessageEntity message;
 
 }

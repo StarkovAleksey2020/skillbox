@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.entity.book.review;
 
+import com.example.MyBookShopApp.entity.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,8 @@ public class MessageEntity {
     @Column(columnDefinition = "TIMESTAMP NOT NULL")
     private LocalDateTime time;
 
-    @Column(columnDefinition = "INT")
-    private int userId;
+//    @Column(name = "user_id", columnDefinition = "INT")
+//    private int userId;
 
     @Column(columnDefinition = "VARCHAR(255)")
     private String email;
@@ -35,4 +36,9 @@ public class MessageEntity {
 
     @Column(columnDefinition = "TEXT NOT NULL")
     private String text;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
+
 }
