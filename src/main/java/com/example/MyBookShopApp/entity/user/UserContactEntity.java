@@ -19,23 +19,29 @@ public class UserContactEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int userId;
+//    @JoinColumn(name = "user_id")
+//    @Column(columnDefinition = "INT NOT NULL")
+//    private int userId;
 
+    @JoinColumn(name = "type")
     private ContactType type;
 
-    @Column(columnDefinition = "SMALLINT NOT NULL")
+    @Column(name = "approved", columnDefinition = "SMALLINT NOT NULL")
     private short approved;
 
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "code", columnDefinition = "VARCHAR(255) NOT NULL")
     private String code;
 
-    @Column(columnDefinition = "INT")
+    @Column(name = "code_trails", columnDefinition = "INT")
     private int codeTrails;
 
-    @Column(columnDefinition = "TIMESTAMP")
+    @Column(name = "code_time", columnDefinition = "TIMESTAMP")
     private LocalDateTime codeTime;
 
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "contact", columnDefinition = "VARCHAR(255) NOT NULL")
     private String contact;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
 }

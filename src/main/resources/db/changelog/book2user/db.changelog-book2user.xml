@@ -6,7 +6,7 @@
     <changeSet id="book2user" author="codewizard">
         <createTable tableName="book2user">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book2user_pkey"/>
             </column>
             <column name="time" type="datetime"/>
             <column name="type_id" type="int">
@@ -19,5 +19,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+    <changeSet author="codewizard" id="book2user-fk-0">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="book2user" constraintName="fk-book2user-0" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book"/>
+    </changeSet>
+    <changeSet author="codewizard" id="book2user-fk-1">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="book2user" constraintName="fk-book2user-1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>

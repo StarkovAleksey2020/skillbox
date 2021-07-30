@@ -6,7 +6,7 @@
     <changeSet id="book_review" author="codewizard">
         <createTable tableName="book_review">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book_review_pkey"/>
             </column>
             <column name="book_id" type="int">
                 <constraints nullable="false"/>
@@ -21,5 +21,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+    <changeSet author="codewizard" id="book_review-fk-0">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="book_review" constraintName="fk-book_review-0" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book"/>
+    </changeSet>
+    <changeSet author="codewizard" id="book_review-fk-1">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="book_review" constraintName="fk-book_review-1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>

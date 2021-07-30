@@ -6,7 +6,7 @@
     <changeSet id="book_file_type" author="codewizard">
         <createTable tableName="book_file_type">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book_file_type_pkey"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>

@@ -18,18 +18,19 @@ public class BalanceTransactionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(columnDefinition = "INT NOT NULL")
+    @Column(name = "user_id", columnDefinition = "INT NOT NULL")
     private int userId;
 
-    @Column(columnDefinition = "TIMESTAMP NOT NULL")
+    @Column(name = "time", columnDefinition = "TIMESTAMP NOT NULL")
     private LocalDateTime time;
 
-    @Column(columnDefinition = "INT NOT NULL  DEFAULT 0")
+    @Column(name = "value", columnDefinition = "INT NOT NULL  DEFAULT 0")
     private int value;
 
-    @Column(columnDefinition = "INT NOT NULL")
+    @Column(name = "book_id", columnDefinition = "INT NOT NULL")
     private int bookId;
 
-    @Column(columnDefinition = "TEXT NOT NULL")
+    @Column(name = "description", columnDefinition = "TEXT NOT NULL")
     private String description;
+
 }

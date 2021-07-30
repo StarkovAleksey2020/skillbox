@@ -18,15 +18,16 @@ public class Book2UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(columnDefinition = "TIMESTAMP NOT NULL")
+    @Column(name = "time", columnDefinition = "TIMESTAMP NOT NULL")
     private LocalDateTime time;
 
-    @Column(columnDefinition = "INT NOT NULL")
+    @Column(name = "type_id", columnDefinition = "INT NOT NULL")
     private int typeId;
 
-    @Column(columnDefinition = "INT NOT NULL")
+    @Column(name = "book_id", columnDefinition = "INT NOT NULL")
     private int bookId;
 
-    @Column(columnDefinition = "INT NOT NULL")
+    @Column(name = "user_id", columnDefinition = "INT NOT NULL")
     private int userId;
+
 }

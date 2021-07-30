@@ -63,8 +63,8 @@ public class BookEntity {
     private Set<UserEntity> userEntityBook2UserSet;
 
     @ManyToMany
-    @JoinTable(name = "file_download", joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "file_download", joinColumns = { @JoinColumn(name = "book_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<UserEntity> userEntityFileDownloadSet;
 
     @ManyToMany

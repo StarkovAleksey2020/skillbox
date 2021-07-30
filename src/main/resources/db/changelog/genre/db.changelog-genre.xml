@@ -6,7 +6,7 @@
     <changeSet id="genre" author="codewizard">
         <createTable tableName="genre">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="genre_pkey"/>
             </column>
             <column name="parent_id" type="int"/>
             <column name="slug" type="VARCHAR(255)">

@@ -6,7 +6,7 @@
     <changeSet id="message" author="codewizard">
         <createTable tableName="message">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="message_pkey"/>
             </column>
             <column name="time" type="datetime">
                 <constraints nullable="false"/>
@@ -21,5 +21,8 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+    <changeSet author="codewizard" id="message-fk-0">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="message" constraintName="fk-message-0" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>

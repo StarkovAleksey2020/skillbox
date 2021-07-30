@@ -6,7 +6,7 @@
     <changeSet id="book2user_type" author="codewizard">
         <createTable tableName="book2user_type">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book2user_type_pkey"/>
             </column>
             <column name="code" type="VARCHAR(255)">
                 <constraints nullable="false"/>

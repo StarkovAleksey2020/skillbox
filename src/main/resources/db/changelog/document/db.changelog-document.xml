@@ -6,7 +6,7 @@
     <changeSet id="document" author="codewizard">
         <createTable tableName="document">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="document_pkey"/>
             </column>
             <column name="sort_index" type="int" defaultValue="0">
                 <constraints nullable="false"/>

@@ -20,7 +20,7 @@ public class Author {
     private String author;
 
     @OneToMany(mappedBy = "author")
-    private List<BookEntity> bookList = new ArrayList<>();
+    private List<Book> bookList = new ArrayList<>();
 
     public Author(long id, String author) {
     }

@@ -7,7 +7,7 @@
         <sql>CREATE TYPE contact_type AS ENUM ('PHONE','EMAIL')</sql>
         <createTable tableName="user_contact">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_contact_pkey"/>
             </column>
             <column name="user_id" type="int">
                 <constraints nullable="false"/>
@@ -23,5 +23,8 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+    <changeSet author="codewizard" id="user_contact-fk-0">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_contact" constraintName="fk-user_contact-0" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>

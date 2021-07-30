@@ -6,7 +6,7 @@
     <changeSet id="file_download" author="codewizard">
         <createTable tableName="file_download">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="file_download_pkey"/>
             </column>
             <column name="user_id" type="int">
                 <constraints nullable="false"/>
@@ -18,5 +18,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+    <changeSet author="codewizard" id="file_download-fk-0">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="file_download" constraintName="fk-file_download-0" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="codewizard" id="file_download-fk-1">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="file_download" constraintName="fk-file_download-1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book"/>
     </changeSet>
 </databaseChangeLog>

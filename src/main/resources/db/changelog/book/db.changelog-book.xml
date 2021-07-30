@@ -6,7 +6,7 @@
     <changeSet id="book" author="codewizard">
         <createTable tableName="book">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book_pkey"/>
             </column>
             <column name="pub_date" type="date">
                 <constraints nullable="false"/>

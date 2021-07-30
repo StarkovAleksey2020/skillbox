@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.entity.book.review;
 
+import com.example.MyBookShopApp.entity.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,15 +19,21 @@ public class BookReviewLikeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JoinColumn(name = "review_id")
     @Column(columnDefinition = "INT NOT NULL")
     private int reviewId;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int userId;
+//    @Column(columnDefinition = "INT NOT NULL")
+//    private int userId;
 
-    @Column(columnDefinition = "TIMESTAMP NOT NULL")
+    @Column(name = "time", columnDefinition = "TIMESTAMP NOT NULL")
     private LocalDateTime time;
 
-    @Column(columnDefinition = "SMALLINT NOT NULL")
+    @Column(name = "value", columnDefinition = "SMALLINT NOT NULL")
     private short value;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
+
 }

@@ -6,7 +6,7 @@
     <changeSet id="balance_transaction" author="codewizard">
         <createTable tableName="balance_transaction">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="balance_transaction_pkey"/>
             </column>
             <column name="user_id" type="int">
                 <constraints nullable="false"/>
@@ -24,5 +24,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+    <changeSet author="codewizard" id="balance_transaction-fk-0">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="balance_transaction" constraintName="fk-balance_transaction-0" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book"/>
+    </changeSet>
+    <changeSet author="codewizard" id="balance_transaction-fk-1">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="balance_transaction" constraintName="fk-balance_transaction-1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>

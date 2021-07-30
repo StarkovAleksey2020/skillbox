@@ -1,8 +1,18 @@
 package com.example.MyBookShopApp.entity.user;
 
+import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.entity.book.review.BookReviewLikeEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -11,55 +21,39 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JoinColumn(name = "hash")
     @Column(columnDefinition = "VARCHAR(255) NOT NULL")
     private String hash;
 
+    @JoinColumn(name = "reg_time")
     @Column(columnDefinition = "TIMESTAMP NOT NULL")
     private LocalDateTime regTime;
 
+    @JoinColumn(name = "balance")
     @Column(columnDefinition = "INT NOT NULL")
     private int balance;
 
+    @JoinColumn(name = "name")
     @Column(columnDefinition = "VARCHAR(255) NOT NULL")
     private String name;
 
-    public int getId() {
-        return id;
-    }
+    @ManyToMany(mappedBy = "userEntityBook2UserSet")
+    private Set<BookEntity> bookEntityBook2UserSet;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @ManyToMany(mappedBy = "userEntityFileDownloadSet")
+    private Set<BookEntity> bookEntityFileDownloadSet;
 
-    public String getHash() {
-        return hash;
-    }
+    @ManyToMany(mappedBy = "userEntityBalanceTransactionSet")
+    private Set<BookEntity> bookEntityBalanceTransactionSet;
 
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
+    @ManyToMany(mappedBy = "userEntityBookReviewSet")
+    private Set<BookEntity> bookEntityBookReviewSet;
 
-    public LocalDateTime getRegTime() {
-        return regTime;
-    }
+    @OneToOne(mappedBy = "user")
+    private UserContactEntity userContact;
 
-    public void setRegTime(LocalDateTime regTime) {
-        this.regTime = regTime;
-    }
+    @OneToOne(mappedBy = "user")
+    private BookReviewLikeEntity bookReviewLike;
 
-    public int getBalance() {
-        return balance;
-    }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
