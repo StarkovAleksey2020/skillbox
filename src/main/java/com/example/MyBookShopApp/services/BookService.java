@@ -1,6 +1,6 @@
 package com.example.MyBookShopApp.services;
 
-import com.example.MyBookShopApp.entity.Book;
+import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> getBooksData() {
+    public List<BookEntity> getBooksData() {
         return bookRepository.findAll();
     }
 

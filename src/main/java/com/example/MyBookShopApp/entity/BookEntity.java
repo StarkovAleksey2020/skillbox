@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.Set;
 
-@Data
+//@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -50,7 +50,7 @@ public class BookEntity {
     @ManyToMany
     @JoinTable(name = "book2author", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
-    private Set<Author> authorSet;
+    private Set<AuthorEntity> authorSet;
 
     @ManyToMany
     @JoinTable(name = "book2genre", joinColumns = @JoinColumn(name = "book_id"),
@@ -77,4 +77,123 @@ public class BookEntity {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<UserEntity> userEntityBookReviewSet;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public OffsetDateTime getPubDate() {
+        return pubDate;
+    }
+
+    public void setPubDate(OffsetDateTime pubDate) {
+        this.pubDate = pubDate;
+    }
+
+    public int getIsBestseller() {
+        return isBestseller;
+    }
+
+    public void setIsBestseller(int isBestseller) {
+        this.isBestseller = isBestseller;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public Set<AuthorEntity> getAuthorSet() {
+        return authorSet;
+    }
+
+    public void setAuthorSet(Set<AuthorEntity> authorSet) {
+        this.authorSet = authorSet;
+    }
+
+    public Set<GenreEntity> getGenreEntitySet() {
+        return genreEntitySet;
+    }
+
+    public void setGenreEntitySet(Set<GenreEntity> genreEntitySet) {
+        this.genreEntitySet = genreEntitySet;
+    }
+
+    public Set<UserEntity> getUserEntityBook2UserSet() {
+        return userEntityBook2UserSet;
+    }
+
+    public void setUserEntityBook2UserSet(Set<UserEntity> userEntityBook2UserSet) {
+        this.userEntityBook2UserSet = userEntityBook2UserSet;
+    }
+
+    public Set<UserEntity> getUserEntityFileDownloadSet() {
+        return userEntityFileDownloadSet;
+    }
+
+    public void setUserEntityFileDownloadSet(Set<UserEntity> userEntityFileDownloadSet) {
+        this.userEntityFileDownloadSet = userEntityFileDownloadSet;
+    }
+
+    public Set<UserEntity> getUserEntityBalanceTransactionSet() {
+        return userEntityBalanceTransactionSet;
+    }
+
+    public void setUserEntityBalanceTransactionSet(Set<UserEntity> userEntityBalanceTransactionSet) {
+        this.userEntityBalanceTransactionSet = userEntityBalanceTransactionSet;
+    }
+
+    public Set<UserEntity> getUserEntityBookReviewSet() {
+        return userEntityBookReviewSet;
+    }
+
+    public void setUserEntityBookReviewSet(Set<UserEntity> userEntityBookReviewSet) {
+        this.userEntityBookReviewSet = userEntityBookReviewSet;
+    }
 }
