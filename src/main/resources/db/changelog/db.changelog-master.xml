@@ -7,30 +7,28 @@
    http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <!--    <include file="db/changelog/liquibase-outputChangeLog_init.xml"/>-->
+    <include file="db/changelog/author/db.changelog-author.xml"/>
+    <include file="db/changelog/book/db.changelog-book.xml"/>
+    <include file="db/changelog/users/db.changelog-users.xml"/>
+    <include file="db/changelog/genre/db.changelog-genre.xml"/>
 
-<!--    <include file="db/changelog/author/db.changelog-author.xml"/>-->
-<!--    <include file="db/changelog/book/db.changelog-book.xml"/>-->
-<!--    <include file="db/changelog/users/db.changelog-users.xml"/>-->
-<!--    <include file="db/changelog/genre/db.changelog-genre.xml"/>-->
+    <include file="db/changelog/book2author/db.changelog-book2author.xml"/>
+    <include file="db/changelog/book_review/db.changelog-book_review.xml"/>
+    <include file="db/changelog/book_review_like/db.changelog-book_review_like.xml"/>
+    <include file="db/changelog/book2genre/db.changelog-book2genre.xml"/>
+    <include file="db/changelog/user_contact/db.changelog-user_contact.xml"/>
+    <include file="db/changelog/book2user/db.changelog-book2user.xml"/>
+    <include file="db/changelog/book2user_type/db.changelog-book2user_type.xml"/>
+    <include file="db/changelog/balance_transaction/db.changelog-balance_transaction.xml"/>
+    <include file="db/changelog/book_file/db.changelog-book_file.xml"/>
+    <include file="db/changelog/book_file_type/db.changelog-book_file_type.xml"/>
+    <include file="db/changelog/file_download/db.changelog-file_download.xml"/>
+    <include file="db/changelog/document/db.changelog-document.xml"/>
+    <include file="db/changelog/faq/db.changelog-faq.xml"/>
+    <include file="db/changelog/message/db.changelog-message.xml"/>
 
-<!--    <include file="db/changelog/book2author/db.changelog-book2author.xml"/>-->
-<!--    <include file="db/changelog/book_review/db.changelog-book_review.xml"/>-->
-<!--    <include file="db/changelog/book_review_like/db.changelog-book_review_like.xml"/>-->
-<!--    <include file="db/changelog/book2genre/db.changelog-book2genre.xml"/>-->
-<!--    <include file="db/changelog/user_contact/db.changelog-user_contact.xml"/>-->
-<!--    <include file="db/changelog/book2user/db.changelog-book2user.xml"/>-->
-<!--    <include file="db/changelog/book2user_type/db.changelog-book2user_type.xml"/>-->
-<!--    <include file="db/changelog/balance_transaction/db.changelog-balance_transaction.xml"/>-->
-<!--    <include file="db/changelog/book_file/db.changelog-book_file.xml"/>-->
-<!--    <include file="db/changelog/book_file_type/db.changelog-book_file_type.xml"/>-->
-<!--    <include file="db/changelog/file_download/db.changelog-file_download.xml"/>-->
-<!--    <include file="db/changelog/document/db.changelog-document.xml"/>-->
-<!--    <include file="db/changelog/faq/db.changelog-faq.xml"/>-->
-<!--    <include file="db/changelog/message/db.changelog-message.xml"/>-->
-
-<!--    <include file="db/changelog/author/db.changelog-author-populate.xml"/>-->
-<!--    <include file="db/changelog/book/db.changelog-book-populate.xml"/>-->
-<!--    <include file="db/changelog/book2author/db.changelog-book2author-populate.xml"/>-->
+    <include file="db/changelog/author/db.changelog-author-populate.xml"/>
+    <include file="db/changelog/book/db.changelog-book-populate.xml"/>
+    <include file="db/changelog/book2author/db.changelog-book2author-populate.xml"/>
 
 </databaseChangeLog>

@@ -35,21 +35,4 @@ public class LocaleChangeConfig implements WebMvcConfigurer {
         return localeResolver;
     }
 
-//    @Bean
-//    public SpringLiquibase liquibase() {
-//        SpringLiquibase liquibase = new SpringLiquibase();
-//        liquibase.setChangeLog("classpath:/db/changelog/liquibase-outputChangeLog_init.xml");
-//        liquibase.setDataSource(dataSource());
-//        return liquibase;
-//    }
-//
-//    private DataSource dataSource() {
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName("org.postgresql.Driver");
-//        dataSource.setUsername("codewizard");
-//        dataSource.setPassword("1234567");
-//        dataSource.setUrl("jdbc:postgresql://localhost:5432/skillbox");
-//        dataSource.setSchema("dbName");
-//        return dataSource;
-//    }
 }
