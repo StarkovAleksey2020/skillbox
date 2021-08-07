@@ -22,9 +22,6 @@ public class MessageEntity {
     @Column(columnDefinition = "TIMESTAMP NOT NULL")
     private LocalDateTime time;
 
-//    @Column(name = "user_id", columnDefinition = "INT")
-//    private int userId;
-
     @Column(columnDefinition = "VARCHAR(255)")
     private String email;
 

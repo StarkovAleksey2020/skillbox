@@ -19,10 +19,6 @@ public class UserContactEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @JoinColumn(name = "user_id")
-//    @Column(columnDefinition = "INT NOT NULL")
-//    private int userId;
-
     @JoinColumn(name = "type")
     private ContactType type;
 
