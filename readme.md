@@ -25,6 +25,12 @@ call java -jar target/BookStore.jar
 ```
 #### /run_app/run.cmd - application launch script for Windows
 
+## Features of the project
+
+#### Application content localized (russian/english)
+#### The application repository has been moved to JPA
+####Liquibase is connected to manage data migration in the application. Initialization and initial filling of the database is done through the changelog.
+
 ## Reference materials
 
 #### /notes/db_recreate.txt - procedure for rebuilding the database for Linux
