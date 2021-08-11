@@ -1,36 +1,43 @@
 package com.example.MyBookShopApp.entity.book.review;
 
 import com.example.MyBookShopApp.entity.user.UserEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "book_review_like")
+@ApiModel(description = "likes and dislikes of reviews")
 public class BookReviewLikeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @ApiModelProperty(value = "automatically generated field", position = 1)
+    private Long id;
 
     @JoinColumn(name = "review_id")
     @Column(columnDefinition = "INT NOT NULL")
-    private int reviewId;
+    @ApiModelProperty(value = "Review id")
+    private Long reviewId;
 
     @Column(name = "time", columnDefinition = "TIMESTAMP NOT NULL")
+    @ApiModelProperty(value = "The date and time at which the like or dislike was set")
     private LocalDateTime time;
 
     @Column(name = "value", columnDefinition = "SMALLINT NOT NULL")
+    @ApiModelProperty(value = "Like (1) or dislike (-1)")
     private short value;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ApiModelProperty(value = "User id")
     private UserEntity user;
 
 }

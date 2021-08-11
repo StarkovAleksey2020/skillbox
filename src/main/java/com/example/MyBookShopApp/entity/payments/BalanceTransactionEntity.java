@@ -1,36 +1,47 @@
 package com.example.MyBookShopApp.entity.payments;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "balance_transaction")
+@ApiModel(description = "transactions on user accounts")
 public class BalanceTransactionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "automatically generated field", position = 1)
     private int id;
 
     @Column(name = "user_id", columnDefinition = "INT NOT NULL")
-    private int userId;
+    @ApiModelProperty(value = "User id")
+    private Long userId;
 
     @Column(name = "time", columnDefinition = "TIMESTAMP NOT NULL")
+    @ApiModelProperty(value = "Date and time of the transaction")
     private LocalDateTime time;
 
     @Column(name = "value", columnDefinition = "INT NOT NULL  DEFAULT 0")
-    private int value;
+    @ApiModelProperty(value = "Transaction size (positive - crediting, negative - debiting)")
+    private Long value;
 
     @Column(name = "book_id", columnDefinition = "INT NOT NULL")
-    private int bookId;
+    @ApiModelProperty(value = "The book for the purchase of which there was a write-off, or NULL")
+    private Long bookId;
 
     @Column(name = "description", columnDefinition = "TEXT NOT NULL")
+    @ApiModelProperty(value = "Description of the transaction: if credited, then where, if debited, then for what")
     private String description;
 
 }
