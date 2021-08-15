@@ -85,7 +85,7 @@ p.error-browser
                              bookAuthor=${book.authorSet[0].name},
                              bookPriceOld=${book.price},
                              bookPrice=${book.discount})}">
-                                <img src="/assets/img/content/main/card.jpg"
+                                <img th:src="${book.image}"
                                      alt="card.jpg"/></a>
                         </div>
                         <div class="Card-content">
@@ -95,17 +95,20 @@ p.error-browser
                                    th:text="${book.title}">Техника</a>
                             </strong>
                             <div class="Card-description"
-                                 th:text="${book.authorSet[0].name}">Кондратенко Александр Петрович
+                                 th:text="${book.description}">Кондратенко Александр Петрович
                             </div>
                             <div class="Card-cost">
                                 <span class="Card-priceOld" th:text="${book.price} + '₽'">₽300.00</span>
                                 <span class="Card-price" th:text="${book.discount} + '₽'">₽190.00</span>
                             </div>
+                            <div class="Card-pubDate">
+                                <span class="Card-book-pubDate" th:text="${book.pubDate}"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
-                                                                     data-refreshshow="recent" data-refreshoffset="20"
-                                                                     data-refreshlimit="20"
+                                                                     data-refreshshow="recent" data-refreshoffset="0"
+                                                                     data-refreshlimit="10"
                                                                      th:text="#{recent.show}">Показать еще</a>
                     </div>
                 </div>

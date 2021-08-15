@@ -13,6 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.ContentHandler;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,11 +74,31 @@ public class BookService {
 
     public Page<BookEntity> getPageOfRecentBooks(Integer offset, Integer limit) {
         Pageable nextPage = PageRequest.of(offset, limit);
-        return bookRepository.findAll(nextPage);
+        return bookRepository.findAllDesc(nextPage);
     }
 
     public Page<BookEntity> getPageOfPopularBooks(Integer offset, Integer limit) {
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findAll(nextPage);
+    }
+
+    public Page<BookEntity> getPageOfSearchResultBooks(String searchWord, Integer offset, Integer limit) {
+        Pageable nextPage = PageRequest.of(offset, limit);
+        return bookRepository.findBookEntitiesByTitleContaining(searchWord, nextPage);
+    }
+
+    public Page<BookEntity> getPageOfRecentBooksInterval(String dateFrom, String dateTo, Integer offset, Integer limit) {
+        Pageable nextPage = PageRequest.of(offset, limit);
+        Pageable nextPage0 = PageRequest.of(0, 10);
+
+        OffsetDateTime dateTimeFrom = getDateOffset(dateFrom);
+        OffsetDateTime dateTimeTo = getDateOffset(dateTo);
+
+        Page<BookEntity> bookEntities = bookRepository.findBookEntitiesByPubDateAfterAndPubDateBefore(dateTimeFrom, dateTimeTo, nextPage0);
+        return bookEntities;
+    }
+
+    private OffsetDateTime getDateOffset(String inputString) {
+        return OffsetDateTime.parse(inputString.substring(6, 10) + "-" + inputString.substring(3, 5) + "-" + inputString.substring(0, 2) + "T01:00:00+03:00");
     }
 }

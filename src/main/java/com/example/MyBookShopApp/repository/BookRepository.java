@@ -2,10 +2,14 @@ package com.example.MyBookShopApp.repository;
 
 import com.example.MyBookShopApp.entity.AuthorEntity;
 import com.example.MyBookShopApp.entity.BookEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
@@ -27,4 +31,20 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
     @Query(value = "from BookEntity where id = :id")
     BookEntity findByIdExactly(@RequestParam("id") Long id);
 
+    Page<BookEntity> findBookEntitiesByTitleContaining(String bookTitle, Pageable nextPage);
+
+    @Query(value = "FROM BookEntity u WHERE u.pubDate >= :dateFrom AND u.pubDate <= :dateTo")
+    Page<BookEntity> getBookEntityByPubDateInterval(@RequestParam("dateFrom") OffsetDateTime dateFrom,
+                                                   @RequestParam("dateTo") OffsetDateTime dateTo,
+                                                   Pageable nextPage);
+
+    Page<BookEntity> getBookEntityByPubDateAfter(OffsetDateTime dateFrom, Pageable pageable);
+
+    @Query(value = "from BookEntity u where u.pubDate >= :dateFrom AND u.pubDate <= :dateTo ORDER BY u.pubDate DESC")
+    Page<BookEntity> findBookEntitiesByPubDateAfterAndPubDateBefore(OffsetDateTime dateFrom, OffsetDateTime dateTo,Pageable pageable);
+
+    Page<BookEntity> getBookEntityByPubDateBetween(OffsetDateTime dateFrom, OffsetDateTime dateTo,Pageable pageable);
+
+    @Query(value = "from BookEntity u ORDER BY u.pubDate DESC")
+    Page<BookEntity> findAllDesc(Pageable nextPage);
 }

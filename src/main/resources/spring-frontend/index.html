@@ -64,8 +64,8 @@ p.error-browser
                                                  bookAuthorName=${book.authorSet[0].name},
                                                  bookPriceOld=${book.price},
                                                  bookPrice=${book.discount})}"
-                                       href="/books/slug.html"><img
-                                            th:src="${book.image}" alt="card.jpg"/></a>
+                                       href="/books/slug.html">
+                                        <img th:src="${book.image}" alt="card.jpg"/></a>
                                     <div class="Card-content">
                                         <strong class="Card-title">
                                             <a th:href="@{/slug(bookTitle=${book.title},
@@ -74,7 +74,8 @@ p.error-browser
                                                          bookPrice=${book.discount})}"
                                                th:text="${book.title}">Техника</a>
                                         </strong>
-                                        <div class="Card-description" th:text="${book.authorSet[0].name}">Кондратенко Валерий
+                                        <div class="Card-description" th:text="${book.description}">Кондратенко
+                                            Валерий
                                             Петрович
                                         </div>
                                         <div class="Card-cost">
@@ -126,7 +127,7 @@ p.error-browser
                                                th:text="${book.title}">Техника</a>
                                         </strong>
                                         <div class="Card-description"
-                                             th:text="${book.authorSet[0].name}">Кондратенко Александр Петрович
+                                             th:text="${book.description} + '!!!'">Кондратенко Александр Петрович
                                         </div>
                                         <div class="Card-cost">
                                             <span class="Card-priceOld"
@@ -180,7 +181,7 @@ p.error-browser
                                                th:text="${book.title}">Техника</a>
                                         </strong>
                                         <div class="Card-description"
-                                             th:text="${book.authorSet[0].name}">Кондратенко Александр Петрович
+                                             th:text="${book.description}">Кондратенко Александр Петрович
                                         </div>
                                         <div class="Card-cost">
                                             <span class="Card-priceOld" th:text="${book.price} + '₽'">₽500.00</span>
@@ -205,7 +206,7 @@ p.error-browser
             </h2>
             <div class="Tags" id="tags">
                 <div class="Tag Tag_xs"><a th:href="@{/tags(tagName='современная литература')}"
-                th:text="#{main.tags.item.0}">современная литература</a>
+                                           th:text="#{main.tags.item.0}">современная литература</a>
                 </div>
                 <div class="Tag Tag_sm"><a th:href="@{/tags(tagName='классическая литература')}"
                                            th:text="#{main.tags.item.1}">классическая литература</a>
