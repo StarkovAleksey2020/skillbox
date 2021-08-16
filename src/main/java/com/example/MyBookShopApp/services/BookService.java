@@ -101,4 +101,9 @@ public class BookService {
     private OffsetDateTime getDateOffset(String inputString) {
         return OffsetDateTime.parse(inputString.substring(6, 10) + "-" + inputString.substring(3, 5) + "-" + inputString.substring(0, 2) + "T01:00:00+03:00");
     }
+
+    public Page<BookEntity> getPageOfPopularBooksOrdered(Integer offset, Integer limit) {
+        Pageable nextPage = PageRequest.of(offset, limit);
+        return bookRepository.findBooksByPopularRate(nextPage);
+    }
 }

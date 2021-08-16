@@ -35,16 +35,19 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     @Query(value = "FROM BookEntity u WHERE u.pubDate >= :dateFrom AND u.pubDate <= :dateTo")
     Page<BookEntity> getBookEntityByPubDateInterval(@RequestParam("dateFrom") OffsetDateTime dateFrom,
-                                                   @RequestParam("dateTo") OffsetDateTime dateTo,
-                                                   Pageable nextPage);
+                                                    @RequestParam("dateTo") OffsetDateTime dateTo,
+                                                    Pageable nextPage);
 
     Page<BookEntity> getBookEntityByPubDateAfter(OffsetDateTime dateFrom, Pageable pageable);
 
     @Query(value = "from BookEntity u where u.pubDate >= :dateFrom AND u.pubDate <= :dateTo ORDER BY u.pubDate DESC")
-    Page<BookEntity> findBookEntitiesByPubDateAfterAndPubDateBefore(OffsetDateTime dateFrom, OffsetDateTime dateTo,Pageable pageable);
+    Page<BookEntity> findBookEntitiesByPubDateAfterAndPubDateBefore(OffsetDateTime dateFrom, OffsetDateTime dateTo, Pageable pageable);
 
-    Page<BookEntity> getBookEntityByPubDateBetween(OffsetDateTime dateFrom, OffsetDateTime dateTo,Pageable pageable);
+    Page<BookEntity> getBookEntityByPubDateBetween(OffsetDateTime dateFrom, OffsetDateTime dateTo, Pageable pageable);
 
     @Query(value = "from BookEntity u ORDER BY u.pubDate DESC")
     Page<BookEntity> findAllDesc(Pageable nextPage);
+
+    @Query(value = "select b.* from book b join book2user bu on bu.book_id = b.id group by b.id order by (count(case when bu.type_id = 3 then bu.id end) + count(case when bu.type_id = 2 then bu.id end) * 0.7 + count(case when bu.type_id = 1 then bu.id end) * 0.4) desc", nativeQuery = true)
+    Page<BookEntity> findBooksByPopularRate(Pageable nextPage);
 }

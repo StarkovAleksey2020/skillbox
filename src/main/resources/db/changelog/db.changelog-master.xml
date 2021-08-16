@@ -31,4 +31,8 @@
 <!--    <include file="db/changelog/book/db.changelog-book-populate.xml"/>-->
 <!--    <include file="db/changelog/book2author/db.changelog-book2author-populate.xml"/>-->
 
+<!--    <include file="db/changelog/users/db.changelog-users-populate.xml"/>-->
+<!--    <include file="db/changelog/book2user_type/db.changelog-book2user_type-populate.xml"/>-->
+<!--    <include file="db/changelog/book2user/db.changelog-book2user-populate.xml"/>-->
+
 </databaseChangeLog>

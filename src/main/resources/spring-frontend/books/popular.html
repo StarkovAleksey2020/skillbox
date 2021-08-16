@@ -68,7 +68,7 @@ p.error-browser
                              bookAuthor=${book.authorSet[0].name},
                              bookPriceOld=${book.price},
                              bookPrice=${book.discount})}">
-                                <img src="/assets/img/content/main/card.jpg"
+                                <img th:src="${book.image}" src="/assets/img/content/main/card.jpg"
                                      alt="card.jpg"/>
                             </a>
                         </div>
@@ -76,7 +76,7 @@ p.error-browser
                             <strong class="Card-title"><a href="#" th:href="@{/slug}"
                                                           th:text="${book.title}">Техника</a>
                             </strong>
-                            <div class="Card-description" th:text="${book.authorSet[0].name}">Кондратенко Александр Петрович
+                            <div class="Card-description" th:text="${book.description}">Кондратенко Александр Петрович
                             </div>
                             <div class="Card-cost">
                                 <span class="Card-priceOld" th:text="${book.price} + '₽'">₽300.00</span>
@@ -85,8 +85,8 @@ p.error-browser
                         </div>
                     </div>
                     <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
-                                                                     data-refreshshow="popular" data-refreshoffset="20"
-                                                                     data-refreshlimit="20"
+                                                                     data-refreshshow="popular" data-refreshoffset="10"
+                                                                     data-refreshlimit="10"
                                                                      th:text="#{recent.show}">Показать еще</a>
                     </div>
                 </div>

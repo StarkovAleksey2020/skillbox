@@ -29,7 +29,7 @@ public class MainPageController {
 
     @ModelAttribute("popularBooks")
     public List<BookEntity> getPopularBooks() {
-        return bookService.getPageOfPopularBooks(0, 10).getContent();
+        return bookService.getPageOfPopularBooksOrdered(0, 10).getContent();
     }
 
     @ModelAttribute("recentBooks")
@@ -138,7 +138,7 @@ public class MainPageController {
     @ResponseBody
     public BooksPageDto getBooksPopularPage(@RequestParam("offset") Integer offset,
                                             @RequestParam("limit") Integer limit) {
-        return new BooksPageDto(bookService.getPageOfPopularBooks(offset, limit).getContent());
+        return new BooksPageDto(bookService.getPageOfPopularBooksOrdered(offset, limit).getContent());
     }
 
     @GetMapping(value = {"/search", "/search/{searchWord}"})

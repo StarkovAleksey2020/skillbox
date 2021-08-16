@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="users-populate" author="codewizard">
+        <sql>
+            insert into users (id, hash, reg_time, balance, name) values (1, '2c1b72880f805e76a260121853553cd8b9d56552', '2020/09/24', 403, 'Clarine Churchyard');
+            insert into users (id, hash, reg_time, balance, name) values (2, '983c61e0dff9421f59ffe3c0104ca00fa8b34362', '2020/09/10', 261, 'Carmelle Lacky');
+            insert into users (id, hash, reg_time, balance, name) values (3, 'c0de5fb6f2fd155b406cf190f210f520385b8b1a', '2021/01/07', 886, 'Freddie Stienham');
+            insert into users (id, hash, reg_time, balance, name) values (4, '2dfd8b11d2060a09600fa212582afd4addb2bd30', '2020/12/28', 295, 'Kerri Reimers');
+            insert into users (id, hash, reg_time, balance, name) values (5, 'c9d7e76cf01c8809d9f84b49a18445d4dc99049a', '2021/05/20', 781, 'Jess Beller');
+            insert into users (id, hash, reg_time, balance, name) values (6, '7fa9b63ab3da51dc359aac9fa85efb2f7626c7d6', '2020/12/04', 936, 'Cyndy Oakenfull');
+            insert into users (id, hash, reg_time, balance, name) values (7, '7a03087931e9e09fdb294292a270ae68d526f545', '2020/10/19', 879, 'Tarrance Eggleston');
+            insert into users (id, hash, reg_time, balance, name) values (8, '95cae19725454cc5a0ffe50eae23ae31b652dede', '2021/02/10', 162, 'Blondy Topley');
+            insert into users (id, hash, reg_time, balance, name) values (9, 'aad9759702b72cdcf2c2ecd5afd8d6cec376334c', '2021/01/16', 597, 'Del Mattheus');
+            insert into users (id, hash, reg_time, balance, name) values (10, 'de503c3365bf231ebfa0ddafec130761ebf1908e', '2021/04/05', 586, 'Alvis Willows');
+        </sql>
+    </changeSet>
+</databaseChangeLog>
