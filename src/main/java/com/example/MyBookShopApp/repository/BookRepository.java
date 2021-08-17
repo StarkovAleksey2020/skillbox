@@ -6,12 +6,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 
+@Repository
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     List<BookEntity> findBookEntitiesByAuthorSetContaining(AuthorEntity authorEntity);
@@ -50,4 +52,8 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     @Query(value = "select b.* from book b join book2user bu on bu.book_id = b.id group by b.id order by (count(case when bu.type_id = 3 then bu.id end) + count(case when bu.type_id = 2 then bu.id end) * 0.7 + count(case when bu.type_id = 1 then bu.id end) * 0.4) desc", nativeQuery = true)
     Page<BookEntity> findBooksByPopularRate(Pageable nextPage);
+
+    @Query(value = "select b from BookEntity b join Book2TagEntity bt on bt.bookId = b.id where bt.tagId = :id")
+    Page<BookEntity> findBooksByTag(Long id, Pageable nextPage);
+
 }

@@ -4,6 +4,8 @@ import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.services.BookService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@Api(description = "main controller")
 public class MainPageController {
 
     private final BookService bookService;
@@ -125,7 +128,16 @@ public class MainPageController {
         return new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit).getContent());
     }
 
+    @GetMapping("/books/tags")
+    @ResponseBody
+    public BooksPageDto getBooksTagsPage(@RequestParam("tagName") String tagName,
+                                         @RequestParam("offset") Integer offset,
+                                         @RequestParam("limit") Integer limit) {
+        return new BooksPageDto(bookService.getPageOfTaggedBooks(tagName, offset, limit).getContent());
+    }
+
     @GetMapping("/books/recent/interval")
+    @ApiOperation("method to get recent books in date interval")
     @ResponseBody
     public BooksPageDto getBooksRecentPageInDateInterval(@RequestParam("from") String from,
                                                          @RequestParam("to") String to,
@@ -135,6 +147,7 @@ public class MainPageController {
     }
 
     @GetMapping("/books/popular")
+    @ApiOperation("method to get popular books ordered by book2user")
     @ResponseBody
     public BooksPageDto getBooksPopularPage(@RequestParam("offset") Integer offset,
                                             @RequestParam("limit") Integer limit) {
@@ -142,6 +155,7 @@ public class MainPageController {
     }
 
     @GetMapping(value = {"/search", "/search/{searchWord}"})
+    @ApiOperation("method to search books")
     public String getSearchResults(@PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto,
                                    Model model) {
         model.addAttribute("searchWordDto", searchWordDto);

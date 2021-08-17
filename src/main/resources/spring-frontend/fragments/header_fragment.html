@@ -27,7 +27,8 @@
                             th:object="${searchWordDto}">
                                 <input class="search-input" id="query" name="query" type="text"
                                        th:placeholder="#{topbar.search.placeholder}"
-                                       placeholder="Search over 30 million book titles" th:field="*{example}" value=""/>
+                                       placeholder="Search over 30 million book titles" value=""/>
+<!--                                       placeholder="Search over 30 million book titles" th:field="*{example}" value=""/>-->
                                 <button class="search-button" type="submit" name="search" id="search" th:text="#{topbar.search}">Поиск
                                 </button>
                             </form>

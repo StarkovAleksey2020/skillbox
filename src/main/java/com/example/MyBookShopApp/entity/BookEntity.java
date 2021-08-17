@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.entity;
 
 import com.example.MyBookShopApp.entity.genre.GenreEntity;
+import com.example.MyBookShopApp.entity.tag.TagEntity;
 import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
@@ -100,5 +101,12 @@ public class BookEntity {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @JsonIgnore
     private List<UserEntity> userEntityBookReviewSet;
+
+    @ManyToMany
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    @JoinTable(name = "book2tag", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JsonIgnore
+    private List<TagEntity> tagEntities;
 
 }

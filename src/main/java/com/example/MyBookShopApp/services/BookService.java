@@ -2,21 +2,18 @@ package com.example.MyBookShopApp.services;
 
 import com.example.MyBookShopApp.entity.AuthorEntity;
 import com.example.MyBookShopApp.entity.BookEntity;
-import com.example.MyBookShopApp.entity.book.links.Book2AuthorEntity;
+import com.example.MyBookShopApp.entity.tag.TagEntity;
 import com.example.MyBookShopApp.repository.AuthorRepository;
 import com.example.MyBookShopApp.repository.Book2AuthorRepository;
 import com.example.MyBookShopApp.repository.BookRepository;
+import com.example.MyBookShopApp.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.net.ContentHandler;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,12 +22,14 @@ public class BookService {
     private BookRepository bookRepository;
     private Book2AuthorRepository book2AuthorRepository;
     private AuthorRepository authorRepository;
+    private TagRepository tagRepository;
 
     @Autowired
-    public BookService(BookRepository bookRepository, Book2AuthorRepository book2AuthorRepository, AuthorRepository authorRepository) {
+    public BookService(BookRepository bookRepository, Book2AuthorRepository book2AuthorRepository, AuthorRepository authorRepository, TagRepository tagRepository) {
         this.bookRepository = bookRepository;
         this.book2AuthorRepository = book2AuthorRepository;
         this.authorRepository = authorRepository;
+        this.tagRepository = tagRepository;
     }
 
     public List<BookEntity> getBooksData() {
@@ -105,5 +104,11 @@ public class BookService {
     public Page<BookEntity> getPageOfPopularBooksOrdered(Integer offset, Integer limit) {
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findBooksByPopularRate(nextPage);
+    }
+
+    public Page<BookEntity> getPageOfTaggedBooks(String tagName, Integer offset, Integer limit) {
+        Pageable nextPage = PageRequest.of(offset, limit);
+        TagEntity tagEntity = tagRepository.findByName(tagName);
+        return bookRepository.findBooksByTag(tagEntity.getId(), nextPage);
     }
 }
