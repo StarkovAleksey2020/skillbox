@@ -136,6 +136,14 @@ public class MainPageController {
         return new BooksPageDto(bookService.getPageOfTaggedBooks(tagName, offset, limit).getContent());
     }
 
+    @GetMapping("/books/genre")
+    @ResponseBody
+    public BooksPageDto getBooksPageByGenre(@RequestParam("genreId") Long genreId,
+                                            @RequestParam("offset") Integer offset,
+                                            @RequestParam("limit") Integer limit) {
+        return new BooksPageDto(bookService.getPageOfBooksByGenreId(genreId, offset, limit).getContent());
+    }
+
     @GetMapping("/books/recent/interval")
     @ApiOperation("method to get recent books in date interval")
     @ResponseBody

@@ -56,7 +56,14 @@
         <div class="Product">
           <div class="ProductCard">
             <div class="ProductCard-look">
-              <div class="ProductCard-photo"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
+              <div class="ProductCard-photo">
+                <img th:src="${bookImage}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
+                <div th:if="${isBestseller == 1}" class="Card-ribbon">
+                  <span class="Card-ribbonText">Бестселлер</span>
+                </div>
+                <div class="Card-sale">
+                  <span th:text="${bookDiscount} + '% скидка'"></span>
+                </div>
               </div>
             </div>
             <div class="ProductCard-desc">
@@ -331,9 +338,11 @@
                         </svg></span>
                       <input name="rating" type="radio" value="5"/></span></span>
                 </div>
-                <div class="ProductCard-tags"><span class="ProductCard-titleProp">Тэги:</span><a href="/tags/">Современные</a>,&#32;<a href="/tags/">Психологическая проза</a>
+                <div class="ProductCard-tags"><span class="ProductCard-titleProp">Тэги:</span>
+                  <a th:href="@{/tags(tagName=${tag}, offset='0', limit='10')}" th:text="${tag}"></a>
                 </div>
-                <div class="ProductCard-cost"><span class="ProductCard-titleProp">Цена:</span><span class="ProductCard-priceOld" th:text="${bookPriceOld}">₽300</span><span class="ProductCard-price" th:text="${bookPrice}">₽180</span>
+                <div class="ProductCard-cost"><span class="ProductCard-titleProp">Цена:</span>
+                  <span class="ProductCard-price" th:text="'₽' + ${price}">₽180</span>
                 </div>
                 <!--+div.-info
                 //+div.-cost
@@ -345,8 +354,9 @@
                 -->
               </div>
               <div class="ProductCard-text">
-                <p>Таких, как я, называют Марами - отмеченными самой богиней смерти Мораной. Когда-то у меня и моих шести сестер был свой путь. Тогда люди нас уважали и просили о милосердии. Они приносили нам подношения и молились нам. Но 200 лет назад все изменилось, когда принц Серата осмелился поднять руку на одну из нас. Я пыталась отомстить, но погибли мы все. Теперь правители Аракена, погрязшие в длительной войне со своим соседом Сератом, решили вернуть меня к жизни. Дать второй шанс на месть и свободу, привязав меня к тому, против кого я никогда не пойду. Таких, как он, называют Морок, и их боятся абсолютно все.
-                </p>
+                <p th:text="${description}"></p>
+<!--                <p>Таких, как я, называют Марами - отмеченными самой богиней смерти Мораной. Когда-то у меня и моих шести сестер был свой путь. Тогда люди нас уважали и просили о милосердии. Они приносили нам подношения и молились нам. Но 200 лет назад все изменилось, когда принц Серата осмелился поднять руку на одну из нас. Я пыталась отомстить, но погибли мы все. Теперь правители Аракена, погрязшие в длительной войне со своим соседом Сератом, решили вернуть меня к жизни. Дать второй шанс на месть и свободу, привязав меня к тому, против кого я никогда не пойду. Таких, как он, называют Морок, и их боятся абсолютно все.-->
+<!--                </p>-->
               </div>
               <div class="ProductCard-cart">
                 <!--+div.-cartElement.-cartElement_amount-->

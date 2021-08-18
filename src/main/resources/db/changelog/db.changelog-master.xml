@@ -26,8 +26,8 @@
     <!--    <include file="db/changelog/document/db.changelog-document.xml"/>-->
     <!--    <include file="db/changelog/faq/db.changelog-faq.xml"/>-->
     <!--    <include file="db/changelog/message/db.changelog-message.xml"/>-->
-<!--    <include file="db/changelog/tag/db.changelog-tag.xml"/>-->
-<!--    <include file="db/changelog/book2tag/db.changelog-book2tag.xml"/>-->
+    <!--    <include file="db/changelog/tag/db.changelog-tag.xml"/>-->
+    <!--    <include file="db/changelog/book2tag/db.changelog-book2tag.xml"/>-->
 
     <!--    <include file="db/changelog/author/db.changelog-author-populate.xml"/>-->
     <!--    <include file="db/changelog/book/db.changelog-book-populate.xml"/>-->
@@ -36,7 +36,9 @@
     <!--    <include file="db/changelog/users/db.changelog-users-populate.xml"/>-->
     <!--    <include file="db/changelog/book2user_type/db.changelog-book2user_type-populate.xml"/>-->
     <!--    <include file="db/changelog/book2user/db.changelog-book2user-populate.xml"/>-->
-<!--    <include file="db/changelog/tag/db.changelog-tag-populate.xml"/>-->
-<!--    <include file="db/changelog/book2tag/db.changelog-book2tag-populate.xml"/>-->
+    <!--    <include file="db/changelog/tag/db.changelog-tag-populate.xml"/>-->
+    <!--    <include file="db/changelog/book2tag/db.changelog-book2tag-populate.xml"/>-->
+    <!--    <include file="db/changelog/genre/db.changelog-genre-populate.xml"/>-->
+    <!--    <include file="db/changelog/book2genre/db.changelog-book2genre-populate.xml"/>-->
 
 </databaseChangeLog>

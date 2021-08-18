@@ -62,53 +62,52 @@ p.error-browser
                     </div>
                 </div>
 
-                <!--                <div class="Cards Cards_refresh">-->
                 <div class="Cards Cards_refresh" data-load="tag" data-loadoffset="0" data-loadlimit="10">
-                    <!--                        <div class="Card" th:href="@{/slug(bookTitle=${book.title},-->
-                    <!--                                                 bookAuthorName=${book.authorSet[0].name}-->
-                    <!--                                                 bookPriceOld=${book.price},-->
-                    <!--                                                 bookPrice=${book.discount})}">-->
-                    <div class="Card" th:each="book : ${taggedBooks}">
-
-
+                    <div class="Card" th:href="@{/tags/slug(bookTitle=${book.title},
+                                bookAuthorName=${book.authorSet[0].name},
+                                description=${book.description},
+                                id=${book.id},
+                                price=${book.price})}" th:each="book : ${taggedBooks}">
                         <div class="Card-picture">
-                            <a>
+                            <a th:href="@{/tags/slug(bookTitle=${book.title},
+                                bookAuthorName=${book.authorSet[0].name},
+                                description=${book.description},
+                                id=${book.id},
+                                price=${book.price})}">
                                 <img th:src="${book.image}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
+                                <div th:if="${book.isBestseller == 1}" class="Card-ribbon"><span
+                                        class="Card-ribbonText">Бестселлер</span></div>
+                                <div class="Card-sale"><span th:text="${book.discount} + '% скидка'"></span></div>
                             </a>
-                            <!--                                <a th:href="@{/slug(bookTitle=${book.title},-->
-                            <!--                                                 bookAuthorName=${book.authorSet[0].name}-->
-                            <!--                                                 bookPriceOld=${book.price},-->
-                            <!--                                                 bookPrice=${book.discount})}">-->
-                            <!--                                    <img th:src="${book.image}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>-->
-                            <!--                                </a>-->
                         </div>
                         <div class="Card-content">
                             <strong class="Card-title">
-                                <!--                                    <a th:href="@{/slug(bookTitle=${book.title},-->
-                                <!--                                                 bookAuthorName=${book.authorSet[0].name}-->
-                                <!--                                                 bookPriceOld=${book.price},-->
-                                <!--                                                 bookPrice=${book.discount})}"-->
-                                <!--                                       th:text="${book.title}">Техника</a>-->
+                                <strong class="Card-title">
+                                    <a th:href="@{/tags/slug(bookTitle=${book.title},
+                                        bookAuthorName=${book.authorSet[0].name},
+                                        description=${book.description},
+                                        id=${book.id},
+                                        price=${book.price})}"
+                                       th:text="${book.title}">
+                                    </a>
+                                </strong>
                             </strong>
                             <div class="Card-description" th:text="${book.description}">Кондратенко Александр
                                 Петрович
                             </div>
-                            <div class="Card-cost">
-                                <span class="Card-priceOld" th:text="${book.price}">₽300.00</span>
-                                <span class="Card-price" th:text="${book.discount}">₽190.00</span>
+                            <div class="Card-cost" th:with="priceOld=${book.price + (book.price * book.discount / 100)}">
+                                <span class="Card-priceOld" th:text="'₽' + ${@thymeMath.ceil(priceOld)}"></span>
+                                <span class="Card-price" th:text="'₽' + ${book.price}">₽300.00</span>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
-                <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
-                                                                 data-refreshshow="tag" data-refreshoffset="10"
-                                                                 data-refreshlimit="10" data-refreshid="10"
-                                                                 th:data-refreshtagname="${tagName}">Показать
-                    еще</a>
+                <div class="Cards-footer Cards-footer_center">
+                    <a class="btn btn_primary" href="#"
+                       data-refreshshow="tag" data-refreshoffset="10"
+                       data-refreshlimit="10" data-refreshid="10"
+                       th:data-refreshtagname="${tagName}">Показать еще</a>
                 </div>
-                <!--                </div>-->
             </div>
         </main>
     </div>

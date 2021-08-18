@@ -40,4 +40,25 @@ public class TagsPageController {
         return "tags/index";
     }
 
+    @GetMapping("/tags/slug")
+    public String getBookInfo(@RequestParam(value = "bookTitle", required = false) String bookTitle,
+                              @RequestParam(value = "bookAuthorName", required = false) String bookAuthorName,
+                              @RequestParam(value = "description", required = false) String description,
+                              @RequestParam(value = "id", required = false) Long id,
+                              @RequestParam(value = "price", required = false) String price,
+                              @RequestParam(value = "bookImage", required = false) String bookImage,
+                              @RequestParam(value = "isBestseller", required = false) Integer isBestseller,
+                              @RequestParam(value = "bookDiscount", required = false) String bookDiscount,
+                              Model model) {
+        model.addAttribute("bookTitle", bookTitle);
+        model.addAttribute("bookAuthorName", bookAuthorName);
+        model.addAttribute("description", description);
+        model.addAttribute("tag", bookService.getBookTag(id));
+        model.addAttribute("price", price);
+        model.addAttribute("bookImage", bookImage);
+        model.addAttribute("isBestseller", isBestseller);
+        model.addAttribute("bookDiscount", bookDiscount);
+        return "books/slug";
+    }
+
 }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="book2genre-populate" author="codewizard">
+        <sql>
+            insert into book2genre (book_id, genre_id) values (1, 2);
+            insert into book2genre (book_id, genre_id) values (2, 2);
+            insert into book2genre (book_id, genre_id) values (3, 1);
+            insert into book2genre (book_id, genre_id) values (4, 5);
+            insert into book2genre (book_id, genre_id) values (5, 6);
+            insert into book2genre (book_id, genre_id) values (6, 7);
+            insert into book2genre (book_id, genre_id) values (7, 8);
+            insert into book2genre (book_id, genre_id) values (8, 9);
+            insert into book2genre (book_id, genre_id) values (9, 10);
+            insert into book2genre (book_id, genre_id) values (10, 11);
+            insert into book2genre (book_id, genre_id) values (11, 12);
+            insert into book2genre (book_id, genre_id) values (12, 13);
+            insert into book2genre (book_id, genre_id) values (13, 14);
+            insert into book2genre (book_id, genre_id) values (14, 15);
+            insert into book2genre (book_id, genre_id) values (15, 16);
+            insert into book2genre (book_id, genre_id) values (16, 18);
+            insert into book2genre (book_id, genre_id) values (17, 20);
+            insert into book2genre (book_id, genre_id) values (18, 21);
+            insert into book2genre (book_id, genre_id) values (19, 22);
+            insert into book2genre (book_id, genre_id) values (20, 23);
+            insert into book2genre (book_id, genre_id) values (21, 24);
+            insert into book2genre (book_id, genre_id) values (22, 25);
+            insert into book2genre (book_id, genre_id) values (23, 26);
+            insert into book2genre (book_id, genre_id) values (24, 27);
+            insert into book2genre (book_id, genre_id) values (25, 28);
+            insert into book2genre (book_id, genre_id) values (26, 29);
+            insert into book2genre (book_id, genre_id) values (27, 30);
+            insert into book2genre (book_id, genre_id) values (28, 31);
+            insert into book2genre (book_id, genre_id) values (29, 32);
+            insert into book2genre (book_id, genre_id) values (30, 33);
+            insert into book2genre (book_id, genre_id) values (31, 34);
+            insert into book2genre (book_id, genre_id) values (32, 35);
+            insert into book2genre (book_id, genre_id) values (33, 36);
+            insert into book2genre (book_id, genre_id) values (34, 37);
+            insert into book2genre (book_id, genre_id) values (35, 38);
+            insert into book2genre (book_id, genre_id) values (36, 39);
+            insert into book2genre (book_id, genre_id) values (37, 40);
+            insert into book2genre (book_id, genre_id) values (38, 41);
+            insert into book2genre (book_id, genre_id) values (39, 42);
+            insert into book2genre (book_id, genre_id) values (40, 43);
+            insert into book2genre (book_id, genre_id) values (41, 44);
+            insert into book2genre (book_id, genre_id) values (42, 45);
+            insert into book2genre (book_id, genre_id) values (43, 46);
+            insert into book2genre (book_id, genre_id) values (44, 47);
+            insert into book2genre (book_id, genre_id) values (45, 48);
+            insert into book2genre (book_id, genre_id) values (46, 49);
+            insert into book2genre (book_id, genre_id) values (47, 50);
+            insert into book2genre (book_id, genre_id) values (48, 51);
+            insert into book2genre (book_id, genre_id) values (49, 52);
+            insert into book2genre (book_id, genre_id) values (50, 53);
+            insert into book2genre (book_id, genre_id) values (51, 54);
+            insert into book2genre (book_id, genre_id) values (52, 55);
+            insert into book2genre (book_id, genre_id) values (53, 56);
+            insert into book2genre (book_id, genre_id) values (54, 58);
+            insert into book2genre (book_id, genre_id) values (55, 59);
+            insert into book2genre (book_id, genre_id) values (56, 60);
+            insert into book2genre (book_id, genre_id) values (57, 61);
+            insert into book2genre (book_id, genre_id) values (58, 2);
+            insert into book2genre (book_id, genre_id) values (59, 2);
+            insert into book2genre (book_id, genre_id) values (60, 2);
+            insert into book2genre (book_id, genre_id) values (61, 2);
+            insert into book2genre (book_id, genre_id) values (62, 2);
+            insert into book2genre (book_id, genre_id) values (63, 2);
+            insert into book2genre (book_id, genre_id) values (64, 2);
+            insert into book2genre (book_id, genre_id) values (65, 2);
+            insert into book2genre (book_id, genre_id) values (66, 2);
+            insert into book2genre (book_id, genre_id) values (67, 2);
+            insert into book2genre (book_id, genre_id) values (68, 2);
+            insert into book2genre (book_id, genre_id) values (69, 2);
+            insert into book2genre (book_id, genre_id) values (70, 2);
+            insert into book2genre (book_id, genre_id) values (71, 2);
+            insert into book2genre (book_id, genre_id) values (72, 2);
+            insert into book2genre (book_id, genre_id) values (73, 2);
+            insert into book2genre (book_id, genre_id) values (74, 2);
+            insert into book2genre (book_id, genre_id) values (75, 2);
+            insert into book2genre (book_id, genre_id) values (76, 2);
+            insert into book2genre (book_id, genre_id) values (77, 2);
+            insert into book2genre (book_id, genre_id) values (78, 2);
+            insert into book2genre (book_id, genre_id) values (79, 2);
+            insert into book2genre (book_id, genre_id) values (80, 2);
+            insert into book2genre (book_id, genre_id) values (81, 2);
+            insert into book2genre (book_id, genre_id) values (82, 2);
+            insert into book2genre (book_id, genre_id) values (83, 2);
+            insert into book2genre (book_id, genre_id) values (84, 3);
+            insert into book2genre (book_id, genre_id) values (85, 3);
+            insert into book2genre (book_id, genre_id) values (86, 3);
+            insert into book2genre (book_id, genre_id) values (87, 3);
+            insert into book2genre (book_id, genre_id) values (88, 3);
+            insert into book2genre (book_id, genre_id) values (89, 3);
+            insert into book2genre (book_id, genre_id) values (90, 3);
+            insert into book2genre (book_id, genre_id) values (91, 3);
+            insert into book2genre (book_id, genre_id) values (92, 3);
+            insert into book2genre (book_id, genre_id) values (93, 3);
+            insert into book2genre (book_id, genre_id) values (94, 3);
+            insert into book2genre (book_id, genre_id) values (95, 3);
+            insert into book2genre (book_id, genre_id) values (96, 3);
+            insert into book2genre (book_id, genre_id) values (97, 3);
+            insert into book2genre (book_id, genre_id) values (98, 3);
+            insert into book2genre (book_id, genre_id) values (99, 3);
+            insert into book2genre (book_id, genre_id) values (100, 3);
+        </sql>
+    </changeSet>
+</databaseChangeLog>
