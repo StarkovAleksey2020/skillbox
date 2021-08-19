@@ -115,6 +115,7 @@ public class MainPageController {
     }
 
     @GetMapping("/books/recommended")
+    @ApiOperation("Getting a page-by-page list of recommended books")
     @ResponseBody
     public BooksPageDto getBooksPage(@RequestParam("offset") Integer offset,
                                      @RequestParam("limit") Integer limit) {
@@ -122,6 +123,7 @@ public class MainPageController {
     }
 
     @GetMapping("/books/recent")
+    @ApiOperation("Getting a page-by-page list of recent books")
     @ResponseBody
     public BooksPageDto getBooksRecentPage(@RequestParam("offset") Integer offset,
                                            @RequestParam("limit") Integer limit) {
@@ -129,6 +131,7 @@ public class MainPageController {
     }
 
     @GetMapping("/books/tags")
+    @ApiOperation("Getting a page-by-page list of tagged books")
     @ResponseBody
     public BooksPageDto getBooksTagsPage(@RequestParam("tagName") String tagName,
                                          @RequestParam("offset") Integer offset,
@@ -137,6 +140,7 @@ public class MainPageController {
     }
 
     @GetMapping("/books/genre")
+    @ApiOperation("Getting a paginated list of books by genre")
     @ResponseBody
     public BooksPageDto getBooksPageByGenre(@RequestParam("genreId") Long genreId,
                                             @RequestParam("offset") Integer offset,
@@ -144,7 +148,17 @@ public class MainPageController {
         return new BooksPageDto(bookService.getPageOfBooksByGenreId(genreId, offset, limit).getContent());
     }
 
+    @GetMapping("/books/author")
+    @ApiOperation("Getting a paginated list of books by author id")
+    @ResponseBody
+    public BooksPageDto getBooksPageByAuthor(@RequestParam("authorId") Long authorId,
+                                            @RequestParam("offset") Integer offset,
+                                            @RequestParam("limit") Integer limit) {
+        return new BooksPageDto(bookService.getPageOfBooksByAuthorId(authorId, offset, limit).getContent());
+    }
+
     @GetMapping("/books/folder/genre")
+    @ApiOperation("Getting a page-by-page list of books by genre sections")
     @ResponseBody
     public BooksPageDto getBooksPageByGenreFolder(@RequestParam("folderId") Long folderId,
                                                   @RequestParam("offset") Integer offset,
@@ -181,6 +195,7 @@ public class MainPageController {
     }
 
     @GetMapping("/search/page/{searchWord}")
+    @ApiOperation("Getting a page-by-page list of books by search")
     @ResponseBody
     public BooksPageDto getNextSearchPage(@RequestParam("offset") Integer offset,
                                           @RequestParam("limit") Integer limit,

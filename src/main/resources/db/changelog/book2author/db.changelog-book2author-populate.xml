@@ -6,16 +6,16 @@
     <changeSet id="book2author-populate" author="codewizard">
         <sql>
             INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (1,1,0);
-            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (2,2,0);
-            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (3,3,0);
-            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (4,4,0);
-            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (5,5,0);
-            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (6,6,0);
-            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (7,7,0);
-            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (8,8,0);
-            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (9,9,0);
-            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (10,10,0);
-            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (11,11,0);
+            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (2,1,0);
+            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (3,1,0);
+            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (4,1,0);
+            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (5,1,0);
+            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (6,1,0);
+            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (7,1,0);
+            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (8,1,0);
+            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (9,1,0);
+            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (10,1,0);
+            INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (11,1,0);
             INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (12,12,0);
             INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (13,13,0);
             INSERT INTO "book2author" (book_id,author_id,sort_index) VALUES (14,14,0);

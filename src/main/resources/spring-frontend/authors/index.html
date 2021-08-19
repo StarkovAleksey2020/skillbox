@@ -65,7 +65,7 @@ p.error-browser
                         </h2>
                         <div class="Authors-letter">
                             <div class="Authors-item" th:each="author : ${authorList.value}">
-                                <a th:href="@{/authors/slug(authorName=${author.name})}"
+                                <a th:href="@{/authors/slug(authorName=${author.name}, description=${author.description}, photo=${author.photo}, authorId=${author.id})}"
                                    th:text="${author.name}">Абгарян Наринэ</a>
                             </div>
                         </div>

@@ -136,8 +136,25 @@ public class BookService {
         return bookRepository.findBooksByGenre(genreId, nextPage);
     }
 
-    public Long getGenreId(String genreName) {
-        return genreRepository.getGenreByName(genreName).getId();
+    public Page<BookEntity> getPageOfBooksByAuthorId(Long authorId, Integer offset, Integer limit) {
+        Pageable nextPage;
+        if (offset!=null || limit!=null) {
+            nextPage = PageRequest.of(offset, limit);
+        } else {
+            nextPage = PageRequest.of(0, 10);
+        }
+        return bookRepository.findBooksByAuthor(authorId, nextPage);
+    }
+
+    public Page<BookEntity> getPageOfBooksByAuthorName(String authorName, Integer offset, Integer limit) {
+        Pageable nextPage;
+        if (offset!=null || limit!=null) {
+            nextPage = PageRequest.of(offset, limit);
+        } else {
+            nextPage = PageRequest.of(0, 10);
+        }
+        Long authorId = authorRepository.findAuthorEntityByName(authorName).getId();
+        return bookRepository.findBooksByAuthor(authorId, nextPage);
     }
 
     public Page<BookEntity> getPageOfBooksByFolderId(Long folderId, Integer offset, Integer limit) {
@@ -149,4 +166,9 @@ public class BookService {
         }
         return bookRepository.findBooksByFolder(folderId, nextPage);
     }
+
+    public Integer getAuthorBooksCount(Long authorId) {
+        return bookRepository.findBooksCountByAuthor(authorId);
+    }
+
 }

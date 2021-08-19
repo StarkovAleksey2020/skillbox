@@ -5,6 +5,7 @@ import com.example.MyBookShopApp.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,4 +31,19 @@ public class AuthorService {
             return a.getName().substring(0, 1);
         }));
     }
+
+    public String getDescriptionVisible(String description) {
+        String[] strings = description.split("\\.");
+        return strings[0] + ". " + strings[1] + ".";
+    }
+
+    public String getDescriptionHidden(String description) {
+        String[] strings = description.split("\\.");
+        String descriptionHidden = "";
+        for (int i = 2; i < strings.length; i++) {
+            descriptionHidden += strings[i] + ". ";
+        }
+        return descriptionHidden;
+    }
+
 }
