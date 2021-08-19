@@ -34,6 +34,23 @@ public class GenresPageController {
         model.addAttribute("subSectionName", subSectionName);
         model.addAttribute("booksByGenreList", bookService.getPageOfBooksByGenreId(genreId, offset, limit));
         model.addAttribute("genreId", genreId);
+        model.addAttribute("folderId", -1);
+        return "genres/slug";
+    }
+
+    @GetMapping("/genres/folder/slug")
+    public String slugFolderPage(@RequestParam(value = "sectionName", required = false) String sectionName,
+                           @RequestParam(value = "genresName", required = false) String genresName,
+                           @RequestParam(value = "subSectionName", required = false) String subSectionName,
+                           @RequestParam(value = "folderId", required = false) Long folderId,
+                           @RequestParam(value = "offset", required = false) Integer offset,
+                           @RequestParam(value = "limit", required = false) Integer limit,
+                           Model model) {
+        model.addAttribute("sectionName", sectionName);
+        model.addAttribute("genresName", genresName);
+        model.addAttribute("subSectionName", subSectionName);
+        model.addAttribute("booksByGenreList", bookService.getPageOfBooksByFolderId(folderId, offset, limit));
+        model.addAttribute("folderId", folderId);
         return "genres/slug";
     }
 

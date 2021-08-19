@@ -15,9 +15,6 @@
     <meta name="description" content="Описание страницы">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <!--meta( http-equiv="cache-control" content="no-cache")-->
-    <!--meta( http-equiv="expires" content="0")-->
-    <!--link(rel="preload" href="assets/css/extra.min.css?v=" + version as="style" crossorigin="anonymous")-->
     <link href="favicon.ico" rel="shortcut icon">
     <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-SemiBold.woff2" as="font" crossorigin="anonymous">
     <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Light.woff2" as="font" crossorigin="anonymous">
@@ -32,15 +29,6 @@
     <script type="text/javascript" th:src="@{/assets/js/headerHandler.js}"></script>
 </head>
 <body class="Site">
-<!--if lt IE 8
-p.error-browser
-    | Ваш браузер&nbsp;
-    em устарел!&nbsp;
-    a(href="http://browsehappy.com/") Выберите новую версию
-        +s
-        | браузера здесь&nbsp;
-    | для правильного отображения сайта.
--->
 <header th:replace="~{fragments/header_fragment :: headFragment}"></header>
 <div class="Middle">
     <div class="wrap">
@@ -52,21 +40,11 @@ p.error-browser
                 <li class="breadcrumbs-item"><a th:href="@{/genres}" th:onclick="testFunc('genresId')"
                                                 th:text="#{topbar.genres}">Жанры</a>
                 </li>
-
-                <li th:if="${genresName.length() > 0}" class="breadcrumbs-item">
-                    <a th:text="${sectionName}"
-                       th:href="@{/genres/slug(sectionName=${sectionName}, genresName='', subSectionName='')}">Легкое
-                        чтение</a>
-                </li>
-                <li th:if="${genresName.length() == 0}" class="breadcrumbs-item breadcrumbs-item_current">
-                    <span th:text="${sectionName}">Легкое чтение</span>
+                <li th:if="${sectionName.length() > 0 && genresName.length() == 0}" class="breadcrumbs-item breadcrumbs-item_current"><span
+                        th:text="${sectionName}">Детективы</span>
                 </li>
 
-                <li th:if="${subSectionName.length() > 0}" class="breadcrumbs-item">
-                    <a th:text="${genresName}"
-                       th:href="@{/genres/slug(sectionName=${sectionName}, genresName=${genresName}, subSectionName='')}">Детективы</a>
-                </li>
-                <li th:if="${subSectionName.length() == 0}" class="breadcrumbs-item breadcrumbs-item_current"><span
+                <li th:if="${subSectionName.length() == 0 && genresName.length() > 0}" class="breadcrumbs-item breadcrumbs-item_current"><span
                         th:text="${genresName}">Детективы</span>
                 </li>
 
@@ -135,13 +113,25 @@ p.error-browser
                         </div>
                     </div>
 
-                    <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
-                                                                     data-refreshshow="genre" data-refreshoffset="10"
-                                                                     data-refreshlimit="10"
-                                                                     th:data-refreshid="${genreId}"
-                                                                     th:text="#{recent.show}"
-                                                                     th:data-refreshtagname="${genresName}">Показать
-                        еще</a>
+                    <div class="Cards-footer Cards-footer_center">
+                        <a
+                                th:if="${folderId < 0}"
+                                class="btn btn_primary" href="#"
+                                data-refreshshow="genre" data-refreshoffset="10"
+                                data-refreshlimit="10"
+                                th:data-refreshid="${genreId}"
+                                th:text="#{recent.show}"
+                                th:data-refreshtagname="${genresName}">Показать еще
+                        </a>
+                        <a
+                                th:if="${folderId > 0}"
+                                class="btn btn_primary" href="#"
+                                data-refreshshow="genreFolder" data-refreshoffset="10"
+                                data-refreshlimit="10"
+                                th:data-refreshid="${folderId}"
+                                th:text="#{recent.show}"
+                                th:data-refreshtagname="${genresName}">Показать еще
+                        </a>
                     </div>
                 </div>
             </div>

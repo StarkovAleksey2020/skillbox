@@ -52,8 +52,8 @@
             <div class="Tags Tags_embed">
               <div class="Tags-title">
                 <div class="Tag"><a
-                        th:href="@{/genres/slug(sectionName=#{genres.item.0}, genresName='', subSectionName='',
-                        genreId='1', offset='0', limit = '10')}"
+                        th:href="@{/genres/folder/slug(sectionName=#{genres.item.0}, genresName='', subSectionName='',
+                        folderId='0', offset='0', limit = '10')}"
                         th:text="#{genres.item.0}">Лёгкое чтение<span class="undefined-amount">(15638)</span></a>
                 </div>
               </div>
@@ -72,8 +72,8 @@
               <div class="Tags">
                 <div class="Tags-title">
                   <div class="Tag"><a
-                          th:href="@{/genres/slug(sectionName=#{genres.item.0}, genresName=#{genres.item.3}, subSectionName='',
-                        genreId='4', offset='0', limit = '10')}"
+                          th:href="@{/genres/folder/slug(sectionName=#{genres.item.0}, genresName=#{genres.item.3}, subSectionName='',
+                        folderId='4', offset='0', limit = '10')}"
                           th:text="#{genres.item.3}">Детективы<span
                           class="undefined-amount">(10)</span></a>
                   </div>
@@ -154,8 +154,8 @@
             <div class="Tags">
               <div class="Tags-title">
                 <div class="Tag"><a
-                        th:href="@{/genres/slug(sectionName=#{genres.item.16}, genresName='', subSectionName='',
-                        genreId='17', offset='0', limit = '10')}"
+                        th:href="@{/genres/folder/slug(sectionName=#{genres.item.16}, genresName='', subSectionName='',
+                        folderId='17', offset='0', limit = '10')}"
                         th:text="#{genres.item.16}">
                   Серьёзное чтение<span class="undefined-amount">(18)</span></a>
                 </div>
@@ -170,8 +170,8 @@
             <div class="Tags">
               <div class="Tags-title">
                 <div class="Tag"><a
-                        th:href="@{/genres/slug(sectionName=#{genres.item.18}, genresName='', subSectionName='',
-                        genreId='19', offset='0', limit = '10')}"
+                        th:href="@{/genres/folder/slug(sectionName=#{genres.item.18}, genresName='', subSectionName='',
+                        folderId='19', offset='0', limit = '10')}"
                         th:text="#{genres.item.18}">
                   Деловая литература<span class="undefined-amount">(158)</span></a>
                 </div>
@@ -403,28 +403,33 @@
             <div class="Tags">
               <div class="Tags-title">
                 <div class="Tag"><a
-                        th:href="@{/genres/slug(sectionName=#{genres.item.56}, genresName='', subSectionName='')}"
+                        th:href="@{/genres/folder/slug(sectionName=#{genres.item.56}, genresName='', subSectionName='',
+                        folderId='57', offset='0', limit = '10')}"
                         th:text="#{genres.item.56}">Драматургия<span
                         class="undefined-amount">(15638)</span></a>
                 </div>
               </div>
               <div class="Tag"><a
-                      th:href="@{/genres/slug(sectionName=#{genres.item.56}, genresName=#{genres.item.57}, subSectionName='')}"
+                      th:href="@{/genres/slug(sectionName=#{genres.item.56}, genresName=#{genres.item.57}, subSectionName='',
+                        genreId='57', offset='0', limit = '10')}"
                       th:text="#{genres.item.57}">
                 Античная драма<span class="undefined-amount">(15638)</span></a>
               </div>
               <div class="Tag"><a
-                      th:href="@{/genres/slug(sectionName=#{genres.item.56}, genresName=#{genres.item.58}, subSectionName='')}"
+                      th:href="@{/genres/slug(sectionName=#{genres.item.56}, genresName=#{genres.item.58}, subSectionName='',
+                        genreId='58', offset='0', limit = '10')}"
                       th:text="#{genres.item.58}">Комедия<span
                       class="undefined-amount">(15638)</span></a>
               </div>
               <div class="Tag"><a
-                      th:href="@{/genres/slug(sectionName=#{genres.item.56}, genresName=#{genres.item.59}, subSectionName='')}"
+                      th:href="@{/genres/slug(sectionName=#{genres.item.56}, genresName=#{genres.item.59}, subSectionName='',
+                        genreId='59', offset='0', limit = '10')}"
                       th:text="#{genres.item.59}">Сценарий<span
                       class="undefined-amount">(15638)</span></a>
               </div>
               <div class="Tag"><a
-                      th:href="@{/genres/slug(sectionName=#{genres.item.56}, genresName=#{genres.item.60}, subSectionName='')}"
+                      th:href="@{/genres/slug(sectionName=#{genres.item.56}, genresName=#{genres.item.60}, subSectionName='',
+                        genreId='60', offset='0', limit = '10')}"
                       th:text="#{genres.item.60}">
                 Драма, пьеса<span class="undefined-amount">(15638)</span></a>
               </div>

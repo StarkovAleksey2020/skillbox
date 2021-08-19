@@ -139,4 +139,14 @@ public class BookService {
     public Long getGenreId(String genreName) {
         return genreRepository.getGenreByName(genreName).getId();
     }
+
+    public Page<BookEntity> getPageOfBooksByFolderId(Long folderId, Integer offset, Integer limit) {
+        Pageable nextPage;
+        if (offset!=null || limit!=null) {
+            nextPage = PageRequest.of(offset, limit);
+        } else {
+            nextPage = PageRequest.of(0, 10);
+        }
+        return bookRepository.findBooksByFolder(folderId, nextPage);
+    }
 }
