@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Table(name = "book2tag")
 @ApiModel(description = "linking books to tag")
 public class Book2TagEntity {
@@ -22,7 +23,6 @@ public class Book2TagEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "automatically generated field", position = 1)
     private Long id;
-
 
     @Column(name = "book_id", columnDefinition = "INT NOT NULL")
     @ApiModelProperty(value = "Book id")

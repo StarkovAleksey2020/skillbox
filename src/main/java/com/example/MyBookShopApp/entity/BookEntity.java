@@ -12,10 +12,12 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Entity
 @Table(name = "book")
 @ApiModel(description = "Entity representing a book")
@@ -61,49 +63,42 @@ public class BookEntity {
     private Double discount;
 
     @ManyToMany
-    @EqualsAndHashCode.Exclude @ToString.Exclude
     @JoinTable(name = "book2author", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     @JsonIgnore
     private List<AuthorEntity> authorSet;
 
     @ManyToMany
-    @EqualsAndHashCode.Exclude @ToString.Exclude
     @JoinTable(name = "book2genre", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     @JsonIgnore
     private List<GenreEntity> genreEntitySet;
 
     @ManyToMany
-    @EqualsAndHashCode.Exclude @ToString.Exclude
     @JoinTable(name = "book2user", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @JsonIgnore
     private List<UserEntity> userEntityBook2UserSet;
 
     @ManyToMany
-    @EqualsAndHashCode.Exclude @ToString.Exclude
     @JoinTable(name = "file_download", joinColumns = { @JoinColumn(name = "book_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") })
     @JsonIgnore
     private List<UserEntity> userEntityFileDownloadSet;
 
     @ManyToMany
-    @EqualsAndHashCode.Exclude @ToString.Exclude
     @JoinTable(name = "balance_transaction", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @JsonIgnore
     private List<UserEntity> userEntityBalanceTransactionSet;
 
     @ManyToMany
-    @EqualsAndHashCode.Exclude @ToString.Exclude
     @JoinTable(name = "book_review", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @JsonIgnore
     private List<UserEntity> userEntityBookReviewSet;
 
     @ManyToMany
-    @EqualsAndHashCode.Exclude @ToString.Exclude
     @JoinTable(name = "book2tag", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @JsonIgnore

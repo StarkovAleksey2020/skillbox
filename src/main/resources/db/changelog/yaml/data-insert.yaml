@@ -1,0 +1,121 @@
+databaseChangeLog:
+  - changeSet:
+      id: 21
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/book/book.sql
+  - changeSet:
+      id: 22
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/author/author.sql
+  - changeSet:
+      id: 23
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/genre/genre.sql
+  - changeSet:
+      id: 24
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/other/document.sql
+  - changeSet:
+      id: 25
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/other/faq.sql
+  - changeSet:
+      id: 26
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/user/user.sql
+  - changeSet:
+      id: 27
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/payment/balance_transaction.sql
+  - changeSet:
+      id: 28
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/review/book_review.sql
+  - changeSet:
+      id: 29
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/review/book_review_like.sql
+  - changeSet:
+      id: 30
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/review/message.sql
+  - changeSet:
+      id: 31
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/tag/tag.sql
+  - changeSet:
+      id: 32
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/user/user_contact.sql
+  - changeSet:
+      id: 33
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/book/file/book_file.sql
+  - changeSet:
+      id: 34
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/book/file/book_file_type.sql
+  - changeSet:
+      id: 35
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/book/file/file_download.sql
+  - changeSet:
+      id: 36
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/book/link/book2author.sql
+  - changeSet:
+      id: 37
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/book/link/book2genre.sql
+  - changeSet:
+      id: 38
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/book/link/book2tag.sql
+  - changeSet:
+      id: 39
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/book/link/book2user_type.sql
+  - changeSet:
+      id: 40
+      author: dmitr2ish
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/book/link/book2user.sql

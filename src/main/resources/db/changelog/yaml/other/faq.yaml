@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: faq
+            remarks: Частые вопросы и ответы на них
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: faq_id
+                    nullable: false
+              - column:
+                  name: sort_index
+                  remarks: порядковый номер вопроса в списке вопросов на странице “Помощь”
+                  type: INT
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: question
+                  remarks: вопрос
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: answer
+                  remarks: ответ в формате HTML
+                  type: TEXT
+                  constraints:
+                    nullable: false

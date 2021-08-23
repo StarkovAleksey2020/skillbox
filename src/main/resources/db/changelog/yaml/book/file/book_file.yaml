@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: book_file
+            remarks: Файлы книг
+            columns:
+              - column:
+                  name: id
+                  remarks: id скачанного файла книги
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: book_file_id
+                    nullable: false
+              - column:
+                  name: hash
+                  remarks: случайный хэш, предназначенный для идентификации файла при скачивании
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: book_hash_uq
+                    nullable: false
+              - column:
+                  name: path
+                  remarks: путь к файлу
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_file_type_id
+                  remarks: тип файла
+                  type: INT
+                  constraints:
+                    nullable: false

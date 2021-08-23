@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: book2genre
+            remarks: Привязка книг к жанрам
+            columns:
+              - column:
+                  name: id
+                  remarks: идентификатор связи
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: book2genre_id
+                    nullable: false
+              - column:
+                  name: book_id
+                  remarks: идентификатор книги
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: genre_id
+                  remarks: идентификатор жанра
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: book_id
+            baseTableName: book2genre
+            constraintName: fk-book2genre-0
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: book
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseColumnNames: genre_id
+            baseTableName: book2genre
+            constraintName: fk-book2genre-1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: genre
+            referencedColumnNames: id

@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: book_review
+            remarks: Отзывы о книгах
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: book_review_id
+                    nullable: false
+              - column:
+                  name: book_id
+                  remarks: идентификатор книги
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  remarks: текст отзыва
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  remarks: время, когда оставлен отзыв
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  remarks: идентификатор пользователя, который написал данный отзыв
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: book_id
+            baseTableName: book_review
+            constraintName: fk-book_review-0
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: book
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: book_review
+            constraintName: fk-book_review-1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: user_entity
+            referencedColumnNames: id

@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: book2tag
+            remarks: Привязка книг к тегам
+            columns:
+              - column:
+                  name: id
+                  remarks: идентификатор связи
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: book2tag_id
+                    nullable: false
+              - column:
+                  name: book_id
+                  remarks: идентификатор книги
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag_id
+                  remarks: идентификатор тэга
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: book_id
+            baseTableName: book2tag
+            constraintName: fk-book2tag-0
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: book
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseColumnNames: tag_id
+            baseTableName: book2tag
+            constraintName: fk-book2tag-1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: tag
+            referencedColumnNames: id

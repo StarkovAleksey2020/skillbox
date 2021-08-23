@@ -1,19 +1,18 @@
 package com.example.MyBookShopApp.entity.book.links;
 
+import com.example.MyBookShopApp.entity.enumiration.Book2UserTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
-@Getter
-@Setter
+@Data
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Table(name = "book2user_type")
 @ApiModel(description = "types of book bindings to users")
 public class Book2UserTypeEntity {
@@ -29,5 +28,6 @@ public class Book2UserTypeEntity {
 
     @Column(columnDefinition = "VARCHAR(255) NOT NULL")
     @ApiModelProperty(value = "Binding type name")
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private Book2UserTypeEnum name;
 }

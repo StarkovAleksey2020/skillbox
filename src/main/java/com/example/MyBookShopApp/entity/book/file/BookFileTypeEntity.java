@@ -1,16 +1,18 @@
 package com.example.MyBookShopApp.entity.book.file;
 
+import com.example.MyBookShopApp.entity.enumiration.BookFileTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
-@Entity
+@Data
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Table(name = "book_file_type")
 @ApiModel(description = "book file types")
 public class BookFileTypeEntity {
@@ -22,7 +24,8 @@ public class BookFileTypeEntity {
 
     @Column(columnDefinition = "VARCHAR(255) NOT NULL")
     @ApiModelProperty(value = "File type name (PDF, EPUB, FB2")
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private BookFileTypeEnum name;
 
     @Column(columnDefinition = "TEXT")
     @ApiModelProperty(value = "File type description")

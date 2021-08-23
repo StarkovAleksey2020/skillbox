@@ -16,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+
 @Table(name = "users")
 @ApiModel(description = "Bookshop users")
 public class UserEntity {
@@ -38,7 +39,7 @@ public class UserEntity {
     @JoinColumn(name = "balance")
     @Column(columnDefinition = "INT NOT NULL")
     @ApiModelProperty(value = "Personal account balance, default 0")
-    private int balance;
+    private Integer balance;
 
     @JoinColumn(name = "name")
     @Column(columnDefinition = "VARCHAR(255) NOT NULL")

@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: tag
+            remarks: Тэг по которому можно найти книгу
+            columns:
+              - column:
+                  name: id
+                  remarks: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: tag_id
+                    nullable: false
+              - column:
+                  name: name
+                  remarks: наименование тэга
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false

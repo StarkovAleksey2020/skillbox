@@ -1,0 +1,72 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: book2user
+            remarks: Привязки книг к юзерам
+            columns:
+              - column:
+                  name: id
+                  remarks: идентификатор связи
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: book2user_id
+                    nullable: false
+              - column:
+                  name: book_id
+                  remarks: идентификатор книги
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  remarks: дата и время возникновения привязки
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type_id
+                  remarks: тип привязки книги к пользователю
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  remarks: идентификатор пользователя
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: book_id
+            baseTableName: book2user
+            constraintName: fk-book2user-0
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: book
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseColumnNames: type_id
+            baseTableName: book2user
+            constraintName: fk-book2user-1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: book2user_type
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: book2user
+            constraintName: fk-book2user-2
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: user_entity
+            referencedColumnNames: id

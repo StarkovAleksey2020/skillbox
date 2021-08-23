@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: message
+            remarks: Сообщения в форму обратной связи
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: message_id
+                    nullable: false
+              - column:
+                  name: time
+                  remarks: дата и время отправки сообщения
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  remarks: электронная почта пользователя, если он не был авторизован
+                  type: VARCHAR(255)
+              - column:
+                  name: name
+                  remarks: имя пользователя, если он не был авторизован
+                  type: VARCHAR(255)
+              - column:
+                  name: subject
+                  remarks: тема сообщения
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  remarks: текст сообщения
+                  type: TEXT
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: message
+            columns:
+              - column:
+                  name: user_id
+                  remarks: если пользователь был авторизован
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: message
+            constraintName: fk-message-0
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: user_entity
+            referencedColumnNames: id

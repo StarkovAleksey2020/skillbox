@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 18
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: book_file_type
+            remarks: Типы файлов книг * PDF * EPUB * FB2
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: book_file_type_id
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false

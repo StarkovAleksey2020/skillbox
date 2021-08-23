@@ -6,11 +6,12 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
-@Getter
-@Setter
+@Data
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Table(name = "faq")
 @ApiModel(description = "frequently asked questions and answers to them")
 public class FaqEntity {
@@ -22,7 +23,7 @@ public class FaqEntity {
 
     @Column(columnDefinition = "INT NOT NULL  DEFAULT 0")
     @ApiModelProperty(value = "The serial number of the question in the list of questions on the 'Help' page", position = 2)
-    private int sortIndex;
+    private Integer sortIndex;
 
     @Column(columnDefinition = "VARCHAR(255) NOT NULL")
     @ApiModelProperty(value = "Question", position = 3)

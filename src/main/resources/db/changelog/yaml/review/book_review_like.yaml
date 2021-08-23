@@ -1,0 +1,63 @@
+databaseChangeLog:
+  - changeSet:
+      id: 15
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: book_review_like
+            remarks: Лайки и дизлайки отзывов
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: book_review_like_id
+                    nullable: false
+              - column:
+                  name: review_id
+                  remarks: идентификатор отзыва
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  remarks: дата и время, в которое поставлен лайк или дизлайк
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  remarks: лайк (1) или дизлайк (-1)
+                  type: SMALLINT
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: book_review_like
+            columns:
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: book_review_like
+            constraintName: fk-book_review_like-0
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: user_entity
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseColumnNames: review_id
+            baseTableName: book_review_like
+            constraintName: fk-book_review_like-1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: book_review
+            referencedColumnNames: id

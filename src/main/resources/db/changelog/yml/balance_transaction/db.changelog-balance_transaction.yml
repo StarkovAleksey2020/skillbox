@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: balance_transacton-create-id
+      author: codewizard
+      comment: balance_transacton table create
+      changes:
+        - createTable:
+            tableName: balance_transacton
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: balance_transacton_pkey
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: balance_transaction-yml-fk-1
+                    references: users(id)
+              - column:
+                  name: time
+                  type: datetime
+              - column:
+                  name: value
+                  type: int
+                  defaultValue: '0'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: balance_transaction-yml-fk-0
+                    references: book(id)
+              - column:
+                  name: description
+                  type: text
+                  constraints:
+                    nullable: false

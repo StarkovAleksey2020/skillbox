@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: document
+            remarks: Документы
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: document_id
+                    nullable: false
+              - column:
+                  name: sort_index
+                  remarks: порядковый номер документа (для вывода на странице списка документов)
+                  type: INT
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: slug
+                  remarks: //  мнемонический код документа, отображаемый в ссылке на страницу документа
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: document_slug_uq
+                    nullable: false
+              - column:
+                  name: title
+                  remarks: наименование документа
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  remarks: текст документа в формате HTML
+                  type: TEXT
+                  constraints:
+                    nullable: false

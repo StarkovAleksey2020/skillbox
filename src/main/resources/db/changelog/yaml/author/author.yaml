@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: author
+            remarks: Авторы книг
+            columns:
+              - column:
+                  name: id
+                  remarks: id автора
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: author_id
+                    nullable: false
+              - column:
+                  name: description
+                  remarks: описание (биография, характеристика)
+                  type: TEXT
+              - column:
+                  name: name
+                  remarks: имя и фамилия автора
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: photo
+                  remarks: ссылка на изображение с фотографией автора
+                  type: VARCHAR(255)
+              - column:
+                  name: slug
+                  remarks: мнемонический идентификатор автора, который будет отображаться в ссылке на его страницу
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: author_slug_uq
+                    nullable: false

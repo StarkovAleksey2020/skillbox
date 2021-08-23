@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: file_download
+            remarks: Количество скачиваний книги юзером количество скачиваний книги юзером
+            columns:
+              - column:
+                  name: id
+                  remarks: идентификатор связи количества скачиваний книги юзером
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: file_download_id
+                    nullable: false
+              - column:
+                  name: book_id
+                  remarks: идентификатор скачанной книги
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: count
+                  remarks: количество скачиваний
+                  type: INT
+                  defaultValue: 1
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  remarks: идентификатор пользователя, скачавшего книгу
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: book_id
+            baseTableName: file_download
+            constraintName: fk-file_download-0
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: book
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: file_download
+            constraintName: fk-file_download-1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: user_entity
+            referencedColumnNames: id

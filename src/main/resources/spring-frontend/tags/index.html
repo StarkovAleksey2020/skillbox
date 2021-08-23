@@ -15,9 +15,6 @@
     <meta name="description" content="Описание страницы">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <!--meta( http-equiv="cache-control" content="no-cache")-->
-    <!--meta( http-equiv="expires" content="0")-->
-    <!--link(rel="preload" href="assets/css/extra.min.css?v=" + version as="style" crossorigin="anonymous")-->
     <link href="favicon.ico" rel="shortcut icon">
     <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-SemiBold.woff2" as="font" crossorigin="anonymous">
     <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Light.woff2" as="font" crossorigin="anonymous">
@@ -32,15 +29,6 @@
     <script type="text/javascript" th:src="@{/assets/js/headerHandler.js}"></script>
 </head>
 <body class="Site">
-<!--if lt IE 8
-p.error-browser
-    | Ваш браузер&nbsp;
-    em устарел!&nbsp;
-    a(href="http://browsehappy.com/") Выберите новую версию
-        +s
-        | браузера здесь&nbsp;
-    | для правильного отображения сайта.
--->
 <header th:replace="~{fragments/header_fragment :: headFragment}"></header>
 <div class="Middle">
     <div class="wrap">
@@ -64,16 +52,22 @@ p.error-browser
 
                 <div class="Cards Cards_refresh" data-load="tag" data-loadoffset="0" data-loadlimit="10">
                     <div class="Card" th:href="@{/tags/slug(bookTitle=${book.title},
-                                bookAuthorName=${book.authorSet[0].name},
-                                description=${book.description},
-                                id=${book.id},
-                                price=${book.price})}" th:each="book : ${taggedBooks}">
+                                        bookAuthorName=${book.authorSet[0].name},
+                                        description=${book.description},
+                                        bookImage=${book.image},
+                                        id=${book.id},
+                                        price=${book.price},
+                                        isBestseller=${book.isBestseller},
+                                        bookDiscount=${book.discount})}" th:each="book : ${taggedBooks}">
                         <div class="Card-picture">
                             <a th:href="@{/tags/slug(bookTitle=${book.title},
-                                bookAuthorName=${book.authorSet[0].name},
-                                description=${book.description},
-                                id=${book.id},
-                                price=${book.price})}">
+                                        bookAuthorName=${book.authorSet[0].name},
+                                        description=${book.description},
+                                        bookImage=${book.image},
+                                        id=${book.id},
+                                        price=${book.price},
+                                        isBestseller=${book.isBestseller},
+                                        bookDiscount=${book.discount})}">
                                 <img th:src="${book.image}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
                                 <div th:if="${book.isBestseller == 1}" class="Card-ribbon"><span
                                         class="Card-ribbonText">Бестселлер</span></div>
@@ -86,8 +80,11 @@ p.error-browser
                                     <a th:href="@{/tags/slug(bookTitle=${book.title},
                                         bookAuthorName=${book.authorSet[0].name},
                                         description=${book.description},
+                                        bookImage=${book.image},
                                         id=${book.id},
-                                        price=${book.price})}"
+                                        price=${book.price},
+                                        isBestseller=${book.isBestseller},
+                                        bookDiscount=${book.discount})}"
                                        th:text="${book.title}">
                                     </a>
                                 </strong>
@@ -95,7 +92,8 @@ p.error-browser
                             <div class="Card-description" th:text="${book.description}">Кондратенко Александр
                                 Петрович
                             </div>
-                            <div class="Card-cost" th:with="priceOld=${book.price + (book.price * book.discount / 100)}">
+                            <div class="Card-cost"
+                                 th:with="priceOld=${book.price + (book.price * book.discount / 100)}">
                                 <span class="Card-priceOld" th:text="'₽' + ${@thymeMath.ceil(priceOld)}"></span>
                                 <span class="Card-price" th:text="'₽' + ${book.price}">₽300.00</span>
                             </div>

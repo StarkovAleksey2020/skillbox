@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: book
+            remarks: Основной класс представляющий книгу
+            columns:
+              - column:
+                  name: id
+                  remarks: id книги
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: book_id
+                    nullable: false
+              - column:
+                  name: description
+                  remarks: описание книги
+                  type: TEXT
+              - column:
+                  name: discount
+                  remarks: скидка в процентах или 0, если её нет
+                  type: SMALLINT
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image
+                  remarks: изображение обложки
+                  type: VARCHAR(50)
+              - column:
+                  name: is_bestseller
+                  remarks: книга очень популярна, является бестселлером
+                  type: SMALLINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  remarks: цена в рублях основная
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pub_date
+                  remarks: дата публикации
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: slug
+                  remarks: мнемонический идентификатор автора, который будет отображаться в ссылке на его страницу
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: book_slug_uq
+                    nullable: false
+              - column:
+                  name: title
+                  remarks: название книги
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false

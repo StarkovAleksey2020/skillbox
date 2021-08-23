@@ -1,5 +1,5 @@
 sudo su -
-su postgres
+su - postgres
 psql
 drop DATABASE skillbox;
 CREATE DATABASE skillbox;

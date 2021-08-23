@@ -1,6 +1,6 @@
 package com.example.MyBookShopApp.entity.user;
 
-import com.example.MyBookShopApp.entity.enums.ContactType;
+import com.example.MyBookShopApp.entity.enumiration.ContactType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -28,7 +28,7 @@ public class UserContactEntity {
 
     @Column(name = "approved", columnDefinition = "SMALLINT NOT NULL")
     @ApiModelProperty(value = "Is the contact confirmed (0 or 1)")
-    private short approved;
+    private Short approved;
 
     @Column(name = "code", columnDefinition = "VARCHAR(255) NOT NULL")
     @ApiModelProperty(value = "Confirmation code")
@@ -36,7 +36,7 @@ public class UserContactEntity {
 
     @Column(name = "code_trails", columnDefinition = "INT")
     @ApiModelProperty(value = "The number of attempts to enter the confirmation code")
-    private int codeTrails;
+    private Integer codeTrails;
 
     @Column(name = "code_time", columnDefinition = "TIMESTAMP")
     @ApiModelProperty(value = "Date and time of generation of the confirmation code")

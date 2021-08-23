@@ -30,5 +30,5 @@ public class Book2AuthorEntity {
 
     @Column(name = "sort_index", columnDefinition = "INT NOT NULL  DEFAULT 0")
     @ApiModelProperty(value = "Serial number of the author")
-    private int sortIndex;
+    private Integer sortIndex;
 }

@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Header</title>
+</head>
+
 <body>
 <header class="Header" th:fragment="headFragment">
     <div class="Header-rowMain">
@@ -28,7 +32,6 @@
                                 <input class="search-input" id="query" name="query" type="text"
                                        th:placeholder="#{topbar.search.placeholder}"
                                        placeholder="Search over 30 million book titles" value=""/>
-<!--                                       placeholder="Search over 30 million book titles" th:field="*{example}" value=""/>-->
                                 <button class="search-button" type="submit" name="search" id="search" th:text="#{topbar.search}">Поиск
                                 </button>
                             </form>

@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: user_entity
+            remarks: Пользователь магазина
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: user_id
+                    nullable: false
+              - column:
+                  name: balance
+                  remarks: баланс личного счёта, по умолчанию 0
+                  type: INT
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  remarks: имя пользователя
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hash
+                  remarks: хэш пользователя, используемый для внешней идентификации пользователя с целью скрытия его ID
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: user_hash_uq
+                    nullable: false
+              - column:
+                  name: reg_time
+                  remarks: дата и время регистрации
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false

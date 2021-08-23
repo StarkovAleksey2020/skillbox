@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -30,9 +29,6 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
     @Query(value = "SELECT * FROM book WHERE discount = (SELECT MAX(discount) FROM book)", nativeQuery = true)
     List<BookEntity> getBooksWithMaxDiscount();
 
-    @Query(value = "from BookEntity where id = :id")
-    BookEntity findByIdExactly(@RequestParam("id") Long id);
-
     Page<BookEntity> findBookEntitiesByTitleContaining(String bookTitle, Pageable nextPage);
 
     @Query(value = "FROM BookEntity u WHERE u.pubDate >= :dateFrom AND u.pubDate <= :dateTo")
@@ -40,12 +36,8 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
                                                     @RequestParam("dateTo") OffsetDateTime dateTo,
                                                     Pageable nextPage);
 
-    Page<BookEntity> getBookEntityByPubDateAfter(OffsetDateTime dateFrom, Pageable pageable);
-
     @Query(value = "from BookEntity u where u.pubDate >= :dateFrom AND u.pubDate <= :dateTo ORDER BY u.pubDate DESC")
     Page<BookEntity> findBookEntitiesByPubDateAfterAndPubDateBefore(OffsetDateTime dateFrom, OffsetDateTime dateTo, Pageable pageable);
-
-    Page<BookEntity> getBookEntityByPubDateBetween(OffsetDateTime dateFrom, OffsetDateTime dateTo, Pageable pageable);
 
     @Query(value = "from BookEntity u ORDER BY u.pubDate DESC")
     Page<BookEntity> findAllDesc(Pageable nextPage);
@@ -53,17 +45,17 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
     @Query(value = "select b.* from book b join book2user bu on bu.book_id = b.id group by b.id order by (count(case when bu.type_id = 3 then bu.id end) + count(case when bu.type_id = 2 then bu.id end) * 0.7 + count(case when bu.type_id = 1 then bu.id end) * 0.4) desc", nativeQuery = true)
     Page<BookEntity> findBooksByPopularRate(Pageable nextPage);
 
-    @Query(value = "select b from BookEntity b join Book2TagEntity bt on bt.bookId = b.id where bt.tagId = :id")
-    Page<BookEntity> findBooksByTag(Long id, Pageable nextPage);
+    @Query(value = "select b from BookEntity b join Book2TagEntity bt on bt.bookId = b.id join TagEntity t on t.id = bt.tagId where t.name = :tagName")
+    Page<BookEntity> findBooksByTagName(String tagName, Pageable nextPage);
 
-    @Query(value = "select b from BookEntity b join Book2GenreEntity bg on bg.bookId = b.id where bg.genreId = :id")
-    Page<BookEntity> findBooksByGenre(Long id, Pageable nextPage);
+    @Query(value = "select b from BookEntity b join Book2GenreEntity bg on bg.bookId = b.id join GenreEntity ge on ge.id = bg.genreId where ge.name = :genreName")
+    Page<BookEntity> findBooksByGenreName(String genreName, Pageable nextPage);
 
-    @Query(value = "select b from BookEntity b join Book2AuthorEntity ba on ba.bookId = b.id where ba.authorId = :authorId")
-    Page<BookEntity> findBooksByAuthor(Long authorId, Pageable nextPage);
+    @Query(value = "select b from BookEntity b join Book2AuthorEntity ba on ba.bookId = b.id join AuthorEntity a on a.id = ba.authorId where a.name = :authorName")
+    Page<BookEntity> findBooksByAuthor(String authorName, Pageable nextPage);
 
-    @Query(value = "select count(b) from BookEntity b join Book2AuthorEntity ba on ba.bookId = b.id where ba.authorId = :authorId")
-    Integer findBooksCountByAuthor(Long authorId);
+    @Query(value = "select count(b) from BookEntity b join Book2AuthorEntity ba on ba.bookId = b.id join AuthorEntity a on a.id = ba.authorId where a.name = :authorName")
+    Integer findBooksCountByAuthor(String authorName);
 
     @Query(value = "select b from BookEntity b join Book2GenreEntity bg on b.id = bg.bookId join GenreEntity g on bg.genreId = g.id where g.parentId = :parentId")
     Page<BookEntity> findBooksByFolder(@RequestParam("parentId") Long parentId, Pageable nextPage);

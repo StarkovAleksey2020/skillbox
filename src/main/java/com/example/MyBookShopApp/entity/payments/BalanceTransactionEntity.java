@@ -2,19 +2,17 @@ package com.example.MyBookShopApp.entity.payments;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Setter
+@Data
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Table(name = "balance_transaction")
 @ApiModel(description = "transactions on user accounts")
 public class BalanceTransactionEntity {
@@ -22,7 +20,7 @@ public class BalanceTransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "automatically generated field", position = 1)
-    private int id;
+    private Integer id;
 
     @Column(name = "user_id", columnDefinition = "INT NOT NULL")
     @ApiModelProperty(value = "User id")

@@ -6,11 +6,12 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
-@Getter
-@Setter
+@Data
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Table(name = "document")
 @ApiModel(description = "the documents")
 public class DocumentEntity {
@@ -22,7 +23,7 @@ public class DocumentEntity {
 
     @Column(columnDefinition = "INT NOT NULL  DEFAULT 0")
     @ApiModelProperty(value = "Serial number of the document (to be displayed on the page of the list of documents)", position = 2)
-    private int sortIndex;
+    private Integer sortIndex;
 
     @Column(columnDefinition = "VARCHAR(255) NOT NULL")
     @ApiModelProperty(value = "The document mnemonic displayed in the link to the document page", position = 3)

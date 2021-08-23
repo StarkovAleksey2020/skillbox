@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: dmitr2ish
+      changes:
+        - createTable:
+            tableName: book2author
+            remarks: Привязка авторов к книгам
+            columns:
+              - column:
+                  name: id
+                  remarks: id связи
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: book2author_id
+                    nullable: false
+              - column:
+                  name: book_id
+                  remarks: идентификатор книги
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author_id
+                  remarks: идентификатор автора
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sort_index
+                  remarks: порядковый номер автора
+                  type: INT
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: book_id
+            baseTableName: book2author
+            constraintName: fk-book2author-0
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: book
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseColumnNames: author_id
+            baseTableName: book2author
+            constraintName: fk-book2author-1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: author
+            referencedColumnNames: id

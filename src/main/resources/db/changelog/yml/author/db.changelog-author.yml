@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: author-create-id
+      author: codewizard
+      comment: author table create
+      changes:
+        - createTable:
+            tableName: author
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: author_pkey
+              - column:
+                  name: photo
+                  type: VARCHAR(255)
+              - column:
+                  name: slug
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+  - changeSet:
+      id: author-populate-id
+      author: codewizard
+      changes:
+        - sqlFile:
+            dbms: 'postgresql'
+            encoding: utf8
+            endDelimiter:  \nGO
+            path: ./db/changelog/yml/author/author-populate.sql
+            relativeToChangelogFile: false
+            splitStatements: true
+            stripComments: true

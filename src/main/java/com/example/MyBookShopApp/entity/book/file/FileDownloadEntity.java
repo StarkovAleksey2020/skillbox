@@ -6,11 +6,12 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
-@Getter
-@Setter
+@Data
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Table(name = "file_download")
 @ApiModel(description = "the number of downloads of the book by the user")
 public class FileDownloadEntity {

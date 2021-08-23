@@ -1,4 +1,3 @@
-
 <!--END-->
 <!--END--><!DOCTYPE html><!--[if IE 7]>
 <html class="ie7" lang="ru">
@@ -9,84 +8,84 @@
 <!--[if IE 9]>
 <html class="ie9" lang="ru">
 <![endif]-->
-<!--[if gt IE 9]><!--> <html lang="ru" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
 <head>
-  <title>Тут название страницы написать</title>
-  <meta name="description" content="Описание страницы">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-  <link href="favicon.ico" rel="shortcut icon">
-  <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-SemiBold.woff2" as="font" crossorigin="anonymous">
-  <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Light.woff2" as="font" crossorigin="anonymous">
-  <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Medium.woff2" as="font" crossorigin="anonymous">
-  <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-ExtraBold.woff2" as="font" crossorigin="anonymous">
-  <link rel="stylesheet" href="/assets/css/fonts.min.css?v=93601584">
-  <link rel="stylesheet" href="/assets/css/basic.min.css?v=93601584">
-  <link rel="stylesheet" href="/assets/css/extra.min.css?v=93601584"><!--[if lt IE 9]>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  <script defer src="/assets/js/scripts.min.js?v=93601584"></script>
-  <script type="text/javascript" th:src="@{/assets/js/headerHandler.js}"></script>
+    <title>Тут название страницы написать</title>
+    <meta name="description" content="Описание страницы">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <link href="favicon.ico" rel="shortcut icon">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-SemiBold.woff2" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Light.woff2" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-Medium.woff2" as="font" crossorigin="anonymous">
+    <link rel="preload" href="/assets/fonts/Montserrat/Montserrat-ExtraBold.woff2" as="font" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/fonts.min.css?v=93601584">
+    <link rel="stylesheet" href="/assets/css/basic.min.css?v=93601584">
+    <link rel="stylesheet" href="/assets/css/extra.min.css?v=93601584">
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <script defer src="/assets/js/scripts.min.js?v=93601584"></script>
+    <script type="text/javascript" th:src="@{/assets/js/headerHandler.js}"></script>
 </head>
 <body class="Site">
-  <!--if lt IE 8
-  p.error-browser
-      | Ваш браузер&nbsp;
-      em устарел!&nbsp;
-      a(href="http://browsehappy.com/") Выберите новую версию
-          +s
-          | браузера здесь&nbsp;
-      | для правильного отображения сайта.
-  -->
-  <header th:replace="~{fragments/header_fragment :: headFragment}"></header>
-  <div class="Middle">
+<header th:replace="~{fragments/header_fragment :: headFragment}"></header>
+<div class="Middle">
     <div class="wrap">
-      <main class="Middle-main">
-        <ul class="breadcrumbs">
-          <li class="breadcrumbs-item"><a th:href="@{/}" th:onclick="testFunc('mainId')">Главная</a>
-          </li>
-          <li class="breadcrumbs-item"><a th:href="@{/authors}" th:onclick="testFunc('authorsId')">Авторы</a>
-          </li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span th:text="${authorName}">Борис Васильевич Бедный</span>
-          </li>
-        </ul>
-        <h1 class="Middle-title" th:text="${authorName}">Борис Васильевич Бедный
-        </h1>
-        <article class="Article">
-          <div class="sdf">
-          </div>
-          <div class="Spoiler">
-            <div class="Spoiler-visible">
-              <div class="pict pict_left">
-                <img th:src="${photo}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
-              </div>
-              <div>
-                <h2 th:text="#{author.biography}">Биография
-                </h2>
-                <p th:text="${descriptionVisible}">Борис Бедный родился в семье учителя в 1916 году в станице Ярославская Краснодарского края. Окончил Майкопский лесной техникум и был послан учиться в Ленинградскую лесотехническую академию. Стал специалистом по сплаву леса и приехал в Республику Коми, работать на сплавных предприятиях.
-                </p>
-              </div>
-            </div>
-            <div class="Spoiler-hide">
-              <p th:text="${descriptionHidden}">"Писать он начал до войны, в академии,- рассказал о нем в предисловии к книге "Первое дело" поэт К.Ваншенкин.- Был участником литературных кружков и студий. Но всерьез вернулся к этому в сорок шестом, в далекой сплавконторе, на Трехозерной запани. Печатался в Коми республиканской газете "За новый Север" ("Красное знамя") и наконец решился вновь переломить судьбу, поступив в Литературный институт" в 1952г.
-              </p>
-            </div>
-            <div class="Spoiler-footer">
-              <button class="Spoiler-trigger btn btn_primary btn_nr" type="button"
-                      th:data-showtext="#{author.collapse}" data-showtext="Свернуть"
-                      th:data-hidetext="#{author.show}" data-hidetext="Показать полностью">
-              </button>
-            </div>
-          </div>
-        </article>
-        <div class="Section">
-          <header class="Section-header">
-            <h2 class="Section-title">Книги автора
-            </h2>
-          </header>
+        <main class="Middle-main">
+            <ul class="breadcrumbs">
+                <li class="breadcrumbs-item"><a th:href="@{/}" th:onclick="testFunc('mainId')">Главная</a>
+                </li>
+                <li class="breadcrumbs-item"><a th:href="@{/authors}" th:onclick="testFunc('authorsId')">Авторы</a>
+                </li>
+                <li class="breadcrumbs-item breadcrumbs-item_current"><span th:text="${authorName}">Борис Васильевич Бедный</span>
+                </li>
+            </ul>
+            <h1 class="Middle-title" th:text="${authorName}">Борис Васильевич Бедный
+            </h1>
+            <article class="Article">
+                <div class="sdf">
+                </div>
+                <div class="Spoiler">
+                    <div class="Spoiler-visible">
+                        <div class="pict pict_left">
+                            <img th:src="${photo}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
+                        </div>
+                        <div>
+                            <h2 th:text="#{author.biography}">Биография
+                            </h2>
+                            <p th:text="${descriptionVisible}">Борис Бедный родился в семье учителя в 1916 году в
+                                станице Ярославская Краснодарского края. Окончил Майкопский лесной техникум и был послан
+                                учиться в Ленинградскую лесотехническую академию. Стал специалистом по сплаву леса и
+                                приехал в Республику Коми, работать на сплавных предприятиях.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="Spoiler-hide">
+                        <p th:text="${descriptionHidden}">"Писать он начал до войны, в академии,- рассказал о нем в
+                            предисловии к книге "Первое дело" поэт К.Ваншенкин.- Был участником литературных кружков и
+                            студий. Но всерьез вернулся к этому в сорок шестом, в далекой сплавконторе, на Трехозерной
+                            запани. Печатался в Коми республиканской газете "За новый Север" ("Красное знамя") и наконец
+                            решился вновь переломить судьбу, поступив в Литературный институт" в 1952г.
+                        </p>
+                    </div>
+                    <div class="Spoiler-footer">
+                        <button class="Spoiler-trigger btn btn_primary btn_nr" type="button"
+                                th:data-showtext="#{author.collapse}" data-showtext="Свернуть"
+                                th:data-hidetext="#{author.show}" data-hidetext="Показать полностью">
+                        </button>
+                    </div>
+                </div>
+            </article>
+            <div class="Section">
+                <header class="Section-header">
+                    <h2 class="Section-title">Книги автора
+                    </h2>
+                </header>
 
-          <div class="Cards Cards_refresh">
-            <div class="Card"
-                 th:href="@{/tags/slug(bookTitle=${book.title},
+                <div class="Cards Cards_refresh">
+                    <div class="Card"
+                         th:href="@{/tags/slug(bookTitle=${book.title},
                                 bookAuthorName=${book.authorSet[0].name},
                                 description=${book.description},
                                 id=${book.id},
@@ -94,9 +93,9 @@
                                 bookImage=${book.image},
                                 isBestseller=${book.isBestseller},
                                 bookDiscount=${book.discount})}"
-                 th:each="book : ${authorBooks.books}">
-              <div class="Card-picture">
-                <a th:href="@{/tags/slug(bookTitle=${book.title},
+                         th:each="book : ${authorBooks.books}">
+                        <div class="Card-picture">
+                            <a th:href="@{/tags/slug(bookTitle=${book.title},
                                 bookAuthorName=${book.authorSet[0].name},
                                 description=${book.description},
                                 id=${book.id},
@@ -104,53 +103,62 @@
                                 bookImage=${book.image},
                                 isBestseller=${book.isBestseller},
                                 bookDiscount=${book.discount})}">
-                  <img th:src="${book.image}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
-                  <div th:if="${book.isBestseller == 1}" class="Card-ribbon">
-                    <span class="Card-ribbonText">Бестселлер</span>
-                  </div>
-                  <div class="Card-sale">
-                    <span th:text="${book.discount} + '% скидка'"></span>
-                  </div>
-                </a>
-              </div>
-              <div class="Card-content">
-                <strong class="Card-title">
-                  <a href="#"
-                     th:href="@{/slug}"
-                     th:text="${book.title}">Техника</a>
-                </strong>
-                <div class="Card-description"
-                     th:text="${book.description}">Кондратенко Александр Петрович
-                </div>
-                <div class="Card-cost">
+                                <img th:src="${book.image}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
+                                <div th:if="${book.isBestseller == 1}" class="Card-ribbon">
+                                    <span class="Card-ribbonText">Бестселлер</span>
+                                </div>
+                                <div class="Card-sale">
+                                    <span th:text="${book.discount} + '% скидка'"></span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="Card-content">
+                            <strong class="Card-title">
+                                <a href="#"
+                                   th:href="@{/tags/slug(bookTitle=${book.title},
+                                bookAuthorName=${book.authorSet[0].name},
+                                description=${book.description},
+                                id=${book.id},
+                                price=${book.price},
+                                bookImage=${book.image},
+                                isBestseller=${book.isBestseller},
+                                bookDiscount=${book.discount})}"
+                                   th:text="${book.title}">Техника</a>
+                            </strong>
+                            <div class="Card-description"
+                                 th:text="${book.description}">Кондратенко Александр Петрович
+                            </div>
+                            <div class="Card-cost">
                                 <span class="Card-priceOld"
                                       th:text="'₽'+${book.price + (book.price / 100 * book.discount)}">₽300.00</span>
-                  <span class="Card-price" th:text="'₽'+${book.price}">₽190.00</span>
+                                <span class="Card-price" th:text="'₽'+${book.price}">₽190.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
+                                                                     data-refreshshow="author" data-refreshoffset="10"
+                                                                     data-refreshlimit="10"
+                                                                     th:data-refreshid="${authorId}"
+                                                                     th:data-refreshauthorname="${authorName}"
+                                                                     th:text="#{recent.show}">Показать еще</a>
+                    </div>
                 </div>
-              </div>
-            </div>
-            <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
-                                                             data-refreshshow="author" data-refreshoffset="10"
-                                                             data-refreshlimit="10"
-                                                             th:data-refreshid="${authorId}"
-                                                             th:text="#{recent.show}">Показать еще</a>
-            </div>
-          </div>
 
-          <footer class="Section-footer">
-            <a class="Author-books" href="/books/author.html">Все книги автора
-              <span class="Author-amount" th:text="${authorTotalBooks}">(55)</span>
-            </a>
-          </footer>
-        </div>
-      </main>
+                <footer class="Section-footer">
+                    <a class="Author-books" href="/books/author.html">Все книги автора
+                        <span class="Author-amount" th:text="${authorTotalBooks}">(55)</span>
+                    </a>
+                </footer>
+            </div>
+        </main>
     </div>
-  </div>
-  <footer th:replace="~{fragments/footer_fragment :: footFragment}"></footer>
-  <script src="/assets/plg/jQuery/jquery-3.5.1.min.js"></script>
-  <script>
+</div>
+<footer th:replace="~{fragments/footer_fragment :: footFragment}"></footer>
+<script src="/assets/plg/jQuery/jquery-3.5.1.min.js"></script>
+<script>
     const itemActive = document.getElementById(localStorage.getItem('clickedPoint'));
     itemActive.classList.add('menu-item_ACTIVE');
-  </script>
+</script>
 
-</body></html>
+</body>
+</html>
