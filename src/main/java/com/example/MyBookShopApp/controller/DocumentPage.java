@@ -4,11 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class SearchPageController {
+public class DocumentPage {
 
-    @GetMapping("/search")
-    public String getSearchPage() {
-        return "search/index";
+    @GetMapping("/documents")
+    public String getDocumentsPage() {
+        return "documents/index";
     }
 
 }

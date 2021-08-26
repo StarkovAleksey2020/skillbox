@@ -15,11 +15,11 @@ import java.util.List;
 
 @Controller
 @Api(description = "tagged data")
-public class TagsPageController {
+public class TagsPage {
 
     private final BookService bookService;
 
-    public TagsPageController(BookService bookService) {
+    public TagsPage(BookService bookService) {
         this.bookService = bookService;
     }
 

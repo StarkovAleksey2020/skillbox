@@ -19,13 +19,13 @@ import java.util.Map;
 
 @Controller
 @Api(description = "authors data")
-public class AuthorsPageController {
+public class AuthorsPage {
 
-    private AuthorService authorService;
-    private BookService bookService;
+    private final AuthorService authorService;
+    private final BookService bookService;
 
     @Autowired
-    public AuthorsPageController(AuthorService authorService, BookService bookService) {
+    public AuthorsPage(AuthorService authorService, BookService bookService) {
         this.authorService = authorService;
         this.bookService = bookService;
     }
@@ -56,12 +56,4 @@ public class AuthorsPageController {
         model.addAttribute("authorTotalBooks", bookService.getAuthorBooksCount(authorName));
         return "authors/slug";
     }
-
-    @ApiOperation("method to get authors page")
-    @GetMapping("/api/authors")
-    @ResponseBody
-    public Map<String, List<AuthorEntity>> getAuthorsHashMap() {
-        return authorService.createAuthorsHashMap();
-    }
-
 }

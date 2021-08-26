@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class GenresPageController {
+public class GenresPage {
 
-    private BookService bookService;
+    private final BookService bookService;
 
-    public GenresPageController(BookService bookService) {
+    public GenresPage(BookService bookService) {
         this.bookService = bookService;
     }
 

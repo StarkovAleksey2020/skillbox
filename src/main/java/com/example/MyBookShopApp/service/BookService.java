@@ -10,16 +10,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
 public class BookService {
 
-    private BookRepository bookRepository;
-    private AuthorRepository authorRepository;
-    private TagRepository tagRepository;
-    private Book2TagRepository book2TagRepository;
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final TagRepository tagRepository;
+    private final Book2TagRepository book2TagRepository;
+
+    private Integer DEFAULT_OFFSET = 0;
+    private Integer DEFAULT_LIMIT = 10;
 
     @Autowired
     public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, GenreRepository genreRepository) {
@@ -75,7 +80,7 @@ public class BookService {
     }
 
     public Page<BookEntity> getPageOfRecentBooksInterval(String dateFrom, String dateTo, Integer offset, Integer limit) {
-        Pageable nextPage0 = PageRequest.of(0, 10);
+        Pageable nextPage0 = PageRequest.of(DEFAULT_OFFSET, DEFAULT_LIMIT);
 
         OffsetDateTime dateTimeFrom = getDateOffset(dateFrom);
         OffsetDateTime dateTimeTo = getDateOffset(dateTo);
@@ -84,7 +89,16 @@ public class BookService {
     }
 
     private OffsetDateTime getDateOffset(String inputString) {
-        return OffsetDateTime.parse(inputString.substring(6, 10) + "-" + inputString.substring(3, 5) + "-" + inputString.substring(0, 2) + "T01:00:00+03:00");
+        SimpleDateFormat fromUser = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String reformattedStr = null;
+        try {
+            reformattedStr = myFormat.format(fromUser.parse(inputString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return OffsetDateTime.parse(reformattedStr + "T01:00:00+03:00");
     }
 
     public Page<BookEntity> getPageOfPopularBooksOrdered(Integer offset, Integer limit) {
@@ -107,7 +121,7 @@ public class BookService {
         if (offset!=null || limit!=null) {
             nextPage = PageRequest.of(offset, limit);
         } else {
-            nextPage = PageRequest.of(0, 10);
+            nextPage = PageRequest.of(DEFAULT_OFFSET, DEFAULT_LIMIT);
         }
         return bookRepository.findBooksByGenreName(genreName, nextPage);
     }
@@ -117,7 +131,7 @@ public class BookService {
         if (offset!=null || limit!=null) {
             nextPage = PageRequest.of(offset, limit);
         } else {
-            nextPage = PageRequest.of(0, 10);
+            nextPage = PageRequest.of(DEFAULT_OFFSET, DEFAULT_LIMIT);
         }
         return bookRepository.findBooksByAuthor(authorName, nextPage);
     }
@@ -127,7 +141,7 @@ public class BookService {
         if (offset!=null || limit!=null) {
             nextPage = PageRequest.of(offset, limit);
         } else {
-            nextPage = PageRequest.of(0, 10);
+            nextPage = PageRequest.of(DEFAULT_OFFSET, DEFAULT_LIMIT);
         }
         return bookRepository.findBooksByFolder(folderId, nextPage);
     }
