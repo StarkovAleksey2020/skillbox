@@ -59,4 +59,6 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     @Query(value = "select b from BookEntity b join Book2GenreEntity bg on b.id = bg.bookId join GenreEntity g on bg.genreId = g.id where g.parentId = :parentId")
     Page<BookEntity> findBooksByFolder(@RequestParam("parentId") Long parentId, Pageable nextPage);
+
+    BookEntity findBookEntityBySlug(String slug);
 }

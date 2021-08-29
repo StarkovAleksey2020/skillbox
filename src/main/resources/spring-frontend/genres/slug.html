@@ -64,23 +64,9 @@
             </header>
             <div class="Section">
                 <div class="Cards Cards_refresh">
-                    <div class="Card" th:href="@{/tags/slug(bookTitle=${book.title},
-                                bookAuthorName=${book.authorSet[0].name},
-                                description=${book.description},
-                                id=${book.id},
-                                price=${book.price},
-                                bookImage=${book.image},
-                                isBestseller=${book.isBestseller},
-                                bookDiscount=${book.discount})}"
+                    <div class="Card" th:href="@{'/books/' + ${book.slug}}"
                          th:each="book : ${booksByGenreList}">
-                        <a class="Card-picture" href="#" th:href="@{/tags/slug(bookTitle=${book.title},
-                                bookAuthorName=${book.authorSet[0].name},
-                                description=${book.description},
-                                id=${book.id},
-                                price=${book.price},
-                                bookImage=${book.image},
-                                isBestseller=${book.isBestseller},
-                                bookDiscount=${book.discount})}">
+                        <a class="Card-picture" href="#" th:href="@{'/books/' + ${book.slug}}">
                             <img th:src="${book.image}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
                             <div th:if="${book.isBestseller == 1}" class="Card-ribbon">
                                 <span class="Card-ribbonText">Бестселлер</span>
@@ -91,14 +77,7 @@
                         </a>
                         <div class="Card-content">
                             <strong class="Card-title">
-                                <a th:href="@{/tags/slug(bookTitle=${book.title},
-                                bookAuthorName=${book.authorSet[0].name},
-                                description=${book.description},
-                                id=${book.id},
-                                price=${book.price},
-                                bookImage=${book.image},
-                                isBestseller=${book.isBestseller},
-                                bookDiscount=${book.discount})}"
+                                <a th:href="@{'/books/' + ${book.slug}}"
                                    th:text="${book.title}">Техника</a>
                             </strong>
                             <div class="Card-description" th:text="${book.authorSet[0].name}">Кондратенко

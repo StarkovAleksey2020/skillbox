@@ -38,27 +38,27 @@
           </li>
           <li class="breadcrumbs-item"><a th:onclick="testFunc('genresId')" th:href="@{/genres}">Жанры</a>
           </li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span th:text="${bookTitle}">Мара и морок</span>
+          <li class="breadcrumbs-item breadcrumbs-item_current"><span th:text="${slugBook.title}">Мара и морок</span>
           </li>
         </ul>
         <div class="Product">
           <div class="ProductCard">
             <div class="ProductCard-look">
               <div class="ProductCard-photo">
-                <img th:src="${bookImage}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
-                <div th:if="${isBestseller == 1}" class="Card-ribbon">
+                <img th:src="${slugBook.image}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
+                <div th:if="${slugBook.isBestseller == 1}" class="Card-ribbon">
                   <span class="Card-ribbonText">Бестселлер</span>
                 </div>
                 <div class="Card-sale">
-                  <span th:text="${bookDiscount} + '% скидка'"></span>
+                  <span th:text="${slugBook.discount} + '% скидка'"></span>
                 </div>
               </div>
             </div>
             <div class="ProductCard-desc">
               <div class="ProductCard-header">
-                <h1 class="ProductCard-title" th:text="${bookTitle}">Мара и морок
+                <h1 class="ProductCard-title" th:text="${slugBook.title}">Мара и морок
                 </h1>
-                <div class="ProductCard-author"><span class="ProductCard-titleProp">Автор:</span>&#32;<a href="#" th:text="${bookAuthorName}">Лия Арден</a>
+                <div class="ProductCard-author"><span class="ProductCard-titleProp">Автор:</span>&#32;<a href="#" th:text="${slugBook.authorName}">Лия Арден</a>
                 </div>
                 <div class="ProductCard-rating"><span class="ProductCard-titleProp">Рейтинг:</span>
                   <button class="trigger trigger_dropdown" type="button">
@@ -330,7 +330,7 @@
                   <a th:href="@{/tags(tagName=${tag}, offset='0', limit='10')}" th:text="${tag}"></a>
                 </div>
                 <div class="ProductCard-cost"><span class="ProductCard-titleProp">Цена:</span>
-                  <span class="ProductCard-price" th:text="'₽' + ${price}">₽180</span>
+                  <span class="ProductCard-price" th:text="'₽' + ${slugBook.price}">₽180</span>
                 </div>
                 <!--+div.-info
                 //+div.-cost
@@ -342,7 +342,7 @@
                 -->
               </div>
               <div class="ProductCard-text">
-                <p th:text="${description}"></p>
+                <p th:text="${slugBook.description}"></p>
               </div>
               <div class="ProductCard-cart">
                 <!--+div.-cartElement.-cartElement_amount-->

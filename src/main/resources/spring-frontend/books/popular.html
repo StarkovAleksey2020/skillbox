@@ -52,14 +52,7 @@
                 <div class="Cards Cards_refresh">
                     <div class="Card" th:each="book : ${popularBooks}">
                         <div class="Card-picture">
-                            <a th:href="@{/tags/slug(bookTitle=${book.title},
-                                bookAuthorName=${book.authorSet[0].name},
-                                description=${book.description},
-                                id=${book.id},
-                                price=${book.price},
-                                bookImage=${book.image},
-                                isBestseller=${book.isBestseller},
-                                bookDiscount=${book.discount})}">
+                            <a th:href="@{'/books/' + ${book.slug}}">
                                 <img th:src="${book.image}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
                                 <div th:if="${book.isBestseller == 1}" class="Card-ribbon">
                                     <span class="Card-ribbonText">Бестселлер</span>
@@ -71,14 +64,7 @@
                         </div>
                         <div class="Card-content">
                             <strong class="Card-title">
-                                <a th:href="@{/tags/slug(bookTitle=${book.title},
-                                bookAuthorName=${book.authorSet[0].name},
-                                description=${book.description},
-                                id=${book.id},
-                                price=${book.price},
-                                bookImage=${book.image},
-                                isBestseller=${book.isBestseller},
-                                bookDiscount=${book.discount})}"
+                                <a th:href="@{'/books/' + ${book.slug}}"
                                    href="#"
                                    th:text="${book.title}">Техника
                                 </a>

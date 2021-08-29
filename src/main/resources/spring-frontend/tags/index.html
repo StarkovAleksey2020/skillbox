@@ -51,23 +51,9 @@
                 </div>
 
                 <div class="Cards Cards_refresh" data-load="tag" data-loadoffset="0" data-loadlimit="10">
-                    <div class="Card" th:href="@{/tags/slug(bookTitle=${book.title},
-                                        bookAuthorName=${book.authorSet[0].name},
-                                        description=${book.description},
-                                        bookImage=${book.image},
-                                        id=${book.id},
-                                        price=${book.price},
-                                        isBestseller=${book.isBestseller},
-                                        bookDiscount=${book.discount})}" th:each="book : ${taggedBooks}">
+                    <div class="Card" th:href="@{'/books/' + ${book.slug}}" th:each="book : ${taggedBooks}">
                         <div class="Card-picture">
-                            <a th:href="@{/tags/slug(bookTitle=${book.title},
-                                        bookAuthorName=${book.authorSet[0].name},
-                                        description=${book.description},
-                                        bookImage=${book.image},
-                                        id=${book.id},
-                                        price=${book.price},
-                                        isBestseller=${book.isBestseller},
-                                        bookDiscount=${book.discount})}">
+                            <a th:href="@{'/books/' + ${book.slug}}">
                                 <img th:src="${book.image}" src="/assets/img/content/main/card.jpg" alt="card.jpg"/>
                                 <div th:if="${book.isBestseller == 1}" class="Card-ribbon"><span
                                         class="Card-ribbonText">Бестселлер</span></div>
@@ -77,14 +63,7 @@
                         <div class="Card-content">
                             <strong class="Card-title">
                                 <strong class="Card-title">
-                                    <a th:href="@{/tags/slug(bookTitle=${book.title},
-                                        bookAuthorName=${book.authorSet[0].name},
-                                        description=${book.description},
-                                        bookImage=${book.image},
-                                        id=${book.id},
-                                        price=${book.price},
-                                        isBestseller=${book.isBestseller},
-                                        bookDiscount=${book.discount})}"
+                                    <a th:href="@{'/books/' + ${book.slug}}"
                                        th:text="${book.title}">
                                     </a>
                                 </strong>
