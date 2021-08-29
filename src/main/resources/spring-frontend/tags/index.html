@@ -92,9 +92,8 @@
                             <div class="Card-description" th:text="${book.description}">Кондратенко Александр
                                 Петрович
                             </div>
-                            <div class="Card-cost"
-                                 th:with="priceOld=${book.price + (book.price * book.discount / 100)}">
-                                <span class="Card-priceOld" th:text="'₽' + ${@thymeMath.ceil(priceOld)}"></span>
+                            <div class="Card-cost">
+                                <span class="Card-priceOld" th:text="'₽' + ${@thymeMath.ceil(book.price, book.discount)}"></span>
                                 <span class="Card-price" th:text="'₽' + ${book.price}">₽300.00</span>
                             </div>
                         </div>

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Api("Library of service math functions")
 public class ThymeMath {
     @ApiOperation("Rounding function")
-    public int ceil(double value) {
-        return (int) Math.ceil(value);
+    public int ceil(double value, double discount) {
+        return (int) Math.ceil(value * 100 / (100 - discount));
     }
 }

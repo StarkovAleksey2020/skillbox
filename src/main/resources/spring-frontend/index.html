@@ -88,7 +88,7 @@
                                         </div>
                                         <div class="Card-cost">
                                             <span class="Card-priceOld"
-                                                  th:text="'₽'+${book.price + (book.price / 100 * book.discount)}">₽300.00</span>
+                                                  th:text="'₽' + ${@thymeMath.ceil(book.price, book.discount)}">₽300.00</span>
                                             <span class="Card-price" th:text="'₽'+${book.price}">₽190.00</span>
                                         </div>
                                     </div>
@@ -153,7 +153,7 @@
                                 </div>
                                 <div class="Card-cost">
                                 <span class="Card-priceOld"
-                                      th:text="'₽'+${book.price + (book.price / 100 * book.discount)}">₽300.00</span>
+                                      th:text="'₽' + ${@thymeMath.ceil(book.price, book.discount)}">₽300.00</span>
                                     <span class="Card-price" th:text="'₽'+${book.price}">₽190.00</span>
                                 </div>
                             </div>
@@ -212,7 +212,7 @@
                                 </div>
                                 <div class="Card-cost">
                                 <span class="Card-priceOld"
-                                      th:text="'₽'+${book.price + (book.price / 100 * book.discount)}">₽300.00</span>
+                                      th:text="'₽' + ${@thymeMath.ceil(book.price, book.discount)}">₽300.00</span>
                                     <span class="Card-price" th:text="'₽'+${book.price}">₽190.00</span>
                                 </div>
                             </div>
