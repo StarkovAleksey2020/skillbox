@@ -3,6 +3,7 @@ package com.example.MyBookShopApp.entity;
 import com.example.MyBookShopApp.entity.genre.GenreEntity;
 import com.example.MyBookShopApp.entity.tag.TagEntity;
 import com.example.MyBookShopApp.entity.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -62,6 +63,11 @@ public class BookEntity {
     @ApiModelProperty("Discount percentage")
     private Double discount;
 
+    @JsonGetter("authorName")
+    public String getAuthorName() {
+        return authorSet.get(0).getName();
+    }
+
     @ManyToMany
     @JoinTable(name = "book2author", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
@@ -81,8 +87,8 @@ public class BookEntity {
     private List<UserEntity> userEntityBook2UserSet;
 
     @ManyToMany
-    @JoinTable(name = "file_download", joinColumns = { @JoinColumn(name = "book_id") },
-            inverseJoinColumns = { @JoinColumn(name = "user_id") })
+    @JoinTable(name = "file_download", joinColumns = {@JoinColumn(name = "book_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
     @JsonIgnore
     private List<UserEntity> userEntityFileDownloadSet;
 
