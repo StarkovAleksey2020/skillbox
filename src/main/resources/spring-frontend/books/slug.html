@@ -46,17 +46,22 @@
             <div class="Product">
                 <div class="ProductCard">
                     <div class="ProductCard-look">
-                        <div class="ProductCard-photo">
-                            <img th:src="${slugBook.image}"
-                                 src="/assets/img/content/main/card.jpg"
-                                 alt="card.jpg"/>
-                            <div th:if="${slugBook.isBestseller == 1}" class="Card-ribbon">
-                                <span class="Card-ribbonText">Бестселлер</span>
+                        <form action="#" id="imgForm" method="POST" enctype="multipart/form-data"
+                              th:action="${'/books/'+slugBook.slug+'/img/save'}">
+                            <div class="ProductCard-photo" id="uploadButton">
+                                <img th:src="${slugBook.image}"
+                                     src="/assets/img/content/main/card.jpg"
+                                     alt="card.jpg"/>
                             </div>
-                            <div class="Card-sale">
-                                <span th:text="${slugBook.discount} + '% скидка'"></span>
-                            </div>
+                            <input type="file" name="file" id="dialog" style="display: none">
+                        </form>
+                        <div th:if="${slugBook.isBestseller == 1}" class="Card-ribbon">
+                            <span class="Card-ribbonText">Бестселлер</span>
                         </div>
+                        <div class="Card-sale">
+                            <span th:text="${slugBook.discount} + '% скидка'"></span>
+                        </div>
+
                     </div>
                     <div class="ProductCard-desc">
                         <div class="ProductCard-header">
@@ -382,15 +387,9 @@
                             <div class="ProductCard-tags"><span class="ProductCard-titleProp">Тэги:</span>
                                 <a th:href="@{/tags(tagName=${tag}, offset='0', limit='10')}" th:text="${tag}"></a>
                             </div>
-                            <form action="#" id="imgForm" method="POST" enctype="multipart/form-data"
-                                  th:action="${'/books/'+slugBook.slug+'/img/save'}">
-                                <div id="uploadButton">
-                                    <div class="ProductCard-cost"><span class="ProductCard-titleProp">Цена:</span>
-                                        <span class="ProductCard-price" th:text="'₽' + ${slugBook.price}">₽180</span>
-                                    </div>
-                                    <input type="file" name="file" id="dialog">
-                                </div>
-                            </form>
+                            <div class="ProductCard-cost"><span class="ProductCard-titleProp">Цена:</span>
+                                <span class="ProductCard-price" th:text="'₽' + ${slugBook.price}">₽180</span>
+                            </div>
 
                             <!--+div.-info
                             //+div.-cost
@@ -638,7 +637,7 @@
 </div>
 <footer th:replace="~{fragments/footer_fragment :: footFragment}"></footer>
 <script src="/assets/plg/jQuery/jquery-3.5.1.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
 <script src="/assets/js/UploadNewBookImageScript.js"></script>
 <script>
     const itemActive = document.getElementById(localStorage.getItem('clickedPoint'));
