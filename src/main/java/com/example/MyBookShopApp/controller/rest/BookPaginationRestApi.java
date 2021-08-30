@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @Api(description = "Pagination data api")
@@ -82,12 +83,12 @@ public class BookPaginationRestApi {
 
     @GetMapping(value = {"/search", "/search/{searchWord}"})
     @ApiOperation("method to search books")
-    public String getSearchResults(@PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto,
-                                   Model model) {
+    public ModelAndView getSearchResults(@PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto,
+                                         Model model) {
         model.addAttribute("searchWordDto", searchWordDto);
         model.addAttribute("searchResults",
                 bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), 0, 5).getContent());
-        return "/search/index";
+        return new ModelAndView("search/index");
     }
 
     @GetMapping("/search/page/{searchWord}")

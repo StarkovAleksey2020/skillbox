@@ -13,8 +13,8 @@ import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-@Data
-@ToString
+@Getter
+@Setter
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor

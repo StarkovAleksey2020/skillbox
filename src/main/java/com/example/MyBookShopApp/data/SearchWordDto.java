@@ -1,8 +1,11 @@
 package com.example.MyBookShopApp.data;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+//@Data
+@Getter
+@Setter
 public class SearchWordDto {
 
     private String example;
