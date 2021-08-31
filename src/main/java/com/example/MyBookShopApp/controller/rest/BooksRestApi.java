@@ -1,16 +1,18 @@
 package com.example.MyBookShopApp.controller.rest;
 
+import com.example.MyBookShopApp.data.ApiResponse;
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.service.BookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -33,8 +35,15 @@ public class BooksRestApi {
 
     @GetMapping("/books/by-title")
     @ApiOperation("Getting a list of books by book name")
-    public ResponseEntity<List<BookEntity>> booksByTitle(@RequestParam("title") String title) {
-        return ResponseEntity.ok(bookService.getBooksByTitle(title));
+    public ResponseEntity<ApiResponse<BookEntity>> booksByTitle(@RequestParam("title") String title) throws BookstoreAPiWrongParameterException {
+        ApiResponse<BookEntity> response = new ApiResponse<>();
+        List<BookEntity> data = bookService.getBooksByTitle(title);
+        response.setDebugMessage("successful request");
+        response.setMessage("data size: " + data.size() + " elements");
+        response.setHttpStatus(HttpStatus.OK);
+        response.setTimeStamp(LocalDateTime.now());
+        response.setData(data);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/books/by-price-range")
@@ -55,4 +64,16 @@ public class BooksRestApi {
     public ResponseEntity<List<BookEntity>> getBestsellers() {
         return ResponseEntity.ok(bookService.getBestsellers());
     }
+
+
+    @ExceptionHandler(value = MissingServletRequestParameterException.class)
+    public ResponseEntity<ApiResponse<BookEntity>> handleMissingServletRequestParameterException(Exception exception) {
+        return new ResponseEntity<>(new ApiResponse<BookEntity>(HttpStatus.BAD_REQUEST, "Missing required parameters", exception), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = BookstoreAPiWrongParameterException.class)
+    public ResponseEntity<ApiResponse<BookEntity>> handleBookstoreAPiWrongParameterException(Exception exception) {
+        return new ResponseEntity<>(new ApiResponse<BookEntity>(HttpStatus.BAD_REQUEST, "Bad parameter value...", exception), HttpStatus.BAD_REQUEST);
+    }
+
 }

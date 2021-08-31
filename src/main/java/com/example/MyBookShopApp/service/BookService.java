@@ -3,6 +3,7 @@ package com.example.MyBookShopApp.service;
 import com.example.MyBookShopApp.entity.AuthorEntity;
 import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.entity.book.links.Book2TagEntity;
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,13 +27,14 @@ public class BookService {
     private Integer DEFAULT_OFFSET = 0;
     private Integer DEFAULT_LIMIT = 10;
 
-    @Autowired
-    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, GenreRepository genreRepository) {
+    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.tagRepository = tagRepository;
         this.book2TagRepository = book2TagRepository;
     }
+
+    @Autowired
 
     public List<BookEntity> getBooksData() {
         return bookRepository.findAll();
@@ -44,8 +46,17 @@ public class BookService {
     }
 
 
-    public List<BookEntity> getBooksByTitle(String title) {
-        return bookRepository.findBookEntitiesByTitleContaining(title);
+    public List<BookEntity> getBooksByTitle(String title) throws BookstoreAPiWrongParameterException {
+        if (title.equals("") || title.length() <= 1) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        } else {
+            List<BookEntity> bookEntities = bookRepository.findBookEntitiesByTitleContaining(title);
+            if (bookEntities.size() > 0 ) {
+                return bookEntities;
+            } else {
+                throw new BookstoreAPiWrongParameterException("No data found with specified parameters...");
+            }
+        }
     }
 
     public List<BookEntity> getBooksWithPriceBetween(Integer min, Integer max) {

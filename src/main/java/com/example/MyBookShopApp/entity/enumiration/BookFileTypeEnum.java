@@ -12,7 +12,25 @@ package com.example.MyBookShopApp.entity.enumiration;
  */
 
 public enum BookFileTypeEnum {
-    PDF,
-    EPUB,
-    FB2
+    PDF(".pdf"),
+    EPUB(".epub"),
+    FB2(".fb2");
+
+    private final String fileExtensionString;
+
+    BookFileTypeEnum(String fileExtensionString) {
+        this.fileExtensionString = fileExtensionString;
+    }
+
+    public static String getExtensionStringByTypeId(Integer typeId) {
+        switch (typeId) {
+            case 1:
+                return BookFileTypeEnum.PDF.fileExtensionString;
+            case 2:
+                return BookFileTypeEnum.EPUB.fileExtensionString;
+            case 3:
+                return BookFileTypeEnum.FB2.fileExtensionString;
+            default: return "";
+        }
+    }
 }

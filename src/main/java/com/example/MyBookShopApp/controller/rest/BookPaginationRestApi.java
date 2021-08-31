@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.controller.rest;
 
 import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.data.SearchWordDto;
+import com.example.MyBookShopApp.exception.EmptySearchException;
 import com.example.MyBookShopApp.service.BookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -84,19 +85,24 @@ public class BookPaginationRestApi {
     @GetMapping(value = {"/search", "/search/{searchWord}"})
     @ApiOperation("method to search books")
     public ModelAndView getSearchResults(@PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto,
-                                         Model model) {
-        model.addAttribute("searchWordDto", searchWordDto);
-        model.addAttribute("searchResults",
-                bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), 0, 5).getContent());
-        return new ModelAndView("search/index");
+                                         Model model) throws EmptySearchException {
+        if (searchWordDto != null) {
+            model.addAttribute("searchWordDto", searchWordDto);
+            model.addAttribute("searchResults",
+                    bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), 0, 5).getContent());
+            return new ModelAndView("search/index");
+        } else {
+            throw new EmptySearchException("Поиск по NULL невозможен");
+        }
+
     }
 
-    @GetMapping("/search/page/{searchWord}")
-    @ApiOperation("Getting a page-by-page list of books by search")
-    public BooksPageDto getNextSearchPage(@RequestParam("offset") Integer offset,
-                                          @RequestParam("limit") Integer limit,
-                                          @PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto) {
-        return new BooksPageDto(bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), offset, limit).getContent());
-    }
+        @GetMapping("/search/page/{searchWord}")
+        @ApiOperation("Getting a page-by-page list of books by search")
+        public BooksPageDto getNextSearchPage(@RequestParam("offset") Integer offset,
+                                              @RequestParam("limit") Integer limit,
+                                              @PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto) {
+            return new BooksPageDto(bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), offset, limit).getContent());
+        }
 
 }

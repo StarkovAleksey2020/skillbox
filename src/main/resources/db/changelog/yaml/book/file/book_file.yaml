@@ -36,3 +36,11 @@ databaseChangeLog:
                   type: INT
                   constraints:
                     nullable: false
+              - column:
+                  name: book_id
+                  remarks: поле связи с книгой
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: book_file_book_fk
+                    references: book(id)

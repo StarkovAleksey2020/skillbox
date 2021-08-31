@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.entity;
 
+import com.example.MyBookShopApp.entity.book.file.BookFileEntity;
 import com.example.MyBookShopApp.entity.genre.GenreEntity;
 import com.example.MyBookShopApp.entity.tag.TagEntity;
 import com.example.MyBookShopApp.entity.user.UserEntity;
@@ -11,6 +12,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -109,5 +111,8 @@ public class BookEntity {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @JsonIgnore
     private List<TagEntity> tagEntities;
+
+    @OneToMany(mappedBy = "book")
+    private List<BookFileEntity> bookFileList = new ArrayList<>();
 
 }
