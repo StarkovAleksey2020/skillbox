@@ -62,4 +62,6 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     @Query(value = "FROM BookEntity b WHERE b.slug = :slug")
     BookEntity getBookBySlug(@RequestParam("slug") String slug);
+
+    List<BookEntity> findBookEntityBySlugIn(String[] slugs);
 }

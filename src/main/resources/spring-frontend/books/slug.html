@@ -33,7 +33,7 @@
 <body class="Site">
 <header th:replace="~{fragments/header_fragment :: headFragment}"></header>
 <div class="Middle">
-    <div class="wrap">
+    <div class="wrap" th:if="${slugBook != null}">
         <main class="Middle-main">
             <ul class="breadcrumbs">
                 <li class="breadcrumbs-item"><a th:onclick="testFunc('mainId')" th:href="@{/}">Главная</a>

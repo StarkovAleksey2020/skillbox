@@ -38,6 +38,7 @@ public class BookController {
                               Model model) {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
         model.addAttribute("slugBook", bookEntity);
+
         return "/books/slug";
     }
 
