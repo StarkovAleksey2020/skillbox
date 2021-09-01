@@ -86,7 +86,9 @@
                   </div>
                   <div class="Cart-buttons">
                     <div class="Cart-btn">
-                      <button class="btn btn_primary btn_outline" data-sendstatus="KEPT" data-bookid="[1111]"><span class="btn-icon"><img src="/assets/img/icons/heart.svg" alt="heart.svg"/></span><span class="btn-content">Отложить</span>
+                      <button class="btn btn_primary btn_outline" data-sendstatus="KEPT"
+                              th:attr="data-bookid = ${'cart/kept/' + book.slug}"
+                              data-bookid="[1111]"><span class="btn-icon"><img src="/assets/img/icons/heart.svg" alt="heart.svg"/></span><span class="btn-content">Отложить</span>
                       </button>
                     </div>
                     <div class="Cart-btn">

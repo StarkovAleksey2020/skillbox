@@ -10,11 +10,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 @Service
 public class BookService {
@@ -51,7 +59,7 @@ public class BookService {
             throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         } else {
             List<BookEntity> bookEntities = bookRepository.findBookEntitiesByTitleContaining(title);
-            if (bookEntities.size() > 0 ) {
+            if (bookEntities.size() > 0) {
                 return bookEntities;
             } else {
                 throw new BookstoreAPiWrongParameterException("No data found with specified parameters...");
@@ -129,7 +137,7 @@ public class BookService {
 
     public Page<BookEntity> getPageOfBooksByGenreName(String genreName, Integer offset, Integer limit) {
         Pageable nextPage;
-        if (offset!=null || limit!=null) {
+        if (offset != null || limit != null) {
             nextPage = PageRequest.of(offset, limit);
         } else {
             nextPage = PageRequest.of(DEFAULT_OFFSET, DEFAULT_LIMIT);
@@ -139,7 +147,7 @@ public class BookService {
 
     public Page<BookEntity> getPageOfBooksByAuthorName(String authorName, Integer offset, Integer limit) {
         Pageable nextPage;
-        if (offset!=null || limit!=null) {
+        if (offset != null || limit != null) {
             nextPage = PageRequest.of(offset, limit);
         } else {
             nextPage = PageRequest.of(DEFAULT_OFFSET, DEFAULT_LIMIT);
@@ -149,7 +157,7 @@ public class BookService {
 
     public Page<BookEntity> getPageOfBooksByFolderId(Long folderId, Integer offset, Integer limit) {
         Pageable nextPage;
-        if (offset!=null || limit!=null) {
+        if (offset != null || limit != null) {
             nextPage = PageRequest.of(offset, limit);
         } else {
             nextPage = PageRequest.of(DEFAULT_OFFSET, DEFAULT_LIMIT);
@@ -159,6 +167,80 @@ public class BookService {
 
     public Integer getAuthorBooksCount(String authorName) {
         return bookRepository.findBooksCountByAuthor(authorName);
+    }
+
+    public void addCartContentsItem(@PathVariable("slug") String slug,
+                                    @CookieValue(name = "cartContents", required = false) String cartContents,
+                                    HttpServletResponse response,
+                                    Model model) {
+        if (cartContents == null || cartContents.equals("")) {
+            Cookie cookie = new Cookie("cartContents", slug);
+            cookie.setMaxAge(24 * 60 * 60);
+            cookie.setPath("/books");
+            response.addCookie(cookie);
+            model.addAttribute("isCartEmpty", false);
+        } else if (!cartContents.contains(slug)) {
+            StringJoiner stringJoiner = new StringJoiner("/");
+            stringJoiner.add(cartContents).add(slug);
+            Cookie cookie = new Cookie("cartContents", stringJoiner.toString());
+            cookie.setMaxAge(24 * 60 * 60);
+            cookie.setPath("/books");
+            response.addCookie(cookie);
+            model.addAttribute("isCartEmpty", false);
+        }
+    }
+
+    public void removeCartContentsItemFromCart(@PathVariable("slug") String slug,
+                                               @CookieValue(name = "cartContents", required = false) String cartContents,
+                                               HttpServletResponse response,
+                                               Model model) {
+        if (cartContents != null || !cartContents.equals("")) {
+            ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(cartContents.split("/")));
+            cookieBooks.remove(slug);
+            Cookie cookie = new Cookie("cartContents", String.join("/", cookieBooks));
+            cookie.setPath("/books");
+            response.addCookie(cookie);
+            model.addAttribute("isCartEmpty", false);
+        } else {
+            model.addAttribute("isCartEmpty", true);
+        }
+    }
+
+    public void addPostponedContentsItem(@PathVariable("slug") String slug,
+                                         @CookieValue(name = "postponedContents", required = false) String postponedContents,
+                                         HttpServletResponse response,
+                                         Model model) {
+        if (postponedContents == null || postponedContents.equals("")) {
+            Cookie cookie = new Cookie("postponedContents", slug);
+            cookie.setMaxAge(24 * 60 * 60);
+            cookie.setPath("/books");
+            response.addCookie(cookie);
+            model.addAttribute("isPostponedEmpty", false);
+        } else if (!postponedContents.contains(slug)) {
+            StringJoiner stringJoiner = new StringJoiner("/");
+            stringJoiner.add(postponedContents).add(slug);
+            Cookie cookie = new Cookie("postponedContents", stringJoiner.toString());
+            cookie.setMaxAge(24 * 60 * 60);
+            cookie.setPath("/books");
+            response.addCookie(cookie);
+            model.addAttribute("isPostponedEmpty", false);
+        }
+    }
+
+    public void removePostponedContentsItemFromPostponed(@PathVariable("slug") String slug,
+                                               @CookieValue(name = "postponedContents", required = false) String postponedContents,
+                                               HttpServletResponse response,
+                                               Model model) {
+        if (postponedContents != null || !postponedContents.equals("")) {
+            ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(postponedContents.split("/")));
+            cookieBooks.remove(slug);
+            Cookie cookie = new Cookie("postponedContents", String.join("/", cookieBooks));
+            cookie.setPath("/books");
+            response.addCookie(cookie);
+            model.addAttribute("isPostponedEmpty", false);
+        } else {
+            model.addAttribute("isPostponedEmpty", true);
+        }
     }
 
 }
