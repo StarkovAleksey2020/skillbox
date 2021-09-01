@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.StringJoiner;
 
 @Controller
-@RequestMapping("/book")
+@RequestMapping("/books")
 public class BookShopCart {
 
     @PostMapping("/changeBookStatus/{slug}")
@@ -22,14 +22,16 @@ public class BookShopCart {
                                          Model model) {
         if (cartContents == null || cartContents.equals("")) {
             Cookie cookie = new Cookie("cartContents", slug);
-            cookie.setPath("/books/");
+            cookie.setMaxAge(24 * 60 * 60);
+            cookie.setPath("/books");
             response.addCookie(cookie);
             model.addAttribute("isCartEmpty", false);
         } else if (!cartContents.contains(slug)) {
             StringJoiner stringJoiner = new StringJoiner("/");
             stringJoiner.add(cartContents).add(slug);
             Cookie cookie = new Cookie("cartContents", stringJoiner.toString());
-            cookie.setPath("/books/");
+            cookie.setMaxAge(24 * 60 * 60);
+            cookie.setPath("/books");
             response.addCookie(cookie);
             model.addAttribute("isCartEmpty", false);
         }
