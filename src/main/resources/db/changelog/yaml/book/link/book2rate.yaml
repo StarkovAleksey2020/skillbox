@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1000
+      author: codewizard
+      changes:
+        - createTable:
+            tableName: book2rate
+            remarks: Привязка книг к рейтингам
+            columns:
+              - column:
+                  name: id
+                  remarks: id связи
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: book2rate_id
+                    nullable: false
+              - column:
+                  name: book_id
+                  remarks: идентификатор книги
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rate
+                  remarks: идентификатор автора
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: book_id
+            baseTableName: book2rate
+            constraintName: fk-book2rate-0
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: book
+            referencedColumnNames: id

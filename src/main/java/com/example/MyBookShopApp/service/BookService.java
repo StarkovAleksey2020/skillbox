@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.service;
 
 import com.example.MyBookShopApp.entity.AuthorEntity;
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.entity.book.links.Book2RateEntity;
 import com.example.MyBookShopApp.entity.book.links.Book2TagEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.*;
@@ -19,10 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 
 @Service
 public class BookService {
@@ -31,15 +29,17 @@ public class BookService {
     private final AuthorRepository authorRepository;
     private final TagRepository tagRepository;
     private final Book2TagRepository book2TagRepository;
+    private final BookRateRepository bookRateRepository;
 
     private Integer DEFAULT_OFFSET = 0;
     private Integer DEFAULT_LIMIT = 10;
 
-    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository) {
+    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, BookRateRepository bookRateRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.tagRepository = tagRepository;
         this.book2TagRepository = book2TagRepository;
+        this.bookRateRepository = bookRateRepository;
     }
 
     @Autowired
@@ -174,11 +174,12 @@ public class BookService {
                                     HttpServletResponse response,
                                     Model model) {
         if (cartContents == null || cartContents.equals("")) {
-            Cookie cookie = new Cookie("cartContents", slug);
+            Cookie cookie = new Cookie("cartContents", "/" + slug);
             cookie.setMaxAge(24 * 60 * 60);
             cookie.setPath("/books");
             response.addCookie(cookie);
             model.addAttribute("isCartEmpty", false);
+            model.addAttribute("cartContentsSize", 1);
         } else if (!cartContents.contains(slug)) {
             StringJoiner stringJoiner = new StringJoiner("/");
             stringJoiner.add(cartContents).add(slug);
@@ -187,6 +188,7 @@ public class BookService {
             cookie.setPath("/books");
             response.addCookie(cookie);
             model.addAttribute("isCartEmpty", false);
+            model.addAttribute("cartContentsSize", cookie.getValue().split("/").length);
         }
     }
 
@@ -201,8 +203,10 @@ public class BookService {
             cookie.setPath("/books");
             response.addCookie(cookie);
             model.addAttribute("isCartEmpty", false);
+            model.addAttribute("cartContentsSize", cookie.getValue().split("/").length);
         } else {
             model.addAttribute("isCartEmpty", true);
+            model.addAttribute("cartContentsSize", 0);
         }
     }
 
@@ -211,11 +215,12 @@ public class BookService {
                                          HttpServletResponse response,
                                          Model model) {
         if (postponedContents == null || postponedContents.equals("")) {
-            Cookie cookie = new Cookie("postponedContents", slug);
+            Cookie cookie = new Cookie("postponedContents", "/" + slug);
             cookie.setMaxAge(24 * 60 * 60);
             cookie.setPath("/books");
             response.addCookie(cookie);
             model.addAttribute("isPostponedEmpty", false);
+            model.addAttribute("postponedSize", 1);
         } else if (!postponedContents.contains(slug)) {
             StringJoiner stringJoiner = new StringJoiner("/");
             stringJoiner.add(postponedContents).add(slug);
@@ -224,13 +229,14 @@ public class BookService {
             cookie.setPath("/books");
             response.addCookie(cookie);
             model.addAttribute("isPostponedEmpty", false);
+            model.addAttribute("postponedSize", cookie.getValue().split("/").length);
         }
     }
 
     public void removePostponedContentsItemFromPostponed(@PathVariable("slug") String slug,
-                                               @CookieValue(name = "postponedContents", required = false) String postponedContents,
-                                               HttpServletResponse response,
-                                               Model model) {
+                                                         @CookieValue(name = "postponedContents", required = false) String postponedContents,
+                                                         HttpServletResponse response,
+                                                         Model model) {
         if (postponedContents != null || !postponedContents.equals("")) {
             ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(postponedContents.split("/")));
             cookieBooks.remove(slug);
@@ -238,9 +244,38 @@ public class BookService {
             cookie.setPath("/books");
             response.addCookie(cookie);
             model.addAttribute("isPostponedEmpty", false);
+            model.addAttribute("postponedSize", cookie.getValue().split("/").length);
         } else {
             model.addAttribute("isPostponedEmpty", true);
+            model.addAttribute("postponedSize", 0);
         }
     }
 
+    public Map<String, Integer> getCartAndPostponedCount(@CookieValue(name = "cartContents", required = false) String cartContents,
+                                                         @CookieValue(name = "postponedContents", required = false) String postponedContents) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("cartContentsSize", new ArrayList<>(Arrays.asList(cartContents.split("/"))).size());
+        map.put("postponedSize", new ArrayList<>(Arrays.asList(postponedContents.split("/"))).size());
+        return map;
+    }
+
+    public Integer getBookRate(String slug) {
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        return bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity).getRate();
+    }
+
+    public Integer setBookRate(String slug, Integer rate) {
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        Book2RateEntity book2RateEntity = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
+        if (book2RateEntity == null) {
+            Book2RateEntity entity = new Book2RateEntity();
+            entity.setRate(rate);
+            entity.setBookEntity(bookEntity);
+            bookRateRepository.save(entity);
+        } else {
+            book2RateEntity.setRate(rate);
+            bookRateRepository.save(book2RateEntity);
+        }
+        return rate;
+    }
 }

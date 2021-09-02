@@ -97,12 +97,12 @@ public class BookPaginationRestApi {
 
     }
 
-        @GetMapping("/search/page/{searchWord}")
-        @ApiOperation("Getting a page-by-page list of books by search")
-        public BooksPageDto getNextSearchPage(@RequestParam("offset") Integer offset,
-                                              @RequestParam("limit") Integer limit,
-                                              @PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto) {
-            return new BooksPageDto(bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), offset, limit).getContent());
-        }
+    @GetMapping("/search/page/{searchWord}")
+    @ApiOperation("Getting a page-by-page list of books by search")
+    public BooksPageDto getNextSearchPage(@RequestParam("offset") Integer offset,
+                                          @RequestParam("limit") Integer limit,
+                                          @PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto) {
+        return new BooksPageDto(bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), offset, limit).getContent());
+    }
 
 }

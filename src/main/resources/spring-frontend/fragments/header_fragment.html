@@ -51,7 +51,7 @@
                                     </g>
                                 </g>
                             </svg>
-                            <span class="CartBlock-amount">0</span>
+                            <span class="CartBlock-amount" th:text="${postponedSize}">0</span>
                         </a>
                         <a class="CartBlock-block" th:href="@{/books/cart}">
                             <svg class="CartBlock-img" xmlns="http://www.w3.org/2000/svg" width="30" height="23"
@@ -63,7 +63,7 @@
                                     </g>
                                 </g>
                             </svg>
-                            <span class="CartBlock-amount">0</span>
+                            <span class="CartBlock-amount" th:text="${cartContentsSize}">0</span>
                         </a>
                         <a class="CartBlock-block" th:href="@{/signin}">
                             <svg class="CartBlock-img" xmlns="http://www.w3.org/2000/svg" width="22" height="23"

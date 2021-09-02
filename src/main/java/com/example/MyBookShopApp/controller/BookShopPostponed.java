@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/books")
@@ -21,6 +21,11 @@ public class BookShopPostponed {
     @ModelAttribute(name = "bookPostponed")
     public List<BookEntity> bookPostponed() {
         return new ArrayList<>();
+    }
+
+    @ModelAttribute(name = "postponedSize")
+    public Integer getPostponedSize() {
+        return 0;
     }
 
     private final BookRepository bookRepository;
@@ -77,4 +82,13 @@ public class BookShopPostponed {
         return "redirect:/books/" + slug;
     }
 
+    @GetMapping("/postponed/count")
+    public ModelAndView getPostponedCount(@CookieValue(name = "cartContents", required = false) String cartContents,
+                                          @CookieValue(name = "postponedContents", required = false) String postponedContents,
+                                          Model model) {
+        Map<String, Integer> map = bookService.getCartAndPostponedCount(cartContents, postponedContents);
+        model.addAttribute("cartContentsSize", map.get("cartContentsSize"));
+        model.addAttribute("postponedSize", map.get("postponedSize"));
+        return new ModelAndView("/fragments/header_fragment");
+    }
 }

@@ -337,53 +337,135 @@
                             </div>
                             <div class="ProductCard-assessment"><span
                                     class="ProductCard-titleProp">Оцените книгу:</span><span class="Rating Rating_input"
-                                                                                             data-bookid="2121"><span
-                                    class="Rating-stars"><span class="Rating-star">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                          <g>
-                            <g>
-                              <path fill="#ffc000"
-                                    d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                            </g>
-                          </g>
-                        </svg></span>
-                      <input name="rating" type="radio" value="1"/><span class="Rating-star">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                          <g>
-                            <g>
-                              <path fill="#ffc000"
-                                    d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                            </g>
-                          </g>
-                        </svg></span>
-                      <input name="rating" type="radio" value="2"/><span class="Rating-star">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                          <g>
-                            <g>
-                              <path fill="#ffc000"
-                                    d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                            </g>
-                          </g>
-                        </svg></span>
-                      <input name="rating" type="radio" value="3"/><span class="Rating-star">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                          <g>
-                            <g>
-                              <path fill="#ffc000"
-                                    d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                            </g>
-                          </g>
-                        </svg></span>
-                      <input name="rating" type="radio" value="4"/><span class="Rating-star">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                          <g>
-                            <g>
-                              <path fill="#ffc000"
-                                    d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                            </g>
-                          </g>
-                        </svg></span>
-                      <input name="rating" type="radio" value="5"/></span></span>
+                                                                                             data-bookid="2121">
+                                <span class="Rating-stars">
+                                    <span th:if="${bookRate >= 1}">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="19" height="18"
+                                             viewBox="0 0 19 18">
+                                            <g>
+                                                <g>
+                                                  <path fill="#f7ca18"
+                                                        d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span th:if="${bookRate < 1}">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="19" height="18"
+                                             viewBox="0 0 19 18">
+                                            <g>
+                                                <g>
+                                                  <path fill="#f0f0f0"
+                                                        d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <input name="rating" type="radio" value="1" th:attr="data-bookid = ${slugBook.slug + '/1'}"/>
+                                    <span th:if="${bookRate >= 2}">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="19" height="18"
+                                             viewBox="0 0 19 18">
+                                            <g>
+                                                <g>
+                                                  <path fill="#f7ca18"
+                                                        d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span th:if="${bookRate < 2}">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="19" height="18"
+                                             viewBox="0 0 19 18">
+                                            <g>
+                                                <g>
+                                                  <path fill="#f0f0f0"
+                                                        d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                  <input name="rating" type="radio" value="2" th:attr="data-bookid = ${slugBook.slug + '/2'}"/>
+                                    <span th:if="${bookRate >= 3}">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="19" height="18"
+                                             viewBox="0 0 19 18">
+                                            <g>
+                                                <g>
+                                                  <path fill="#f7ca18"
+                                                        d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span th:if="${bookRate < 3}">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="19" height="18"
+                                             viewBox="0 0 19 18">
+                                            <g>
+                                                <g>
+                                                  <path fill="#f0f0f0"
+                                                        d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <input name="rating" type="radio" value="3" th:attr="data-bookid = ${slugBook.slug + '/3'}"/>
+                                    <span th:if="${bookRate >= 4}">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="19" height="18"
+                                             viewBox="0 0 19 18">
+                                            <g>
+                                                <g>
+                                                  <path fill="#f7ca18"
+                                                        d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span th:if="${bookRate < 4}">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="19" height="18"
+                                             viewBox="0 0 19 18">
+                                            <g>
+                                                <g>
+                                                  <path fill="#f0f0f0"
+                                                        d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+
+                                    <input name="rating" type="radio" value="4" th:attr="data-bookid = ${slugBook.slug + '/4'}"/>
+                                    <span th:if="${bookRate == 5}">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="19" height="18"
+                                             viewBox="0 0 19 18">
+                                            <g>
+                                                <g>
+                                                  <path fill="#f7ca18"
+                                                        d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span th:if="${bookRate < 5}">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="19" height="18"
+                                             viewBox="0 0 19 18">
+                                            <g>
+                                                <g>
+                                                  <path fill="#f0f0f0"
+                                                        d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </span>
+                      <input name="rating" type="radio" value="5"
+                             th:attr="data-bookid = ${slugBook.slug + '/5'}"/></span></span>
                             </div>
                             <div class="ProductCard-tags"><span class="ProductCard-titleProp">Тэги:</span>
                                 <a th:href="@{/tags(tagName=${tag}, offset='0', limit='10')}" th:text="${tag}"></a>
@@ -408,7 +490,7 @@
                             <!--+div.-cartElement.-cartElement_amount-->
                             <!--    +Amount._product-->
                             <div class="ProductCard-cartElement">
-                                <button class="btn btn_primary btn_outline" data-sendstatus="KEPT" data-bookid="[1111]"
+                                <button class="btn btn_primary btn_outline" data-sendstatus="KEPT"
                                         th:attr="data-bookid = ${'postponed/' + slugBook.slug}"
                                         data-btntype="check" data-btnradio="buyblock" data-check="false"
                                         data-alttext="Отложена"><span class="btn-icon"><img
@@ -417,7 +499,7 @@
                                 </button>
                             </div>
                             <div class="ProductCard-cartElement">
-                                <button class="btn btn_primary btn_outline" data-sendstatus="CART" data-bookid="[1111]"
+                                <button class="btn btn_primary btn_outline" data-sendstatus="CART"
                                         th:attr="data-bookid=${slugBook.slug}"
                                         data-btntype="check" data-btnradio="buyblock" data-check="false"
                                         data-alttext="В корзине"><span class="btn-icon"><img
@@ -436,7 +518,7 @@
                             </div>
                             <div class="ProductCard-cartElement">
                                 <button class="btn btn_primary btn_outline" data-sendstatus="ARCHIVED"
-                                        data-bookid="[1111]" data-btntype="check" data-btnradio="buyblock"
+                                        data-btntype="check" data-btnradio="buyblock"
                                         data-check="false" data-alttext="Вернуть из архива"><span class="btn-icon"><img
                                         src="/assets/img/icons/archive.svg" alt="archive.svg"/></span><span
                                         class="btn-content">В архив</span>
