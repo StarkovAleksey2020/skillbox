@@ -41,9 +41,6 @@ databaseChangeLog:
                   type: TEXT
                   constraints:
                     nullable: false
-        - addColumn:
-            tableName: message
-            columns:
               - column:
                   name: user_id
                   remarks: если пользователь был авторизован

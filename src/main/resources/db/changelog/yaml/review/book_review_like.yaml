@@ -33,9 +33,6 @@ databaseChangeLog:
                   type: SMALLINT
                   constraints:
                     nullable: false
-        - addColumn:
-            tableName: book_review_like
-            columns:
               - column:
                   name: user_id
                   type: INT

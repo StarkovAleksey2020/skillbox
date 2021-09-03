@@ -49,5 +49,5 @@ public class UserContactEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ApiModelProperty(value = "The identifier of the user this contact belongs to")
-    private UserEntity user;
+    private UserEntity userEntity;
 }

@@ -1,9 +1,8 @@
 package com.example.MyBookShopApp.entity;
 
-import com.example.MyBookShopApp.controller.BookRate;
 import com.example.MyBookShopApp.entity.book.file.BookFileEntity;
 import com.example.MyBookShopApp.entity.book.links.Book2RateEntity;
-import com.example.MyBookShopApp.entity.book.review.BookReviewLikeEntity;
+import com.example.MyBookShopApp.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.entity.genre.GenreEntity;
 import com.example.MyBookShopApp.entity.tag.TagEntity;
 import com.example.MyBookShopApp.entity.user.UserEntity;
@@ -104,12 +103,6 @@ public class BookEntity {
     private List<UserEntity> userEntityBalanceTransactionSet;
 
     @ManyToMany
-    @JoinTable(name = "book_review", joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @JsonIgnore
-    private List<UserEntity> userEntityBookReviewSet;
-
-    @ManyToMany
     @JoinTable(name = "book2tag", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @JsonIgnore
@@ -121,5 +114,7 @@ public class BookEntity {
     @OneToOne(mappedBy = "bookEntity")
     private Book2RateEntity book2RateEntity;
 
+    @OneToMany(mappedBy = "bookEntity")
+    private List<BookReviewEntity> bookReviewEntities;
 
 }

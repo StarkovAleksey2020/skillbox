@@ -4,6 +4,8 @@ import com.example.MyBookShopApp.entity.AuthorEntity;
 import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.entity.book.links.Book2RateEntity;
 import com.example.MyBookShopApp.entity.book.links.Book2TagEntity;
+import com.example.MyBookShopApp.entity.book.review.BookReviewEntity;
+import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +21,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.logging.Logger;
 
 @Service
 public class BookService {
@@ -30,16 +34,20 @@ public class BookService {
     private final TagRepository tagRepository;
     private final Book2TagRepository book2TagRepository;
     private final BookRateRepository bookRateRepository;
+    private final BookReviewRepository bookReviewRepository;
+    private final UserRepository userRepository;
 
     private Integer DEFAULT_OFFSET = 0;
     private Integer DEFAULT_LIMIT = 10;
 
-    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, BookRateRepository bookRateRepository) {
+    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, BookRateRepository bookRateRepository, BookReviewRepository bookReviewRepository, UserRepository userRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.tagRepository = tagRepository;
         this.book2TagRepository = book2TagRepository;
         this.bookRateRepository = bookRateRepository;
+        this.bookReviewRepository = bookReviewRepository;
+        this.userRepository = userRepository;
     }
 
     @Autowired
@@ -261,7 +269,13 @@ public class BookService {
 
     public Integer getBookRate(String slug) {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        return bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity).getRate();
+        Book2RateEntity book2RateEntity = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
+        if (book2RateEntity != null) {
+            return book2RateEntity.getRate();
+        } else {
+            return 0;
+        }
+
     }
 
     public Integer setBookRate(String slug, Integer rate) {
@@ -277,5 +291,26 @@ public class BookService {
             bookRateRepository.save(book2RateEntity);
         }
         return rate;
+    }
+
+    public Boolean createBookReview(String slug, String comment) throws BookstoreAPiWrongParameterException {
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        if (bookEntity != null && comment != null && !comment.equals("") ) {
+            UserEntity userEntity = userRepository.findByIdExactly(1L);
+            BookReviewEntity bookReviewEntity = new BookReviewEntity();
+
+//            bookReviewEntity.setId(bookReviewRepository.findAll().size()+1L);
+            bookReviewEntity.setTime(LocalDateTime.now());
+            bookReviewEntity.setBookEntity(bookEntity);
+            bookReviewEntity.setUserEntity(userEntity);
+            bookReviewEntity.setText(comment);
+
+            Logger.getLogger(this.getClass().getSimpleName()).info("Book Review Entity to save" + bookReviewEntity);
+            bookReviewRepository.save(bookReviewEntity);
+
+            return true;
+        } else {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
     }
 }

@@ -363,7 +363,8 @@
                                             </g>
                                         </svg>
                                     </span>
-                                    <input name="rating" type="radio" value="1" th:attr="data-bookid = ${slugBook.slug + '/1'}"/>
+                                    <input name="rating" type="radio" value="1"
+                                           th:attr="data-bookid = ${slugBook.slug + '/1'}"/>
                                     <span th:if="${bookRate >= 2}">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              width="19" height="18"
@@ -388,7 +389,8 @@
                                             </g>
                                         </svg>
                                     </span>
-                                  <input name="rating" type="radio" value="2" th:attr="data-bookid = ${slugBook.slug + '/2'}"/>
+                                  <input name="rating" type="radio" value="2"
+                                         th:attr="data-bookid = ${slugBook.slug + '/2'}"/>
                                     <span th:if="${bookRate >= 3}">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              width="19" height="18"
@@ -413,7 +415,8 @@
                                             </g>
                                         </svg>
                                     </span>
-                                    <input name="rating" type="radio" value="3" th:attr="data-bookid = ${slugBook.slug + '/3'}"/>
+                                    <input name="rating" type="radio" value="3"
+                                           th:attr="data-bookid = ${slugBook.slug + '/3'}"/>
                                     <span th:if="${bookRate >= 4}">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              width="19" height="18"
@@ -439,7 +442,8 @@
                                         </svg>
                                     </span>
 
-                                    <input name="rating" type="radio" value="4" th:attr="data-bookid = ${slugBook.slug + '/4'}"/>
+                                    <input name="rating" type="radio" value="4"
+                                           th:attr="data-bookid = ${slugBook.slug + '/4'}"/>
                                     <span th:if="${bookRate == 5}">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                              width="19" height="18"
@@ -541,6 +545,33 @@
                     <div class="Product-comments-header">
                         <h3 class="Product-comments-title">Отзывы
                         </h3><span class="Product-comments-amount">567 отзывов</span>
+                    </div>
+                    <strong class="Comments-title">Написать отзыв
+                    </strong>
+                    <div class="Comments-addComment">
+                        <form class="form" action="#" method="post" data-bookid="1111"
+                              th:attr="data-bookid = ${slugBook.slug}"
+                              th:action="${'/bookReview/'}">
+                            <div class="form-group">
+                                <textarea class="form-textarea Comments-review"
+                                          name="review"
+                                          id="review"
+                                          placeholder="Текст отзыва"
+                                          data-validate="require"></textarea>
+                            </div>
+                            <div class="form-group Comments-sendReview">
+                                <button class="btn btn_warning" type="submit">Отправить отзыв
+                                </button>
+                            </div>
+                        </form>
+                        <div id="comment-result">
+                            <div th:if="${session.isCommentLeft}">
+                                <span style="color: #0064c9">Отзыв успешно сохранен</span>
+                            </div>
+                            <div th:if="${session.isCommentLeft == false}">
+                                <span style="color: #c90000">Отзыв не сохранен, что-то пошло не так ...</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="Comments">

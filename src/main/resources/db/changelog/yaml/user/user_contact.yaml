@@ -16,23 +16,8 @@ databaseChangeLog:
                     primaryKeyName: user_contact_id
                     nullable: false
               - column:
-                  name: code
-                  remarks: код подтверждения
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: code_time
-                  remarks: дата и время формирования кода подтверждения
-                  type: TIMESTAMP
-              - column:
-                  name: code_trails
-                  remarks: количество попыток ввода кода подтверждения
+                  name: user_id
                   type: INT
-              - column:
-                  name: contact
-                  remarks: контакт (e-mail или телефон)
-                  type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:
@@ -41,12 +26,30 @@ databaseChangeLog:
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
-        - addColumn:
-            tableName: user_contact
-            columns:
               - column:
-                  name: user_id
+                  name: approved
+                  remarks: подтверждён ли контакт
+                  type: smallint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: code
+                  remarks: код подтверждения
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: code_trails
+                  remarks: количество попыток ввода кода подтверждения
                   type: INT
+              - column:
+                  name: code_time
+                  remarks: дата и время формирования кода подтверждения
+                  type: TIMESTAMP
+              - column:
+                  name: contact
+                  remarks: контакт (e-mail или телефон)
+                  type: VARCHAR(255)
                   constraints:
                     nullable: false
         - addForeignKeyConstraint:

@@ -28,10 +28,6 @@ public class Book2RateEntity {
     @ApiModelProperty(value = "Book rate", position = 2)
     private Integer rate;
 
-//    @Column(name = "book_id", columnDefinition = "INT NOT NULL  DEFAULT 0")
-//    @ApiModelProperty(value = "Book id", position = 3)
-//    private Long bookId;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     @ApiModelProperty(value = "Book id")
