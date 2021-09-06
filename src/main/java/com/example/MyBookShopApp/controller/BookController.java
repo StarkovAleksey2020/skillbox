@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.BookRepository;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.ResourceStorage;
@@ -35,11 +36,12 @@ public class BookController {
 
     @GetMapping("/{slug}")
     public String getBookPage(@PathVariable("slug") String slug,
-                              Model model) {
+                              Model model) throws BookstoreAPiWrongParameterException {
         if ((slug != null || !slug.equals("")) && !slug.equals("favicon.ico")) {
             BookEntity bookEntity = bookRepository.getBookBySlug(slug);
             model.addAttribute("slugBook", bookEntity);
             model.addAttribute("bookRate", bookService.getBookRate(slug));
+            model.addAttribute("bookReviewInfo", bookService.getBookReviewInfo(slug));
         }
         return "/books/slug";
     }

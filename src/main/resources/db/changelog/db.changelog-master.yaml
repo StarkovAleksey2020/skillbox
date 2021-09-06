@@ -6,8 +6,6 @@ databaseChangeLog:
     - include:
         file: db/changelog/yaml/book/link/book2author.yaml
     - include:
-        file: db/changelog/yaml/book/link/book2rate.yaml
-    - include:
         file: db/changelog/yaml/genre/genre.yaml
     - include:
         file: db/changelog/yaml/book/link/book2genre.yaml
@@ -17,6 +15,8 @@ databaseChangeLog:
         file: db/changelog/yaml/book/link/book2tag.yaml
     - include:
         file: db/changelog/yaml/user/user.yaml
+    - include:
+        file: db/changelog/yaml/book/link/book2rate.yaml
     - include:
         file: db/changelog/yaml/book/link/book2user_type.yaml
     - include:

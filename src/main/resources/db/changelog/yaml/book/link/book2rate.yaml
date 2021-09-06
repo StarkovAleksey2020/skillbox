@@ -23,6 +23,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: user_id
+                  remarks: идентификатор пользователя
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
                   name: rate
                   remarks: идентификатор автора
                   type: INT
@@ -37,4 +43,14 @@ databaseChangeLog:
             onDelete: NO ACTION
             onUpdate: NO ACTION
             referencedTableName: book
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: book2rate
+            constraintName: fk-book2rate-1
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedTableName: user_entity
             referencedColumnNames: id

@@ -42,7 +42,7 @@ public class MessageEntity {
     @ApiModelProperty(value = "Message text", position = 6)
     private String text;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ApiModelProperty(value = "If the user was logged in", position = 7)
     private UserEntity user;

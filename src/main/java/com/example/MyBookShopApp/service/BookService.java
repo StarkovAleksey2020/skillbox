@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.service;
 
+import com.example.MyBookShopApp.data.BookReviewRLDto;
 import com.example.MyBookShopApp.entity.AuthorEntity;
 import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.entity.book.links.Book2RateEntity;
@@ -7,6 +8,7 @@ import com.example.MyBookShopApp.entity.book.links.Book2TagEntity;
 import com.example.MyBookShopApp.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
+import com.example.MyBookShopApp.mapper.BookReviewRLDtoMapper;
 import com.example.MyBookShopApp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,11 +38,13 @@ public class BookService {
     private final BookRateRepository bookRateRepository;
     private final BookReviewRepository bookReviewRepository;
     private final UserRepository userRepository;
+    private final BookReviewRLDtoRepository bookReviewRLDtoRepository;
+    private final BookReviewRLDtoMapper bookReviewRLDtoMapper;
 
     private Integer DEFAULT_OFFSET = 0;
     private Integer DEFAULT_LIMIT = 10;
 
-    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, BookRateRepository bookRateRepository, BookReviewRepository bookReviewRepository, UserRepository userRepository) {
+    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, BookRateRepository bookRateRepository, BookReviewRepository bookReviewRepository, UserRepository userRepository, BookReviewLikeRepository bookReviewLikeRepository, BookReviewRLDtoRepository bookReviewRLDtoRepository, BookReviewRLDtoMapper bookReviewRLDtoMapper) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.tagRepository = tagRepository;
@@ -48,6 +52,8 @@ public class BookService {
         this.bookRateRepository = bookRateRepository;
         this.bookReviewRepository = bookReviewRepository;
         this.userRepository = userRepository;
+        this.bookReviewRLDtoRepository = bookReviewRLDtoRepository;
+        this.bookReviewRLDtoMapper = bookReviewRLDtoMapper;
     }
 
     @Autowired
@@ -281,10 +287,12 @@ public class BookService {
     public Integer setBookRate(String slug, Integer rate) {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
         Book2RateEntity book2RateEntity = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
+        UserEntity userEntity = userRepository.findByIdExactly(1L);
         if (book2RateEntity == null) {
             Book2RateEntity entity = new Book2RateEntity();
             entity.setRate(rate);
             entity.setBookEntity(bookEntity);
+            entity.setUserEntity(userEntity);
             bookRateRepository.save(entity);
         } else {
             book2RateEntity.setRate(rate);
@@ -296,10 +304,9 @@ public class BookService {
     public Boolean createBookReview(String slug, String comment) throws BookstoreAPiWrongParameterException {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
         if (bookEntity != null && comment != null && !comment.equals("") ) {
-            UserEntity userEntity = userRepository.findByIdExactly(1L);
+            UserEntity userEntity = userRepository.findByName("Carita Gunn");
             BookReviewEntity bookReviewEntity = new BookReviewEntity();
 
-//            bookReviewEntity.setId(bookReviewRepository.findAll().size()+1L);
             bookReviewEntity.setTime(LocalDateTime.now());
             bookReviewEntity.setBookEntity(bookEntity);
             bookReviewEntity.setUserEntity(userEntity);
@@ -309,6 +316,22 @@ public class BookService {
             bookReviewRepository.save(bookReviewEntity);
 
             return true;
+        } else {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
+    }
+
+    public List<BookReviewRLDto> getBookReviewInfo(String slug) throws BookstoreAPiWrongParameterException {
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+        if (bookEntity != null) {
+            List<BookReviewEntity> bookReviewEntities = bookReviewRepository.findByUserEntityAndBookEntity(bookEntity);
+            List<BookReviewRLDto> bookReviewRLDtos = new ArrayList<>();
+            if (bookReviewEntities != null || bookReviewEntities.size() == 0) {
+                bookReviewRLDtos = bookReviewRLDtoMapper.map(bookReviewEntities);
+            }
+
+            return bookReviewRLDtos;
         } else {
             throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }

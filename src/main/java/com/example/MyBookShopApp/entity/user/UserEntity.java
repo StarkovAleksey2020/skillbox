@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.entity.user;
 
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.entity.book.links.Book2RateEntity;
 import com.example.MyBookShopApp.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.entity.book.review.BookReviewLikeEntity;
 import com.example.MyBookShopApp.entity.book.review.MessageEntity;
@@ -13,11 +14,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name = "user_entity")
 @ApiModel(description = "Bookshop users")
 public class UserEntity {
@@ -56,15 +57,18 @@ public class UserEntity {
     @ManyToMany(mappedBy = "userEntityBalanceTransactionSet")
     private Set<BookEntity> bookEntityBalanceTransactionSet;
 
-    @OneToOne(mappedBy = "user")
-    private BookReviewLikeEntity bookReviewLike;
+    @OneToMany(mappedBy = "user")
+    private List<BookReviewLikeEntity> bookReviewLikeEntities;
 
-    @OneToOne(mappedBy = "user")
-    private MessageEntity message;
+    @OneToMany(mappedBy = "user")
+    private List<MessageEntity> messageEntities;
 
     @OneToMany(mappedBy = "userEntity")
     private List<BookReviewEntity> bookReviewEntities;
 
     @OneToOne(mappedBy = "userEntity")
+    private Book2RateEntity book2RateEntity;
+
+    @OneToOne(mappedBy = "userEntityContact")
     private UserContactEntity userContact;
 }

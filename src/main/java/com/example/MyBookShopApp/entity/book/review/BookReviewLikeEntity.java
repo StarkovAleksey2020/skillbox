@@ -35,9 +35,7 @@ public class BookReviewLikeEntity {
     @ApiModelProperty(value = "Like (1) or dislike (-1)")
     private short value;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ApiModelProperty(value = "User id")
     private UserEntity user;
-
 }

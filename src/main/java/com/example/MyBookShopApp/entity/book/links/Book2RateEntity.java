@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.entity.book.links;
 
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.entity.user.UserEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -32,5 +33,10 @@ public class Book2RateEntity {
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     @ApiModelProperty(value = "Book id")
     private BookEntity bookEntity;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ApiModelProperty(value = "user id")
+    private UserEntity userEntity;
 
 }

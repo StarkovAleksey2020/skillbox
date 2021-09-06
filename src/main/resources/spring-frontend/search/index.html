@@ -54,13 +54,13 @@
                 </header>
                 <div class="Cards Cards_search Cards_refresh">
                     <div class="Card" th:each="book : ${searchResults}">
-                        <div class="Card-picture"><a href="#">
+                        <div class="Card-picture"><a href="#" th:href="@{'/books/' + ${book.slug}}">
                             <img th:src="${book.image}"
                                  src="/assets/img/content/main/card.jpg"
                                  alt="card.jpg"/></a>
                         </div>
                         <div class="Card-content">
-                            <strong class="Card-title"><a href="#" th:text="${book.title}">Техника</a>
+                            <strong class="Card-title"><a href="#" th:text="${book.title}" th:href="@{'/books/' + ${book.slug}}">Техника</a>
                             </strong>
                             <div class="Card-description" th:text="${book.description}">Кондратенко Александр Петрович
                             </div>

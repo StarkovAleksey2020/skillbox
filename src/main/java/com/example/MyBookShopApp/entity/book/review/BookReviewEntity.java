@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.entity.book.review;
 
 import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.entity.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -13,10 +14,10 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-//@Getter
-//@Setter
-//@AllArgsConstructor
-//@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "book_review")
 @ApiModel(description = "book reviews")
 public class BookReviewEntity {
@@ -36,49 +37,11 @@ public class BookReviewEntity {
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
+    @JsonIgnore
     private BookEntity bookEntity;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private UserEntity userEntity;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public BookEntity getBookEntity() {
-        return bookEntity;
-    }
-
-    public void setBookEntity(BookEntity bookEntity) {
-        this.bookEntity = bookEntity;
-    }
-
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
-    }
 }
