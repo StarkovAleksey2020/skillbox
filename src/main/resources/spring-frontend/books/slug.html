@@ -71,265 +71,794 @@
                             <div class="ProductCard-author"><span class="ProductCard-titleProp">Автор:</span>&#32;<a
                                     href="#" th:text="${slugBook.authorName}">Лия Арден</a>
                             </div>
-                            <div class="ProductCard-rating"><span class="ProductCard-titleProp">Рейтинг:</span>
+                            <div class="ProductCard-rating">
+                                <span class="ProductCard-titleProp">Рейтинг:</span>
                                 <button class="trigger trigger_dropdown" type="button">
-                                    <div class="Rating Rating_noStyleLink"><span class="Rating-stars"><span
-                                            class="Rating-star Rating-star_view">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                            <g>
-                              <g>
-                                <path fill="#ffc000"
-                                      d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                              </g>
-                            </g>
-                          </svg></span><span class="Rating-star Rating-star_view">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                            <g>
-                              <g>
-                                <path fill="#ffc000"
-                                      d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                              </g>
-                            </g>
-                          </svg></span><span class="Rating-star">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                            <g>
-                              <g>
-                                <path fill="#ffc000"
-                                      d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                              </g>
-                            </g>
-                          </svg></span><span class="Rating-star">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                            <g>
-                              <g>
-                                <path fill="#ffc000"
-                                      d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                              </g>
-                            </g>
-                          </svg></span><span class="Rating-star">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                            <g>
-                              <g>
-                                <path fill="#ffc000"
-                                      d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                              </g>
-                            </g>
-                          </svg></span></span><span class="Rating-title">(567)</span>
+                                    <div class="Rating Rating_noStyleLink">
+                                        <span class="Rating-stars">
+                                            <span th:if="${bookRateTotal >= 1}">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="19" height="18"
+                                                     viewBox="0 0 19 18">
+                                                    <g>
+                                                        <g>
+                                                          <path fill="#f7ca18"
+                                                                d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                            <span th:if="${bookRateTotal < 1}">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="19" height="18"
+                                                     viewBox="0 0 19 18">
+                                                    <g>
+                                                        <g>
+                                                          <path fill="#f0f0f0"
+                                                                d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+
+                                            <span th:if="${bookRateTotal >= 2}">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="19" height="18"
+                                                     viewBox="0 0 19 18">
+                                                    <g>
+                                                        <g>
+                                                          <path fill="#f7ca18"
+                                                                d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                            <span th:if="${bookRateTotal < 2}">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="19" height="18"
+                                                     viewBox="0 0 19 18">
+                                                    <g>
+                                                        <g>
+                                                          <path fill="#f0f0f0"
+                                                                d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+
+                                        <span th:if="${bookRateTotal >= 3}">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 width="19" height="18"
+                                                 viewBox="0 0 19 18">
+                                                <g>
+                                                    <g>
+                                                      <path fill="#f7ca18"
+                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <span th:if="${bookRateTotal < 3}">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 width="19" height="18"
+                                                 viewBox="0 0 19 18">
+                                                <g>
+                                                    <g>
+                                                      <path fill="#f0f0f0"
+                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+
+                                        <span th:if="${bookRateTotal >= 4}">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 width="19" height="18"
+                                                 viewBox="0 0 19 18">
+                                                <g>
+                                                    <g>
+                                                      <path fill="#f7ca18"
+                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <span th:if="${bookRateTotal < 4}">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 width="19" height="18"
+                                                 viewBox="0 0 19 18">
+                                                <g>
+                                                    <g>
+                                                      <path fill="#f0f0f0"
+                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+
+                                        <span th:if="${bookRateTotal >= 5}">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 width="19" height="18"
+                                                 viewBox="0 0 19 18">
+                                                <g>
+                                                    <g>
+                                                      <path fill="#f7ca18"
+                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <span th:if="${bookRateTotal < 5}">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 width="19" height="18"
+                                                 viewBox="0 0 19 18">
+                                                <g>
+                                                    <g>
+                                                      <path fill="#f0f0f0"
+                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                    </g>
+                                                </g>
+                                            </svg>
+                                        </span>
+
+
+                                        </span>
+                                        <span class="Rating-title" th:text="${'(' + bookRateTotalCount + ')'}">(567)</span>
                                     </div>
                                     <div class="modal modal_compression modal_dropdown">
-                                        <div class="modal-window"><a class="modal-close"
-                                                                     href="#"><span></span><span></span></a>
-                                            <strong class="modal-title">Распределение оценок
-                                            </strong>
-                                            <div class="RatingGroup"><span class="Rating"><span
-                                                    class="Rating-stars"><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span></span><span class="Rating-title">1</span></span><br><span
-                                                    class="Rating"><span class="Rating-stars"><span
-                                                    class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span></span><span class="Rating-title">4</span></span><br><span
-                                                    class="Rating"><span class="Rating-stars"><span
-                                                    class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span></span><span class="Rating-title">0</span></span><br><span
-                                                    class="Rating"><span class="Rating-stars"><span
-                                                    class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span></span><span class="Rating-title">10</span></span><br><span class="Rating"><span
-                                                    class="Rating-stars"><span class="Rating-star Rating-star_view">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span><span class="Rating-star">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
-                                  <g>
-                                    <g>
-                                      <path fill="#ffc000"
-                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
-                                    </g>
-                                  </g>
-                                </svg></span></span><span class="Rating-title">3</span></span>
+                                        <div class="modal-window">
+                                            <a class="modal-close" href="#"><span></span><span></span></a>
+                                            <strong class="modal-title">Распределение оценок</strong>
+                                            <div class="RatingGroup">
+                                                <span class="Rating" style="display: flex; flex-direction: column;">
+                                                    <span class="Rating-stars">
+                                                        <span th:if="${bookRateSubTotal5 >= 1}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal5 < 1}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal5 >= 2}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal5 < 2}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal5 >= 3}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal5 < 3}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal5 >= 4}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal5 < 4}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal5 >= 5}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal5 < 5}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                    <span class="Rating-title" th:text="${bookRateSubTotalCount5}">1</span>
+                                                </span>
+                                                <br>
+                                                <span class="Rating">
+                                                    <span class="Rating-stars">
+                                                        <span th:if="${bookRateSubTotal4 >= 1}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal4 < 1}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal4 >= 2}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal4 < 2}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal4 >= 3}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal4 < 3}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal4 >= 4}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal4 < 4}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal4 >= 5}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal4 < 5}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                    </span>
+                                                    <span class="Rating-title" th:text="${bookRateSubTotalCount4}">1</span>
+                                                </span>
+                                                <br>
+                                                <span class="Rating">
+                                                    <span class="Rating-stars">
+
+                                                        <span th:if="${bookRateSubTotal3 >= 1}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal3 < 1}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal3 >= 2}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal3 < 2}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal3 >= 3}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal3 < 3}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal3 >= 4}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal3 < 4}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal3 >= 5}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal3 < 5}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                    </span>
+                                                    <span class="Rating-title" th:text="${bookRateSubTotalCount3}">1</span>
+                                                </span>
+                                                <br>
+                                                <span class="Rating">
+                                                    <span class="Rating-stars">
+
+                                                        <span th:if="${bookRateSubTotal2 >= 1}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal2 < 1}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal2 >= 2}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal2 < 2}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal2 >= 3}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal2 < 3}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal2 >= 4}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal2 < 4}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal2 >= 5}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal2 < 5}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                    </span>
+                                                    <span class="Rating-title" th:text="${bookRateSubTotalCount2}">1</span>
+                                                </span>
+                                                <br>
+                                                <span class="Rating">
+                                                    <span class="Rating-stars">
+
+                                                        <span th:if="${bookRateSubTotal1 >= 1}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal1 < 1}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal1 >= 2}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal1 < 2}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal1 >= 3}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal1 < 3}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal1 >= 4}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal1 < 4}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                        <span th:if="${bookRateSubTotal1 >= 5}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f7ca18"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+                                                        <span th:if="${bookRateSubTotal1 < 5}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                 width="19" height="18"
+                                                                 viewBox="0 0 19 18">
+                                                                <g>
+                                                                    <g>
+                                                                      <path fill="#f0f0f0"
+                                                                            d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </svg>
+                                                        </span>
+
+                                                    </span>
+                                                    <span class="Rating-title" th:text="${bookRateSubTotalCount1}">1</span>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -587,7 +1116,8 @@
                             <header class="Comment-header">
                                 <div>
 
-                                    <div class="Comment-header-upper" style="display: flex; flex-direction: row; align-items: center">
+                                    <div class="Comment-header-upper"
+                                         style="display: flex; flex-direction: row; align-items: center">
                                         <strong class="Comment-title" th:text="${review.userName}">Александр
                                             Кузнецов</strong>
 
@@ -596,7 +1126,8 @@
                                                 <span class="Rating Rating_comment">
                                                     <span class="Rating-stars">
 
-                                                        <span th:classappend="${review.userBookRate >= 1} ? 'Rating-star_view' : 'Rating-star'" th:if="${review.userBookRate >= 1}">
+                                                        <span th:classappend="${review.userBookRate >= 1} ? 'Rating-star_view' : 'Rating-star'"
+                                                              th:if="${review.userBookRate >= 1}">
                                                           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18"
                                                                viewBox="0 0 19 18">
                                                             <g>
@@ -608,7 +1139,8 @@
                                                           </svg>
                                                         </span>
 
-                                                        <span th:classappend="${review.userBookRate < 1} ? 'Rating-star' : 'Rating-star_view'" th:if="${review.userBookRate < 1}">
+                                                        <span th:classappend="${review.userBookRate < 1} ? 'Rating-star' : 'Rating-star_view'"
+                                                              th:if="${review.userBookRate < 1}">
                                                           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18"
                                                                viewBox="0 0 19 18">
                                                             <g>
@@ -620,7 +1152,8 @@
                                                           </svg>
                                                         </span>
 
-                                                        <span th:classappend="${review.userBookRate >= 2} ? 'Rating-star_view' : 'Rating-star'" th:if="${review.userBookRate >= 2}">
+                                                        <span th:classappend="${review.userBookRate >= 2} ? 'Rating-star_view' : 'Rating-star'"
+                                                              th:if="${review.userBookRate >= 2}">
                                                           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18"
                                                                viewBox="0 0 19 18">
                                                             <g>
@@ -632,7 +1165,8 @@
                                                           </svg>
                                                         </span>
 
-                                                        <span th:classappend="${review.userBookRate < 2} ? 'Rating-star' : 'Rating-star_view'" th:if="${review.userBookRate < 2}">
+                                                        <span th:classappend="${review.userBookRate < 2} ? 'Rating-star' : 'Rating-star_view'"
+                                                              th:if="${review.userBookRate < 2}">
                                                           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18"
                                                                viewBox="0 0 19 18">
                                                             <g>
@@ -644,7 +1178,8 @@
                                                           </svg>
                                                         </span>
 
-                                                        <span th:classappend="${review.userBookRate >= 3} ? 'Rating-star_view' : 'Rating-star'" th:if="${review.userBookRate >= 3}">
+                                                        <span th:classappend="${review.userBookRate >= 3} ? 'Rating-star_view' : 'Rating-star'"
+                                                              th:if="${review.userBookRate >= 3}">
                                                           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18"
                                                                viewBox="0 0 19 18">
                                                             <g>
@@ -656,7 +1191,8 @@
                                                           </svg>
                                                         </span>
 
-                                                        <span th:classappend="${review.userBookRate < 3} ? 'Rating-star' : 'Rating-star_view'" th:if="${review.userBookRate < 3}">
+                                                        <span th:classappend="${review.userBookRate < 3} ? 'Rating-star' : 'Rating-star_view'"
+                                                              th:if="${review.userBookRate < 3}">
                                                           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18"
                                                                viewBox="0 0 19 18">
                                                             <g>
@@ -668,7 +1204,8 @@
                                                           </svg>
                                                         </span>
 
-                                                        <span th:classappend="${review.userBookRate >= 4} ? 'Rating-star_view' : 'Rating-star'" th:if="${review.userBookRate >= 4}">
+                                                        <span th:classappend="${review.userBookRate >= 4} ? 'Rating-star_view' : 'Rating-star'"
+                                                              th:if="${review.userBookRate >= 4}">
                                                           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18"
                                                                viewBox="0 0 19 18">
                                                             <g>
@@ -680,7 +1217,8 @@
                                                           </svg>
                                                         </span>
 
-                                                        <span th:classappend="${review.userBookRate < 4} ? 'Rating-star' : 'Rating-star_view'" th:if="${review.userBookRate < 4}">
+                                                        <span th:classappend="${review.userBookRate < 4} ? 'Rating-star' : 'Rating-star_view'"
+                                                              th:if="${review.userBookRate < 4}">
                                                           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18"
                                                                viewBox="0 0 19 18">
                                                             <g>
@@ -692,7 +1230,8 @@
                                                           </svg>
                                                         </span>
 
-                                                        <span th:classappend="${review.userBookRate == 5} ? 'Rating-star_view' : 'Rating-star'" th:if="${review.userBookRate == 5}">
+                                                        <span th:classappend="${review.userBookRate == 5} ? 'Rating-star_view' : 'Rating-star'"
+                                                              th:if="${review.userBookRate == 5}">
                                                           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18"
                                                                viewBox="0 0 19 18">
                                                             <g>
@@ -704,7 +1243,8 @@
                                                           </svg>
                                                         </span>
 
-                                                        <span th:classappend="${review.userBookRate < 5} ? 'Rating-star' : 'Rating-star_view'" th:if="${review.userBookRate < 5}">
+                                                        <span th:classappend="${review.userBookRate < 5} ? 'Rating-star' : 'Rating-star_view'"
+                                                              th:if="${review.userBookRate < 5}">
                                                           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18"
                                                                viewBox="0 0 19 18">
                                                             <g>

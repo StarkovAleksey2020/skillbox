@@ -41,6 +41,18 @@ public class BookController {
             BookEntity bookEntity = bookRepository.getBookBySlug(slug);
             model.addAttribute("slugBook", bookEntity);
             model.addAttribute("bookRate", bookService.getBookRate(slug));
+            model.addAttribute("bookRateTotal", bookService.getBookRateTotal(slug));
+            model.addAttribute("bookRateTotalCount", bookService.getBookRateTotalCount(slug));
+            model.addAttribute("bookRateSubTotal1", bookService.getBookRateSubTotal(slug, 1));
+            model.addAttribute("bookRateSubTotalCount1", bookService.getBookRateSubTotalCount(slug, 1));
+            model.addAttribute("bookRateSubTotal2", bookService.getBookRateSubTotal(slug, 2));
+            model.addAttribute("bookRateSubTotalCount2", bookService.getBookRateSubTotalCount(slug, 2));
+            model.addAttribute("bookRateSubTotal3", bookService.getBookRateSubTotal(slug, 3));
+            model.addAttribute("bookRateSubTotalCount3", bookService.getBookRateSubTotalCount(slug, 3));
+            model.addAttribute("bookRateSubTotal4", bookService.getBookRateSubTotal(slug, 4));
+            model.addAttribute("bookRateSubTotalCount4", bookService.getBookRateSubTotalCount(slug, 4));
+            model.addAttribute("bookRateSubTotal5", bookService.getBookRateSubTotal(slug, 5));
+            model.addAttribute("bookRateSubTotalCount5", bookService.getBookRateSubTotalCount(slug, 5));
             model.addAttribute("bookReviewInfo", bookService.getBookReviewInfo(slug));
         }
         return "/books/slug";
@@ -76,7 +88,6 @@ public class BookController {
                 .body(new ByteArrayResource(data));
     }
 
-//    @PostMapping("/rateBookReview/{slug}/{value}/{reviewid}")
     @PostMapping(value = "/rateBookReview")
     public String handleLikesDislikes(@RequestParam("slug") String slug,
                                       @RequestParam("reviewid") Long reviewid,

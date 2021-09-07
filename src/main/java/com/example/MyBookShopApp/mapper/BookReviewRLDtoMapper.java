@@ -34,9 +34,9 @@ public class BookReviewRLDtoMapper {
         bookReviewRLDto.setReviewTime(formattedString);
         bookReviewRLDto.setTextReview(bookReviewEntity.getText());
         bookReviewRLDto.setUserName(bookReviewEntity.getUserEntity().getName());
-        Book2RateEntity book2RateEntity = bookRateRepository.findBook2Rate(bookReviewEntity.getUserEntity().getId(), bookReviewEntity.getBookEntity().getId());
-        if (book2RateEntity != null) {
-            bookReviewRLDto.setUserBookRate(bookRateRepository.findBook2Rate(bookReviewEntity.getUserEntity().getId(), bookReviewEntity.getBookEntity().getId()).getRate());
+        List<Book2RateEntity> book2RateEntity = bookRateRepository.findBook2Rate(bookReviewEntity.getUserEntity().getId(), bookReviewEntity.getBookEntity().getId());
+        if (book2RateEntity != null && book2RateEntity.size() > 0) {
+            bookReviewRLDto.setUserBookRate(book2RateEntity.get(0).getRate());
         }
 
         bookReviewRLDto.setReviewLikesCount(bookReviewLikeRepository.getLikesCount(bookReviewEntity.getId()));

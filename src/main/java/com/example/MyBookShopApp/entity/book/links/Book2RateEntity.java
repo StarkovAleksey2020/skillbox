@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.entity.book.links;
 
 import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.entity.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -29,14 +30,14 @@ public class Book2RateEntity {
     @ApiModelProperty(value = "Book rate", position = 2)
     private Integer rate;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "book_id", referencedColumnName = "id")
-    @ApiModelProperty(value = "Book id")
+    @ManyToOne
+    @JoinColumn(name = "book_id", nullable = false)
+    @JsonIgnore
     private BookEntity bookEntity;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ApiModelProperty(value = "user id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private UserEntity userEntity;
 
 }

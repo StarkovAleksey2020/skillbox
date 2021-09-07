@@ -278,9 +278,10 @@ public class BookService {
 
     public Integer getBookRate(String slug) {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        Book2RateEntity book2RateEntity = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
-        if (book2RateEntity != null) {
-            return book2RateEntity.getRate();
+        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+        List<Book2RateEntity> book2RateEntity = bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(bookEntity.getId(), userEntity.getId());
+        if (book2RateEntity != null && book2RateEntity.size() > 0) {
+            return book2RateEntity.get(0).getRate();
         } else {
             return 0;
         }
@@ -289,17 +290,17 @@ public class BookService {
 
     public Integer setBookRate(String slug, Integer rate) {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        Book2RateEntity book2RateEntity = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
-        UserEntity userEntity = userRepository.findByIdExactly(1L);
-        if (book2RateEntity == null) {
+        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+        List<Book2RateEntity> book2RateEntity = bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(bookEntity.getId(), userEntity.getId());
+        if (book2RateEntity == null || book2RateEntity.size() == 0) {
             Book2RateEntity entity = new Book2RateEntity();
             entity.setRate(rate);
             entity.setBookEntity(bookEntity);
             entity.setUserEntity(userEntity);
             bookRateRepository.save(entity);
         } else {
-            book2RateEntity.setRate(rate);
-            bookRateRepository.save(book2RateEntity);
+            book2RateEntity.get(0).setRate(rate);
+            bookRateRepository.save(book2RateEntity.get(0));
         }
         return rate;
     }
@@ -358,5 +359,50 @@ public class BookService {
         } else {
             throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
+    }
+
+    public Integer getBookRateTotal(String slug) {
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
+        if (book2RateEntities != null && book2RateEntities.size() > 0) {
+            int sum = book2RateEntities.stream().mapToInt(o->o.getRate()).sum();
+            return (int)(Math.round( sum / book2RateEntities.size()));
+        } else {
+            return 0;
+        }
+
+    }
+
+    public Integer getBookRateTotalCount(String slug) {
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
+        if (book2RateEntities != null && book2RateEntities.size() > 0) {
+            return book2RateEntities.size();
+        } else {
+            return 0;
+        }
+    }
+
+    public Integer getBookRateSubTotal(String slug, int rate) {
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntityAndRate(bookEntity, rate);
+        if (book2RateEntities != null && book2RateEntities.size() > 0) {
+            int sum = book2RateEntities.stream().mapToInt(o->o.getRate()).sum();
+            return (int)(Math.round( sum / book2RateEntities.size()));
+        } else {
+            return 0;
+        }
+
+    }
+
+    public Integer getBookRateSubTotalCount(String slug, int rate) {
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntityAndRate(bookEntity, rate);
+        if (book2RateEntities != null && book2RateEntities.size() > 0) {
+            return book2RateEntities.size();
+        } else {
+            return 0;
+        }
+
     }
 }

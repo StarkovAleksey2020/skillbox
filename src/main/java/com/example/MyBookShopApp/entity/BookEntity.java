@@ -111,8 +111,8 @@ public class BookEntity {
     @OneToMany(mappedBy = "book")
     private List<BookFileEntity> bookFileList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "bookEntity")
-    private Book2RateEntity book2RateEntity;
+    @OneToMany(mappedBy = "bookEntity")
+    private List<Book2RateEntity> book2RateEntities;
 
     @OneToMany(mappedBy = "bookEntity")
     private List<BookReviewEntity> bookReviewEntities;

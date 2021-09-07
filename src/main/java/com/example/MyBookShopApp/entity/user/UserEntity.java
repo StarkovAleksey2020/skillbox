@@ -66,8 +66,8 @@ public class UserEntity {
     @OneToMany(mappedBy = "userEntity")
     private List<BookReviewEntity> bookReviewEntities;
 
-    @OneToOne(mappedBy = "userEntity")
-    private Book2RateEntity book2RateEntity;
+    @OneToMany(mappedBy = "userEntity")
+    private List<Book2RateEntity> book2RateEntity;
 
     @OneToOne(mappedBy = "userEntityContact")
     private UserContactEntity userContact;
