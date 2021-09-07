@@ -24,7 +24,7 @@ public class BookShopPostponed {
     }
 
     @ModelAttribute(name = "postponedSize")
-    public Integer getPostponedSize() {
+    public Integer postponedSize() {
         return 0;
     }
 
@@ -86,9 +86,16 @@ public class BookShopPostponed {
     public ModelAndView getPostponedCount(@CookieValue(name = "cartContents", required = false) String cartContents,
                                           @CookieValue(name = "postponedContents", required = false) String postponedContents,
                                           Model model) {
-        Map<String, Integer> map = bookService.getCartAndPostponedCount(cartContents, postponedContents);
-        model.addAttribute("cartContentsSize", map.get("cartContentsSize"));
-        model.addAttribute("postponedSize", map.get("postponedSize"));
+        if (cartContents != null) {
+            model.addAttribute("cartContentsSize", bookService.getCartCount(cartContents));
+        } else {
+            model.addAttribute("cartContentsSize", 0);
+        }
+        if (postponedContents != null) {
+            model.addAttribute("postponedSize", bookService.getPostponedCount(postponedContents));
+        } else {
+            model.addAttribute("postponedSize", 0);
+        }
         return new ModelAndView("/fragments/header_fragment");
     }
 }

@@ -21,6 +21,11 @@ public class BookShopCart {
         return new ArrayList<>();
     }
 
+    @ModelAttribute(name = "cartContentsSize")
+    public Integer cartContentSize() {
+        return 0;
+    }
+
     private final BookRepository bookRepository;
     private final BookService bookService;
 

@@ -268,12 +268,12 @@ public class BookService {
         }
     }
 
-    public Map<String, Integer> getCartAndPostponedCount(@CookieValue(name = "cartContents", required = false) String cartContents,
-                                                         @CookieValue(name = "postponedContents", required = false) String postponedContents) {
-        Map<String, Integer> map = new HashMap<>();
-        map.put("cartContentsSize", new ArrayList<>(Arrays.asList(cartContents.split("/"))).size());
-        map.put("postponedSize", new ArrayList<>(Arrays.asList(postponedContents.split("/"))).size());
-        return map;
+    public Integer getCartCount(@CookieValue(name = "cartContents", required = false) String cartContents) {
+        return new ArrayList<>(Arrays.asList(cartContents.split("/"))).size();
+    }
+
+    public Integer getPostponedCount(@CookieValue(name = "postponedContents", required = false) String postponedContents) {
+        return new ArrayList<>(Arrays.asList(postponedContents.split("/"))).size();
     }
 
     public Integer getBookRate(String slug) {
@@ -306,7 +306,7 @@ public class BookService {
 
     public Boolean createBookReview(String slug, String comment) throws BookstoreAPiWrongParameterException {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        if (bookEntity != null && comment != null && !comment.equals("") ) {
+        if (bookEntity != null && comment != null && !comment.equals("")) {
             UserEntity userEntity = userRepository.findByName("Carita Gunn");
             BookReviewEntity bookReviewEntity = new BookReviewEntity();
 
@@ -345,11 +345,11 @@ public class BookService {
         if (bookEntity != null && reviewid != null && userEntity != null) {
             BookReviewLikeEntity bookReviewLikeEntity = bookReviewLikeRepository.getReviewLikeEntityByReviewIdAndUserId(reviewid, userEntity.getId());
             if (bookReviewLikeEntity != null) {
-                bookReviewLikeEntity.setValue(value > 0 ? (short)1 : 0);
+                bookReviewLikeEntity.setValue(value > 0 ? (short) 1 : 0);
                 bookReviewLikeRepository.save(bookReviewLikeEntity);
             } else {
                 BookReviewLikeEntity entity = new BookReviewLikeEntity();
-                entity.setValue(value > 0 ? (short)1 : 0);
+                entity.setValue(value > 0 ? (short) 1 : 0);
                 entity.setTime(LocalDateTime.now());
                 entity.setReviewId(reviewid);
                 entity.setUser(userEntity);
