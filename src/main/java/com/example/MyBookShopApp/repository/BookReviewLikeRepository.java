@@ -23,4 +23,9 @@ public interface BookReviewLikeRepository extends JpaRepository<BookReviewLikeEn
 
     @Query(value = "SELECT count(*) FROM book_review_like brl WHERE brl.review_id = :reviewId AND brl.value = 0", nativeQuery = true)
     Integer getDislikesCount(@RequestParam("reviewId") Long reviewId);
+
+    @Query(value = "SELECT * FROM book_review_like brl WHERE brl.review_id = :reviewId AND brl.user_id = :userId" , nativeQuery = true)
+    BookReviewLikeEntity getReviewLikeEntityByReviewIdAndUserId(@RequestParam("reviewId") Long reviewId,
+                                                              @RequestParam("userId") Long userId);
+
 }

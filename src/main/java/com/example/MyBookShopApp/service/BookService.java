@@ -6,6 +6,7 @@ import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.entity.book.links.Book2RateEntity;
 import com.example.MyBookShopApp.entity.book.links.Book2TagEntity;
 import com.example.MyBookShopApp.entity.book.review.BookReviewEntity;
+import com.example.MyBookShopApp.entity.book.review.BookReviewLikeEntity;
 import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.mapper.BookReviewRLDtoMapper;
@@ -40,11 +41,12 @@ public class BookService {
     private final UserRepository userRepository;
     private final BookReviewRLDtoRepository bookReviewRLDtoRepository;
     private final BookReviewRLDtoMapper bookReviewRLDtoMapper;
+    private final BookReviewLikeRepository bookReviewLikeRepository;
 
     private Integer DEFAULT_OFFSET = 0;
     private Integer DEFAULT_LIMIT = 10;
 
-    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, BookRateRepository bookRateRepository, BookReviewRepository bookReviewRepository, UserRepository userRepository, BookReviewLikeRepository bookReviewLikeRepository, BookReviewRLDtoRepository bookReviewRLDtoRepository, BookReviewRLDtoMapper bookReviewRLDtoMapper) {
+    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, BookRateRepository bookRateRepository, BookReviewRepository bookReviewRepository, UserRepository userRepository, BookReviewRLDtoRepository bookReviewRLDtoRepository, BookReviewRLDtoMapper bookReviewRLDtoMapper, BookReviewLikeRepository bookReviewLikeRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.tagRepository = tagRepository;
@@ -54,6 +56,7 @@ public class BookService {
         this.userRepository = userRepository;
         this.bookReviewRLDtoRepository = bookReviewRLDtoRepository;
         this.bookReviewRLDtoMapper = bookReviewRLDtoMapper;
+        this.bookReviewLikeRepository = bookReviewLikeRepository;
     }
 
     @Autowired
@@ -330,8 +333,28 @@ public class BookService {
             if (bookReviewEntities != null || bookReviewEntities.size() == 0) {
                 bookReviewRLDtos = bookReviewRLDtoMapper.map(bookReviewEntities);
             }
-
             return bookReviewRLDtos;
+        } else {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
+    }
+
+    public void handleReviewLikesDislikes(String slug, Long reviewid, Long value) throws BookstoreAPiWrongParameterException {
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+        if (bookEntity != null && reviewid != null && userEntity != null) {
+            BookReviewLikeEntity bookReviewLikeEntity = bookReviewLikeRepository.getReviewLikeEntityByReviewIdAndUserId(reviewid, userEntity.getId());
+            if (bookReviewLikeEntity != null) {
+                bookReviewLikeEntity.setValue(value > 0 ? (short)1 : 0);
+                bookReviewLikeRepository.save(bookReviewLikeEntity);
+            } else {
+                BookReviewLikeEntity entity = new BookReviewLikeEntity();
+                entity.setValue(value > 0 ? (short)1 : 0);
+                entity.setTime(LocalDateTime.now());
+                entity.setReviewId(reviewid);
+                entity.setUser(userEntity);
+                bookReviewLikeRepository.save(entity);
+            }
         } else {
             throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }

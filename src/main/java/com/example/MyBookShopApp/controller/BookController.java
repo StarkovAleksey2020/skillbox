@@ -75,4 +75,18 @@ public class BookController {
                 .contentLength(data.length)
                 .body(new ByteArrayResource(data));
     }
+
+//    @PostMapping("/rateBookReview/{slug}/{value}/{reviewid}")
+    @PostMapping(value = "/rateBookReview")
+    public String handleLikesDislikes(@RequestParam("slug") String slug,
+                                      @RequestParam("reviewid") Long reviewid,
+                                      @RequestParam("value") Long value,
+                                      Model model) throws BookstoreAPiWrongParameterException {
+        if (slug != null || !slug.equals("")) {
+            bookService.handleReviewLikesDislikes(slug, reviewid, value);
+            model.addAttribute("bookReviewInfo", bookService.getBookReviewInfo(slug));
+        }
+
+        return ("redirect:/books/" + slug);
+    }
 }

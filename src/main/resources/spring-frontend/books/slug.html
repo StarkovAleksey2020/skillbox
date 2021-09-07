@@ -742,11 +742,13 @@
                                 <div class="Comment-footer">
                                     <div class="Comment-appeal">
                                         <button class="btn btn_white btn_like" data-btntype="check" data-check="false"
+                                                th:attr="data-likeid = ${slugBook.slug + '/' + review.reviewId}"
                                                 data-btnradio="two2" data-likeid="1111"><span class="btn-icon"><img
                                                 src="/assets/img/icons/comment/like.svg" alt="like.svg"/></span><span
                                                 class="btn-content" th:text="${review.reviewLikesCount}">200</span>
                                         </button>
                                         <button class="btn btn_white btn_dislike" data-btntype="check"
+                                                th:attr="data-likeid = ${slugBook.slug + '/' + review.reviewId}"
                                                 data-check="false" data-btnradio="two2" data-likeid="1111"><span
                                                 class="btn-icon"><img src="/assets/img/icons/comment/dislike.svg"
                                                                       alt="dislike.svg"/></span><span
