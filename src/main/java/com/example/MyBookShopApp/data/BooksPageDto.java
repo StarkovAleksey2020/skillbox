@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.data;
 
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.entity.other.LinkEntity;
 import lombok.Data;
 
 import java.util.List;

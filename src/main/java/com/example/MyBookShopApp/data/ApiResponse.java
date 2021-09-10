@@ -1,11 +1,13 @@
 package com.example.MyBookShopApp.data;
 
+import com.example.MyBookShopApp.entity.other.LinkEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Data
 public class ApiResponse<T> {
@@ -18,6 +20,7 @@ public class ApiResponse<T> {
     private String message;
     private String debugMessage;
     private Collection<T> data;
+    private List<LinkEntity> links;
 
     public ApiResponse() {
         this.timeStamp = LocalDateTime.now();

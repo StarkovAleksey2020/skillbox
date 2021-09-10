@@ -119,3 +119,9 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db/changelog/yaml/sql/data/book/link/book2user.sql
+  - changeSet:
+      id: 41
+      author: codewizard
+      changes:
+        - sqlFile:
+            path: db/changelog/yaml/sql/data/other/links.sql

@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 102
+      author: codewizard
+      changes:
+        - createTable:
+            tableName: links
+            remarks: ссылки для HATEOAS
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: links_id
+                    nullable: false
+              - column:
+                  name: url
+                  remarks: ссылки
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false

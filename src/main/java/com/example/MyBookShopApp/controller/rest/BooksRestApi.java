@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.controller.rest;
 
 import com.example.MyBookShopApp.data.ApiResponse;
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.entity.other.LinkEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.service.BookService;
 import io.swagger.annotations.Api;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -43,6 +45,14 @@ public class BooksRestApi {
         response.setHttpStatus(HttpStatus.OK);
         response.setTimeStamp(LocalDateTime.now());
         response.setData(data);
+
+        List<LinkEntity> entities = new ArrayList<>();
+        LinkEntity entity = new LinkEntity();
+        entity.setId(1L);
+        entity.setUrl("https://www.litmir.me/");
+        entities.add(entity);
+
+        response.setLinks(entities);
         return ResponseEntity.ok(response);
     }
 
