@@ -5,6 +5,7 @@ import com.example.MyBookShopApp.entity.book.links.Book2RateEntity;
 import com.example.MyBookShopApp.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.entity.book.review.BookReviewLikeEntity;
 import com.example.MyBookShopApp.entity.book.review.MessageEntity;
+import com.example.MyBookShopApp.entity.cart.CartEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -71,4 +72,7 @@ public class UserEntity {
 
     @OneToOne(mappedBy = "userEntityContact")
     private UserContactEntity userContact;
+
+    @OneToOne(mappedBy = "userEntity")
+    private CartEntity cartEntity;
 }

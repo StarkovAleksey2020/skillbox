@@ -33,6 +33,16 @@ public class MainPage {
         return bookService.getPageOfRecommendedBooks(DEFAULT_OFFSET, DEFAULT_LIMIT).getContent();
     }
 
+    @ModelAttribute("postponedSize")
+    public Integer getPostponedSize() {
+        return bookService.getPostponedCount();
+    }
+
+    @ModelAttribute("cartContentsSize")
+    public Integer getCartContentsSize() {
+        return bookService.getCartCount();
+    }
+
     @ModelAttribute("popularBooks")
     public List<BookEntity> getPopularBooks() {
         return bookService.getPageOfPopularBooksOrdered(DEFAULT_OFFSET, DEFAULT_LIMIT).getContent();

@@ -23,9 +23,14 @@ public class BookShopPostponed {
         return new ArrayList<>();
     }
 
-    @ModelAttribute(name = "postponedSize")
-    public Integer postponedSize() {
-        return 0;
+    @ModelAttribute("postponedSize")
+    public Integer getPostponedSize() {
+        return bookService.getPostponedCount();
+    }
+
+    @ModelAttribute("cartContentsSize")
+    public Integer getCartContentsSize() {
+        return bookService.getCartCount();
     }
 
     private final BookRepository bookRepository;
@@ -40,62 +45,39 @@ public class BookShopPostponed {
     @GetMapping("/postponed")
     public String handlePostponedRequest(@CookieValue(name = "postponedContents", required = false) String postponedContents,
                                          Model model) {
-        if (postponedContents == null || postponedContents.equals("")) {
+        if (bookService.getPostponedCount() == 0) {
             model.addAttribute("isPostponedEmpty", true);
         } else {
             model.addAttribute("isPostponedEmpty", false);
-            postponedContents = postponedContents.startsWith("/") ? postponedContents.substring(1) : postponedContents;
-            postponedContents = postponedContents.endsWith("/") ? postponedContents.substring(0, postponedContents.length() - 1) : postponedContents;
-            String[] cookieSlugs = postponedContents.split("/");
-            List<BookEntity> booksFromCookieSlugs = bookRepository.findBookEntityBySlugIn(cookieSlugs);
-            model.addAttribute("bookPostponed", booksFromCookieSlugs);
+            model.addAttribute("bookPostponed", bookService.getBookListInPostponed());
         }
         return "postponed";
     }
 
     @PostMapping("/changeBookStatus/postponed/remove/{slug}")
     public String handleRemoveBookFromPostponedRequest(@PathVariable("slug") String slug,
-                                                       @CookieValue(name = "postponedContents", required = false) String postponedContents,
-                                                       HttpServletResponse response,
                                                        Model model) {
-        bookService.removePostponedContentsItemFromPostponed(slug, postponedContents, response, model);
+        bookService.removePostponedItem(slug);
+        model.addAttribute("postponedSize", bookService.getPostponedCount());
+        model.addAttribute("cartContentsSize", bookService.getCartCount());
         return "redirect:/books/postponed";
     }
 
     @PostMapping("/changeBookStatus/postponed/buy/{slug}")
     public String handleBuyBookFromPostponedRequest(@PathVariable("slug") String slug,
-                                                    @CookieValue(name = "cartContents", required = false) String cartContents,
-                                                    @CookieValue(name = "postponedContents", required = false) String postponedContents,
-                                                    HttpServletResponse response,
                                                     Model model) {
-        bookService.removePostponedContentsItemFromPostponed(slug, postponedContents, response, model);
-        bookService.addCartContentsItem(slug, cartContents, response, model);
+        bookService.addCartItem(slug);
+        model.addAttribute("postponedSize", bookService.getPostponedCount());
+        model.addAttribute("cartContentsSize", bookService.getCartCount());
         return "redirect:/books/postponed";
     }
 
     @PostMapping("/changeBookStatus/postponed/{slug}")
     public String handleChangeBookStatus(@PathVariable("slug") String slug,
-                                         @CookieValue(name = "postponedContents", required = false) String postponedContents,
-                                         HttpServletResponse response,
                                          Model model) {
-        bookService.addPostponedContentsItem(slug, postponedContents, response, model);
+        bookService.addPostponedItem(slug);
+        model.addAttribute("postponedSize", bookService.getPostponedCount());
+        model.addAttribute("cartContentsSize", bookService.getCartCount());
         return "redirect:/books/" + slug;
-    }
-
-    @GetMapping("/postponed/count")
-    public ModelAndView getPostponedCount(@CookieValue(name = "cartContents", required = false) String cartContents,
-                                          @CookieValue(name = "postponedContents", required = false) String postponedContents,
-                                          Model model) {
-        if (cartContents != null) {
-            model.addAttribute("cartContentsSize", bookService.getCartCount(cartContents));
-        } else {
-            model.addAttribute("cartContentsSize", 0);
-        }
-        if (postponedContents != null) {
-            model.addAttribute("postponedSize", bookService.getPostponedCount(postponedContents));
-        } else {
-            model.addAttribute("postponedSize", 0);
-        }
-        return new ModelAndView("/fragments/header_fragment");
     }
 }

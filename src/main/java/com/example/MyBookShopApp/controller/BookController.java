@@ -34,6 +34,17 @@ public class BookController {
         this.bookService = bookService;
     }
 
+    @ModelAttribute("postponedSize")
+    public Integer getPostponedSize() {
+        return bookService.getPostponedCount();
+    }
+
+    @ModelAttribute("cartContentsSize")
+    public Integer getCartContentsSize() {
+        return bookService.getCartCount();
+    }
+
+
     @GetMapping("/{slug}")
     public String getBookPage(@PathVariable("slug") String slug,
                               Model model) throws BookstoreAPiWrongParameterException {

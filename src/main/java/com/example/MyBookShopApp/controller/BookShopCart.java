@@ -21,9 +21,14 @@ public class BookShopCart {
         return new ArrayList<>();
     }
 
-    @ModelAttribute(name = "cartContentsSize")
-    public Integer cartContentSize() {
-        return 0;
+    @ModelAttribute("postponedSize")
+    public Integer getPostponedSize() {
+        return bookService.getPostponedCount();
+    }
+
+    @ModelAttribute("cartContentsSize")
+    public Integer getCartContentsSize() {
+        return bookService.getCartCount();
     }
 
     private final BookRepository bookRepository;
@@ -38,45 +43,39 @@ public class BookShopCart {
     @GetMapping("/cart")
     public String handleCartRequest(@CookieValue(name = "cartContents", required = false) String cartContents,
                                     Model model) {
-        if (cartContents == null || cartContents.equals("")) {
+        if (bookService.getCartCount() == 0) {
             model.addAttribute("isCartEmpty", true);
         } else {
             model.addAttribute("isCartEmpty", false);
-            cartContents = cartContents.startsWith("/") ? cartContents.substring(1) : cartContents;
-            cartContents = cartContents.endsWith("/") ? cartContents.substring(0, cartContents.length() - 1) : cartContents;
-            String[] cookieSlugs = cartContents.split("/");
-            List<BookEntity> booksFromCookieSlugs = bookRepository.findBookEntityBySlugIn(cookieSlugs);
-            model.addAttribute("bookCart", booksFromCookieSlugs);
+            model.addAttribute("bookCart", bookService.getBookListInCart());
         }
         return "cart";
     }
 
     @PostMapping("/changeBookStatus/cart/remove/{slug}")
     public String handleRemoveBookFromCartRequest(@PathVariable("slug") String slug,
-                                                  @CookieValue(name = "cartContents", required = false) String cartContents,
-                                                  HttpServletResponse response,
                                                   Model model) {
-        bookService.removeCartContentsItemFromCart(slug, cartContents, response, model);
+        bookService.removeCartItem(slug);
+        model.addAttribute("postponedSize", bookService.getPostponedCount());
+        model.addAttribute("cartContentsSize", bookService.getCartCount());
         return "redirect:/books/cart";
     }
 
     @PostMapping("/changeBookStatus/cart/kept/{slug}")
     public String handleMoveBookFromCartToKeptRequest(@PathVariable("slug") String slug,
-                                                      @CookieValue(name = "cartContents", required = false) String cartContents,
-                                                      @CookieValue(name = "postponedContents", required = false) String postponedContents,
-                                                      HttpServletResponse response,
                                                       Model model) {
-        bookService.removeCartContentsItemFromCart(slug, cartContents, response, model);
-        bookService.addPostponedContentsItem(slug, postponedContents, response, model);
+        bookService.addPostponedItem(slug);
+        model.addAttribute("postponedSize", bookService.getPostponedCount());
+        model.addAttribute("cartContentsSize", bookService.getCartCount());
         return "redirect:/books/cart";
     }
 
     @PostMapping("/changeBookStatus/{slug}")
     public String handleChangeBookStatus(@PathVariable("slug") String slug,
-                                         @CookieValue(name = "cartContents", required = false) String cartContents,
-                                         HttpServletResponse response,
                                          Model model) {
-        bookService.addCartContentsItem(slug, cartContents, response, model);
+        bookService.addCartItem(slug);
+        model.addAttribute("postponedSize", bookService.getPostponedCount());
+        model.addAttribute("cartContentsSize", bookService.getCartCount());
         return "redirect:/books/" + slug;
     }
 }
