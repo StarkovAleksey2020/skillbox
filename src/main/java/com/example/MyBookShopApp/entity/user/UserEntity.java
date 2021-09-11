@@ -49,6 +49,21 @@ public class UserEntity {
     @ApiModelProperty(value = "User name")
     private String name;
 
+    @JoinColumn(name = "email")
+    @Column(columnDefinition = "VARCHAR(255)")
+    @ApiModelProperty(value = "User email")
+    private String email;
+
+    @JoinColumn(name = "phone")
+    @Column(columnDefinition = "VARCHAR(255)")
+    @ApiModelProperty(value = "User phone")
+    private String phone;
+
+    @JoinColumn(name = "password")
+    @Column(columnDefinition = "VARCHAR(255)")
+    @ApiModelProperty(value = "User password")
+    private String password;
+
     @ManyToMany(mappedBy = "userEntityBook2UserSet")
     private Set<BookEntity> bookEntityBook2UserSet;
 

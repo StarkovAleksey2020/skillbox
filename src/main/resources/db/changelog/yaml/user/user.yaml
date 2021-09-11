@@ -42,3 +42,15 @@ databaseChangeLog:
                   type: TIMESTAMP
                   constraints:
                     nullable: false
+              - column:
+                  name: email
+                  remarks: email пользователя
+                  type: VARCHAR(255)
+              - column:
+                  name: phone
+                  remarks: телефон пользователя
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  remarks: пароль пользователя
+                  type: VARCHAR(255)

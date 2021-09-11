@@ -106,11 +106,6 @@ public class MainPage {
         return "cart";
     }
 
-    @GetMapping("/signin")
-    public String getSignInPage() {
-        return "signin";
-    }
-
     @GetMapping("/about")
     public String getAboutPage() {
         return "about";

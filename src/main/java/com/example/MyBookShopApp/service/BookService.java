@@ -411,8 +411,12 @@ public class BookService {
                     return gson.fromJson(object, CartItemEntity.class).getCartString().split("/").length - 1;
                 }
             } else {
-                JsonObject object = (JsonObject) parser.parse(cartEntity.getValue());
-                return gson.fromJson(object, CartItemEntity.class).getCartString().split("/").length - 1;
+                if (!cartEntity.getValue().equals("") && cartEntity.getValue() != null) {
+                    JsonObject object = (JsonObject) parser.parse(cartEntity.getValue());
+                    return gson.fromJson(object, CartItemEntity.class).getCartString().split("/").length - 1;
+                } else {
+                    return 0;
+                }
             }
         } else {
             createCartEntity(userEntity);
@@ -441,8 +445,12 @@ public class BookService {
                     return gson.fromJson(object, CartItemEntity.class).getPostponedString().split("/").length - 1;
                 }
             } else {
-                JsonObject object = (JsonObject) parser.parse(cartEntity.getValue());
-                return gson.fromJson(object, CartItemEntity.class).getPostponedString().split("/").length - 1;
+                if (!cartEntity.getValue().equals("") && cartEntity.getValue() != null) {
+                    JsonObject object = (JsonObject) parser.parse(cartEntity.getValue());
+                    return gson.fromJson(object, CartItemEntity.class).getPostponedString().split("/").length - 1;
+                } else {
+                    return 0;
+                }
             }
         } else {
             createCartEntity(userEntity);

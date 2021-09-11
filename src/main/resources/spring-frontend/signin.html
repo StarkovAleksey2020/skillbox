@@ -27,6 +27,8 @@
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <script defer src="/assets/js/scripts.min.js?v=27449092"></script>
     <script type="text/javascript" th:src="@{/assets/js/headerHandler.js}"></script>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.getToken()}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 <body class="Site">
 <header th:replace="~{fragments/header_fragment :: headFragment}"></header>
@@ -45,6 +47,8 @@
                         <div class="form-group">
                             <label class="form-label Login-title" th:text="#{signin.subtitle}">Введите e-mail или
                                 телефон
+                                <br>
+                                <span th:if="${regOk}">Регистрация прошла успешно!</span>
                             </label>
                         </div>
                         <div class="form-group">
@@ -96,13 +100,13 @@
                     </div>
                     <div class="Login-step Login-step_hide" data-type="mail">
                         <div class="form-group">
-                            <label class="form-label Login-title">На&nbsp;Ваш e-mail отправлена ссылка для входа и&nbsp;код.
-                                Перейдите по&nbsp;ссылке или введите код ниже:
+                            <label class="form-label Login-title">Введите пароль учетной записи или
+                                перейдите по&nbsp;ссылке ниже для регистрации:
                             </label>
                         </div>
                         <div class="form-group form-group_key">
                             <input class="form-input" id="mailcode" name="mailcode" type="text" placeholder="Код"
-                                   data-validate="key require" data-mask="999 999"/>
+                                   data-validate="key require"/>
                         </div>
                         <div class="form-group form-group_center">
                             <button class="btn btn_primary form-btn" type="button" name="toComeInMail" id="toComeInMail"
@@ -110,7 +114,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="form-group form-group_center"><a class="Login-reg" href="/signup.html"
+                    <div class="form-group form-group_center"><a class="Login-reg" th:href="@{/signup}" href="/signup.html"
                                                                  th:text="#{signin.signup}">Зарегистрироваться</a>
                     </div>
                 </div>
