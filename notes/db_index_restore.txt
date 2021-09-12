@@ -7,3 +7,4 @@ https://stackoverflow.com/questions/37970743/postgresql-unique-violation-7-error
 
 Way to fix:
 SELECT setval(pg_get_serial_sequence('book_review', 'id'), coalesce(max(id)+1, 1), false) FROM book_review;
+SELECT setval(pg_get_serial_sequence('user_entity', 'id'), coalesce(max(id)+1, 1), false) FROM user_entity;
