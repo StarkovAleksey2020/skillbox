@@ -1,0 +1,2 @@
+Good article about exceptions:
+https://habr.com/ru/post/528116/

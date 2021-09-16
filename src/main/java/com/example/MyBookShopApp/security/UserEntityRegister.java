@@ -3,15 +3,19 @@ package com.example.MyBookShopApp.security;
 import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.security.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -31,6 +35,8 @@ public class UserEntityRegister {
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
     }
+
+
 
     public void registerNewUser(RegistrationForm registrationForm) {
 
@@ -67,8 +73,17 @@ public class UserEntityRegister {
     }
 
     public Object getCurrentUser() {
-        UserEntityDetails userEntityDetails =
-                (UserEntityDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userEntityDetails.getUserEntity();
+
+        Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (o instanceof DefaultOAuth2User) {
+            UserEntity userEntity = new UserEntity();
+
+            return userEntity;
+        } else {
+            UserEntityDetails userEntityDetails =
+                    (UserEntityDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return userEntityDetails.getUserEntity();
+        }
     }
 }

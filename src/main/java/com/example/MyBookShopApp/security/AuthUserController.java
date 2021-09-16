@@ -1,7 +1,8 @@
 package com.example.MyBookShopApp.security;
 
+import com.example.MyBookShopApp.exception.UserNotFoundException;
+import com.example.MyBookShopApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,18 +11,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class AuthUserController {
 
     private final UserEntityRegister userEntityRegister;
+    private final UserService userService;
 
     @Autowired
-    public AuthUserController(UserEntityRegister userEntityRegister) {
+    public AuthUserController(UserEntityRegister userEntityRegister, UserService userService) {
         this.userEntityRegister = userEntityRegister;
+        this.userService = userService;
     }
 
     @GetMapping("/signin")
@@ -37,9 +38,13 @@ public class AuthUserController {
 
     @PostMapping("/requestContactConfirmation")
     @ResponseBody
-    public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload) {
+    public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload) throws UserNotFoundException {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
-        response.setResult("true");
+        if (userService.isUserFound(payload.getContact())) {
+            response.setResult("true");
+        } else {
+            throw new UserNotFoundException("The specified user was not found");
+        }
         return response;
     }
 
