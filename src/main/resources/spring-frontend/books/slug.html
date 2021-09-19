@@ -56,6 +56,9 @@
                             </div>
                             <input type="file" name="file" id="dialog" style="display: none" accept="image/*">
                         </form>
+
+                        <span th:if="${isBadCredentialsForChangeCover}" th:text="${isBadCredentialsForChangeCover}" style="color: red"></span>
+
                         <div th:if="${slugBook.isBestseller == 1}" class="Card-ribbon">
                             <span class="Card-ribbonText">Бестселлер</span>
                         </div>
@@ -203,7 +206,8 @@
 
 
                                         </span>
-                                        <span class="Rating-title" th:text="${'(' + bookRateTotalCount + ')'}">(567)</span>
+                                        <span class="Rating-title"
+                                              th:text="${'(' + bookRateTotalCount + ')'}">(567)</span>
                                     </div>
                                     <div class="modal modal_compression modal_dropdown">
                                         <div class="modal-window">
@@ -335,7 +339,8 @@
                                                                 </g>
                                                             </svg>
                                                         </span>
-                                                    <span class="Rating-title" th:text="${bookRateSubTotalCount5}">1</span>
+                                                    <span class="Rating-title"
+                                                          th:text="${bookRateSubTotalCount5}">1</span>
                                                 </span>
                                                 <br>
                                                 <span class="Rating">
@@ -464,7 +469,8 @@
                                                             </svg>
                                                         </span>
                                                     </span>
-                                                    <span class="Rating-title" th:text="${bookRateSubTotalCount4}">1</span>
+                                                    <span class="Rating-title"
+                                                          th:text="${bookRateSubTotalCount4}">1</span>
                                                 </span>
                                                 <br>
                                                 <span class="Rating">
@@ -595,7 +601,8 @@
                                                         </span>
 
                                                     </span>
-                                                    <span class="Rating-title" th:text="${bookRateSubTotalCount3}">1</span>
+                                                    <span class="Rating-title"
+                                                          th:text="${bookRateSubTotalCount3}">1</span>
                                                 </span>
                                                 <br>
                                                 <span class="Rating">
@@ -726,7 +733,8 @@
                                                         </span>
 
                                                     </span>
-                                                    <span class="Rating-title" th:text="${bookRateSubTotalCount2}">1</span>
+                                                    <span class="Rating-title"
+                                                          th:text="${bookRateSubTotalCount2}">1</span>
                                                 </span>
                                                 <br>
                                                 <span class="Rating">
@@ -857,7 +865,8 @@
                                                         </span>
 
                                                     </span>
-                                                    <span class="Rating-title" th:text="${bookRateSubTotalCount1}">1</span>
+                                                    <span class="Rating-title"
+                                                          th:text="${bookRateSubTotalCount1}">1</span>
                                                 </span>
                                             </div>
                                         </div>

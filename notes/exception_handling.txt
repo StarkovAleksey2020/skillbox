@@ -1,2 +1,26 @@
+Custom exception handling of Spring Security
+https://www.fatalerrors.org/a/custom-exception-handling-of-spring-security.html
+
 Good article about exceptions:
 https://habr.com/ru/post/528116/
+
+https://www.youtube.com/watch?v=sFKmJV4Rmb8
+
+Spring Boot + ControllerAdvice + ResponseBodyAdvice или как обернуть ответ контроллеров
+https://habr.com/ru/post/567056/
+
+Обработка исключений в контроллерах Spring
+https://habr.com/ru/post/528116/
+
+One article completes Spring Security exception handling mechanism
+https://programming.vip/docs/one-article-completes-spring-security-exception-handling-mechanism.html
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!
+Exception Handling In Spring Security
+https://www.devglan.com/spring-security/exception-handling-in-spring-security
+
+!_ Spring ControllerAdvice and authentication/authorization exception handling
+https://stackoverflow.com/questions/37080590/spring-controlleradvice-and-authentication-authorization-exception-handling
+
+A Custom Filter in the Spring Security Filter Chain
+https://www.baeldung.com/spring-security-custom-filter

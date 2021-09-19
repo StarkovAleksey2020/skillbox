@@ -614,4 +614,14 @@ public class BookService {
 
     }
 
+    public Boolean checkCredentials(Object principal) {
+
+        UserEntity userEntity = userRepository.findByEmail(principal.getClass().getName());
+
+        if (userEntity != null) {
+            return userEntity.getEmail().equals("admin@example.com");
+        } else {
+            return false;
+        }
+    }
 }

@@ -1,7 +1,10 @@
 package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
+import com.example.MyBookShopApp.exception.ForbiddenException;
+import com.example.MyBookShopApp.exception.InsufficientRightsToChangeCoverException;
 import com.example.MyBookShopApp.repository.BookRepository;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.ResourceStorage;
@@ -10,6 +13,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -71,11 +75,20 @@ public class BookController {
 
     @PostMapping("/{slug}/img/save")
     public String saveNewBookImage(@RequestParam("file") MultipartFile file,
-                                   @PathVariable("slug") String slug) throws IOException {
-        String savePath = storage.saveNewBookImage(file, slug);
-        BookEntity bookToUpdate = bookRepository.getBookBySlug(slug);
-        bookToUpdate.setImage(savePath);
-        bookRepository.save(bookToUpdate);
+                                   @PathVariable("slug") String slug,
+                                   Model model) throws IOException, ForbiddenException, InsufficientRightsToChangeCoverException {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Boolean isSufficientLevelOfAccess = bookService.checkCredentials(principal);
+
+        if (isSufficientLevelOfAccess) {
+            String savePath = storage.saveNewBookImage(file, slug);
+            BookEntity bookToUpdate = bookRepository.getBookBySlug(slug);
+            bookToUpdate.setImage(savePath);
+            bookRepository.save(bookToUpdate);
+        } else {
+            throw new InsufficientRightsToChangeCoverException(slug);
+        }
 
         return ("redirect:/books/" + slug);
     }
