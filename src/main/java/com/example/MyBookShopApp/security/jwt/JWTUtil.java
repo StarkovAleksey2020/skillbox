@@ -1,9 +1,12 @@
 package com.example.MyBookShopApp.security.jwt;
 
+import com.example.MyBookShopApp.entity.other.TokenEntity;
+import com.example.MyBookShopApp.exception.JwtTokenMalformedException;
+import com.example.MyBookShopApp.exception.JwtTokenMissingException;
+import com.example.MyBookShopApp.repository.TokenRepository;
 import com.example.MyBookShopApp.security.UserEntityDetails;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +21,23 @@ public class JWTUtil {
     @Value("${auth.secret}")
     private String secret;
 
+    @Value("${jwtExpirationInMs}")
+    private int jwtExpirationMs;
+
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    public JWTUtil(TokenRepository tokenRepository) {
+        this.tokenRepository = tokenRepository;
+    }
+
     private String createToken(Map<String, Object> claims, String username) {
         return Jwts
                 .builder()
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 *10))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
 
     }
@@ -55,8 +68,26 @@ public class JWTUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public Boolean validateToken(String token, UserEntityDetails userEntityDetails) {
+    private Boolean isTokenInBlackList(String token) {
+        TokenEntity entity = tokenRepository.findByToken(token);
+        return entity == null;
+    }
+
+    public Boolean validateToken(String token, UserEntityDetails userEntityDetails) throws JwtTokenMalformedException, JwtTokenMissingException {
+        try {
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+        } catch (SignatureException e) {
+            throw new JwtTokenMalformedException("Invalid JWT signature");
+        } catch (MalformedJwtException e) {
+            throw new JwtTokenMalformedException("Invalid JWT token");
+        } catch (ExpiredJwtException e) {
+            throw new JwtTokenMalformedException("Expired JWT token");
+        } catch (UnsupportedJwtException e) {
+            throw new JwtTokenMalformedException("Unsupported JWT token");
+        } catch (IllegalArgumentException e) {
+            throw new JwtTokenMissingException("JWT claims string is empty.");
+        }
         String username = extractUsername(token);
-        return (username.equals(userEntityDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userEntityDetails.getUsername()) && !isTokenExpired(token) && isTokenInBlackList(token));
     }
 }

@@ -1,8 +1,12 @@
 package com.example.MyBookShopApp.security.jwt;
 
+import com.example.MyBookShopApp.exception.AuthenticationCredentialsNotFoundException;
+import com.example.MyBookShopApp.exception.BadRequestException;
 import com.example.MyBookShopApp.security.UserEntityDetailService;
 import com.example.MyBookShopApp.security.UserEntityDetails;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -28,6 +32,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
+    @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                     FilterChain filterChain) throws ServletException, IOException {
@@ -49,8 +54,9 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                                 userEntityDetails, null, userEntityDetails.getAuthorities());
                         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    } else {
+                        throw new BadCredentialsException("Invalid credentials");
                     }
-
                 }
             }
         }

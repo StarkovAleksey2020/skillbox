@@ -24,3 +24,12 @@ https://stackoverflow.com/questions/37080590/spring-controlleradvice-and-authent
 
 A Custom Filter in the Spring Security Filter Chain
 https://www.baeldung.com/spring-security-custom-filter
+
+Custom exception is not working in filter using spring boot and spring security:
+https://stackoverflow.com/questions/61986861/custom-exception-is-not-working-in-filter-using-spring-boot-and-spring-security
+
+Spring Security Custom Logout Handler
+https://www.baeldung.com/spring-security-custom-logout-handler
+
+Spring Security Logout
+https://www.baeldung.com/spring-security-logout

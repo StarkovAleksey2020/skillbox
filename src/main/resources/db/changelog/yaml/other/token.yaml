@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 103
+      author: codewizard
+      changes:
+        - createTable:
+            tableName: token
+            remarks: Таблица невалидных токенов
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: token_id
+                    nullable: false
+              - column:
+                  name: token
+                  remarks: токен
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false

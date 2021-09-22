@@ -1,6 +1,5 @@
 package com.example.MyBookShopApp.security;
 
-import com.example.MyBookShopApp.security.baeldung.LoginPageFilter;
 import com.example.MyBookShopApp.security.devglan.RestAccessDeniedHandler;
 import com.example.MyBookShopApp.security.devglan.RestAuthenticationEntryPoint;
 import com.example.MyBookShopApp.security.jwt.JWTRequestFilter;
@@ -24,10 +23,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserEntityDetailService userEntityDetailService;
     private final JWTRequestFilter jwtRequestFilter;
 
+    private CustomLogoutHandler logoutHandler;
+
     @Autowired
-    public SecurityConfig(UserEntityDetailService userEntityDetailService, JWTRequestFilter jwtRequestFilter) {
+    public SecurityConfig(UserEntityDetailService userEntityDetailService, JWTRequestFilter jwtRequestFilter, CustomLogoutHandler logoutHandler) {
         this.userEntityDetailService = userEntityDetailService;
         this.jwtRequestFilter = jwtRequestFilter;
+        this.logoutHandler = logoutHandler;
     }
 
     @Bean
@@ -65,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/signin").failureUrl("/signin")
                 .failureHandler(authenticationFailureHandler())
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/signin").deleteCookies("token")
+                .addLogoutHandler(logoutHandler)
                 .and().oauth2Login()
                 .and().oauth2Client();
 //        http
