@@ -1,7 +1,5 @@
 package com.example.MyBookShopApp.security.jwt;
 
-import com.example.MyBookShopApp.exception.AuthenticationCredentialsNotFoundException;
-import com.example.MyBookShopApp.exception.BadRequestException;
 import com.example.MyBookShopApp.security.UserEntityDetailService;
 import com.example.MyBookShopApp.security.UserEntityDetails;
 import lombok.SneakyThrows;

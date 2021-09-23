@@ -1,7 +1,5 @@
 package com.example.MyBookShopApp.security;
 
-import com.example.MyBookShopApp.security.devglan.RestAccessDeniedHandler;
-import com.example.MyBookShopApp.security.devglan.RestAuthenticationEntryPoint;
 import com.example.MyBookShopApp.security.jwt.JWTRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -70,24 +68,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addLogoutHandler(logoutHandler)
                 .and().oauth2Login()
                 .and().oauth2Client();
-//        http
-//                .addFilterBefore(new LoginPageFilter(), UsernamePasswordAuthenticationFilter.class);
         http.
                 addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//        http
-//                .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
-//                .authenticationEntryPoint(authenticationEntryPoint());
-    }
-
-    // devglan
-    @Bean
-    public RestAuthenticationEntryPoint authenticationEntryPoint() {
-        return new RestAuthenticationEntryPoint();
-    }
-
-    @Bean
-    public RestAccessDeniedHandler accessDeniedHandler() {
-        return new RestAccessDeniedHandler();
     }
 
 }

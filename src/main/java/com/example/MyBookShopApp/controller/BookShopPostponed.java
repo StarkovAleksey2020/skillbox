@@ -1,18 +1,14 @@
 package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.entity.BookEntity;
-import com.example.MyBookShopApp.repository.BookRepository;
 import com.example.MyBookShopApp.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/books")
@@ -33,14 +29,13 @@ public class BookShopPostponed {
         return bookService.getCartCount();
     }
 
-    private final BookRepository bookRepository;
     private final BookService bookService;
 
-    @Autowired
-    public BookShopPostponed(BookRepository bookRepository, BookService bookService) {
-        this.bookRepository = bookRepository;
+    public BookShopPostponed(BookService bookService) {
         this.bookService = bookService;
     }
+
+    @Autowired
 
     @GetMapping("/postponed")
     public String handlePostponedRequest(@CookieValue(name = "postponedContents", required = false) String postponedContents,

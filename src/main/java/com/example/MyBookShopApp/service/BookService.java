@@ -31,7 +31,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.StringJoiner;
 import java.util.logging.Logger;
 
 @Service
@@ -513,10 +516,9 @@ public class BookService {
         return rate;
     }
 
-    public Boolean createBookReview(String slug, String comment) throws BookstoreAPiWrongParameterException {
+    public Boolean createBookReview(String slug, String comment, UserEntity userEntity) throws BookstoreAPiWrongParameterException {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
         if (bookEntity != null && comment != null && !comment.equals("")) {
-            UserEntity userEntity = userRepository.findByName("Carita Gunn");
             BookReviewEntity bookReviewEntity = new BookReviewEntity();
 
             bookReviewEntity.setTime(LocalDateTime.now());

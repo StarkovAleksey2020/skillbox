@@ -1,7 +1,6 @@
 package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.entity.BookEntity;
-import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.exception.ForbiddenException;
 import com.example.MyBookShopApp.exception.InsufficientRightsToChangeCoverException;

@@ -1103,20 +1103,23 @@
                             </div>
                         </form>
                         <div id="comment-result">
-                            <div th:if="${session.isCommentLeft}">
+                            <div th:if="${session.isCommentLeft == 0}">
                                 <span style="color: #0064c9">Отзыв успешно сохранен</span>
                             </div>
-                            <div th:if="${session.isCommentLeft == false}">
-                                <span style="color: #c90000">Отзыв не сохранен, что-то пошло не так ...</span>
+                            <div th:if="${session.isCommentLeft == 1}">
+                                <span style="color: #c90000">Отзыв не сохранен - недостаточно прав</span>
+                            </div>
+                            <div th:if="${session.isCommentLeft == 2}">
+                                <span style="color: #c90000">Отзыв не сохранен - доступно только зарегистрированным пользователям</span>
+                            </div>
+                            <div th:if="${session.isCommentLeft == 3}">
+                                <span style="color: #c90000">Отзыв не сохранен - что-то пошло не так ...</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="Comments">
                     <div class="Comment" th:each="review : ${bookReviewInfo}">
-                        <!--                        <span th:text="${review.userBookRate}"></span>-->
-
-
                         <div class="Comment-column Comment-column_pict">
                             <div class="Comment-avatar">
                             </div>
