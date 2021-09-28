@@ -31,7 +31,7 @@ public class BooksRestApi {
 
     @GetMapping("/books/by-author")
     @ApiOperation("Getting a list of books by author name")
-    public ResponseEntity<List<BookEntity>> booksByAuthor(@RequestParam("author") String author) {
+    public ResponseEntity<List<BookEntity>> booksByAuthor(@RequestParam("author") String author) throws BookstoreAPiWrongParameterException {
         return ResponseEntity.ok(bookService.getBooksByAuthor(author));
     }
 
@@ -59,7 +59,7 @@ public class BooksRestApi {
     @GetMapping("/books/by-price-range")
     @ApiOperation("Getting a list of books by price range")
     public ResponseEntity<List<BookEntity>> getPriceRangeBooks(@RequestParam("min") Integer min,
-                                                               @RequestParam("max") Integer max) {
+                                                               @RequestParam("max") Integer max) throws BookstoreAPiWrongParameterException {
         return ResponseEntity.ok(bookService.getBooksWithPriceBetween(min, max));
     }
 

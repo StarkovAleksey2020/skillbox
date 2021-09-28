@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.controller;
 
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.service.BookService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +28,7 @@ public class GenresPage {
                            @RequestParam(value = "genreName", required = false) String genreName,
                            @RequestParam(value = "offset", required = false) Integer offset,
                            @RequestParam(value = "limit", required = false) Integer limit,
-                           Model model) {
+                           Model model) throws BookstoreAPiWrongParameterException {
         model.addAttribute("sectionName", sectionName);
         model.addAttribute("genresName", genresName);
         model.addAttribute("subSectionName", subSectionName);
@@ -43,7 +44,7 @@ public class GenresPage {
                            @RequestParam(value = "folderId", required = false) Long folderId,
                            @RequestParam(value = "offset", required = false) Integer offset,
                            @RequestParam(value = "limit", required = false) Integer limit,
-                           Model model) {
+                           Model model) throws BookstoreAPiWrongParameterException {
         model.addAttribute("sectionName", sectionName);
         model.addAttribute("genresName", genresName);
         model.addAttribute("subSectionName", subSectionName);

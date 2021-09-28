@@ -1,8 +1,15 @@
 sudo su -
 su - postgres
 psql
+
 drop DATABASE skillbox;
 CREATE DATABASE skillbox;
 CREATE USER codewizard WITH ENCRYPTED PASSWORD '1234567';
 GRANT ALL PRIVILEGES ON DATABASE skillbox TO codewizard;
+ALTER USER codewizard WITH SUPERUSER;
+
+drop DATABASE skillboxtest;
+CREATE DATABASE skillboxtest;
+CREATE USER codewizard WITH ENCRYPTED PASSWORD '1234567';
+GRANT ALL PRIVILEGES ON DATABASE skillboxtest TO codewizard;
 ALTER USER codewizard WITH SUPERUSER;

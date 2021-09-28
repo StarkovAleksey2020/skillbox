@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.controller.rest;
 
 import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.data.SearchWordDto;
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.exception.EmptySearchException;
 import com.example.MyBookShopApp.service.BookService;
 import io.swagger.annotations.Api;
@@ -23,14 +24,14 @@ public class BookPaginationRestApi {
     @GetMapping("/books/recommended")
     @ApiOperation("Getting a page-by-page list of recommended books")
     public BooksPageDto getBooksPage(@RequestParam("offset") Integer offset,
-                                     @RequestParam("limit") Integer limit) {
+                                     @RequestParam("limit") Integer limit) throws BookstoreAPiWrongParameterException {
         return new BooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit).getContent());
     }
 
     @GetMapping("/books/recent")
     @ApiOperation("Getting a page-by-page list of recent books")
     public BooksPageDto getBooksRecentPage(@RequestParam("offset") Integer offset,
-                                           @RequestParam("limit") Integer limit) {
+                                           @RequestParam("limit") Integer limit) throws BookstoreAPiWrongParameterException {
         return new BooksPageDto(bookService.getPageOfRecentBooks(offset, limit).getContent());
     }
 
@@ -38,7 +39,7 @@ public class BookPaginationRestApi {
     @ApiOperation("Getting a page-by-page list of tagged books")
     public BooksPageDto getBooksTagsPage(@RequestParam("tagName") String tagName,
                                          @RequestParam("offset") Integer offset,
-                                         @RequestParam("limit") Integer limit) {
+                                         @RequestParam("limit") Integer limit) throws BookstoreAPiWrongParameterException {
         return new BooksPageDto(bookService.getPageOfTaggedBooks(tagName, offset, limit).getContent());
     }
 
@@ -46,7 +47,7 @@ public class BookPaginationRestApi {
     @ApiOperation("Getting a paginated list of books by genre")
     public BooksPageDto getBooksPageByGenre(@RequestParam("genreName") String genreName,
                                             @RequestParam("offset") Integer offset,
-                                            @RequestParam("limit") Integer limit) {
+                                            @RequestParam("limit") Integer limit) throws BookstoreAPiWrongParameterException {
         return new BooksPageDto(bookService.getPageOfBooksByGenreName(genreName, offset, limit).getContent());
     }
 
@@ -54,7 +55,7 @@ public class BookPaginationRestApi {
     @ApiOperation("Getting a paginated list of books by author id")
     public BooksPageDto getBooksPageByAuthor(@RequestParam("authorName") String authorName,
                                              @RequestParam("offset") Integer offset,
-                                             @RequestParam("limit") Integer limit) {
+                                             @RequestParam("limit") Integer limit) throws BookstoreAPiWrongParameterException {
         return new BooksPageDto(bookService.getPageOfBooksByAuthorName(authorName, offset, limit).getContent());
     }
 
@@ -62,7 +63,7 @@ public class BookPaginationRestApi {
     @ApiOperation("Getting a page-by-page list of books by genre sections")
     public BooksPageDto getBooksPageByGenreFolder(@RequestParam("folderId") Long folderId,
                                                   @RequestParam("offset") Integer offset,
-                                                  @RequestParam("limit") Integer limit) {
+                                                  @RequestParam("limit") Integer limit) throws BookstoreAPiWrongParameterException {
         return new BooksPageDto(bookService.getPageOfBooksByFolderId(folderId, offset, limit).getContent());
     }
 
@@ -71,21 +72,21 @@ public class BookPaginationRestApi {
     public BooksPageDto getBooksRecentPageInDateInterval(@RequestParam("from") String from,
                                                          @RequestParam("to") String to,
                                                          @RequestParam("offset") Integer offset,
-                                                         @RequestParam("limit") Integer limit) {
+                                                         @RequestParam("limit") Integer limit) throws BookstoreAPiWrongParameterException {
         return new BooksPageDto(bookService.getPageOfRecentBooksInterval(from, to, offset, limit).getContent());
     }
 
     @GetMapping("/books/popular")
     @ApiOperation("method to get popular books ordered by book2user")
     public BooksPageDto getBooksPopularPage(@RequestParam("offset") Integer offset,
-                                            @RequestParam("limit") Integer limit) {
+                                            @RequestParam("limit") Integer limit) throws BookstoreAPiWrongParameterException {
         return new BooksPageDto(bookService.getPageOfPopularBooksOrdered(offset, limit).getContent());
     }
 
     @GetMapping(value = {"/search", "/search/{searchWord}"})
     @ApiOperation("method to search books")
     public ModelAndView getSearchResults(@PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto,
-                                         Model model) throws EmptySearchException {
+                                         Model model) throws EmptySearchException, BookstoreAPiWrongParameterException {
         if (searchWordDto != null) {
             model.addAttribute("searchWordDto", searchWordDto);
             model.addAttribute("searchResults",
@@ -101,7 +102,7 @@ public class BookPaginationRestApi {
     @ApiOperation("Getting a page-by-page list of books by search")
     public BooksPageDto getNextSearchPage(@RequestParam("offset") Integer offset,
                                           @RequestParam("limit") Integer limit,
-                                          @PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto) {
+                                          @PathVariable(value = "searchWord", required = false) SearchWordDto searchWordDto) throws BookstoreAPiWrongParameterException {
         return new BooksPageDto(bookService.getPageOfSearchResultBooks(searchWordDto.getExample(), offset, limit).getContent());
     }
 

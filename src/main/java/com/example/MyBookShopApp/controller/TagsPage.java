@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.service.BookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +35,7 @@ public class TagsPage {
             @RequestParam("tagName") String tagName,
             @RequestParam("offset") Integer offset,
             @RequestParam("limit") Integer limit,
-            Model model) {
+            Model model) throws BookstoreAPiWrongParameterException {
         model.addAttribute("tagName", tagName);
         model.addAttribute("taggedBooks", bookService.getPageOfTaggedBooks(tagName, offset, limit).getContent());
         return "tags/index";
@@ -49,7 +50,7 @@ public class TagsPage {
                               @RequestParam(value = "bookImage", required = false) String bookImage,
                               @RequestParam(value = "isBestseller", required = false) Integer isBestseller,
                               @RequestParam(value = "bookDiscount", required = false) String bookDiscount,
-                              Model model) {
+                              Model model) throws BookstoreAPiWrongParameterException {
         model.addAttribute("bookTitle", bookTitle);
         model.addAttribute("bookAuthorName", bookAuthorName);
         model.addAttribute("description", description);

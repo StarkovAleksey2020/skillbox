@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.service.BookService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class MainPage {
     }
 
     @ModelAttribute("recommendedBooks")
-    public List<BookEntity> getRecommendedBooks() {
+    public List<BookEntity> getRecommendedBooks() throws BookstoreAPiWrongParameterException {
         return bookService.getPageOfRecommendedBooks(DEFAULT_OFFSET, DEFAULT_LIMIT).getContent();
     }
 
@@ -44,12 +45,12 @@ public class MainPage {
     }
 
     @ModelAttribute("popularBooks")
-    public List<BookEntity> getPopularBooks() {
+    public List<BookEntity> getPopularBooks() throws BookstoreAPiWrongParameterException {
         return bookService.getPageOfPopularBooksOrdered(DEFAULT_OFFSET, DEFAULT_LIMIT).getContent();
     }
 
     @ModelAttribute("recentBooks")
-    public List<BookEntity> getRecentBook() {
+    public List<BookEntity> getRecentBook() throws BookstoreAPiWrongParameterException {
         return bookService.getPageOfRecentBooks(DEFAULT_OFFSET, DEFAULT_LIMIT).getContent();
     }
 

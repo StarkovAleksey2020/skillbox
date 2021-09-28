@@ -35,10 +35,10 @@ public class UserEntityRegister {
 
 
 
-    public void registerNewUser(RegistrationForm registrationForm) {
+    public UserEntity registerNewUser(RegistrationForm registrationForm) {
 
+        UserEntity userEntity = new UserEntity();
         if (userEntityRepository.findUserEntityByEmail(registrationForm.getEmail()) == null) {
-            UserEntity userEntity = new UserEntity();
             userEntity.setName(registrationForm.getName());
             userEntity.setEmail(registrationForm.getEmail());
             userEntity.setPhone(registrationForm.getPhone());
@@ -48,6 +48,7 @@ public class UserEntityRegister {
             userEntity.setHash(UUID.randomUUID().toString());
             userEntityRepository.save(userEntity);
         }
+        return userEntity;
     }
 
     public ContactConfirmationResponse login(ContactConfirmationPayload payload) {

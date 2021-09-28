@@ -35,8 +35,6 @@ public class BookShopPostponed {
         this.bookService = bookService;
     }
 
-    @Autowired
-
     @GetMapping("/postponed")
     public String handlePostponedRequest(@CookieValue(name = "postponedContents", required = false) String postponedContents,
                                          Model model) {

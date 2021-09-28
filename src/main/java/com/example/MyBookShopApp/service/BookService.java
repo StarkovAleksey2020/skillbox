@@ -16,7 +16,9 @@ import com.example.MyBookShopApp.repository.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.commons.validator.routines.DateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -55,6 +57,7 @@ public class BookService {
     private Integer DEFAULT_OFFSET = 0;
     private Integer DEFAULT_LIMIT = 10;
 
+    @Autowired
     public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, BookRateRepository bookRateRepository, BookReviewRepository bookReviewRepository, UserRepository userRepository, BookReviewRLDtoRepository bookReviewRLDtoRepository, BookReviewRLDtoMapper bookReviewRLDtoMapper, BookReviewLikeRepository bookReviewLikeRepository, CartRepository cartRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
@@ -69,14 +72,18 @@ public class BookService {
         this.cartRepository = cartRepository;
     }
 
-    @Autowired
-
     public List<BookEntity> getBooksData() {
         return bookRepository.findAll();
     }
 
-    public List<BookEntity> getBooksByAuthor(String authorName) {
+    public List<BookEntity> getBooksByAuthor(String authorName) throws BookstoreAPiWrongParameterException {
+        if (authorName.equals("")) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         AuthorEntity entity = authorRepository.findAuthorEntityByName(authorName);
+        if (entity == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         return bookRepository.findBookEntitiesByAuthorSetContaining(entity);
     }
 
@@ -94,12 +101,11 @@ public class BookService {
         }
     }
 
-    public List<BookEntity> getBooksWithPriceBetween(Integer min, Integer max) {
+    public List<BookEntity> getBooksWithPriceBetween(Integer min, Integer max) throws BookstoreAPiWrongParameterException {
+        if (min == null || max == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         return bookRepository.findBookEntitiesByPriceBetween(min, max);
-    }
-
-    public List<BookEntity> getBooksWithPrice(Integer price) {
-        return bookRepository.findBookEntitiesByPriceIs(price);
     }
 
     public List<BookEntity> getBooksWithMaxDiscount() {
@@ -110,22 +116,34 @@ public class BookService {
         return bookRepository.getBestsellers();
     }
 
-    public Page<BookEntity> getPageOfRecommendedBooks(Integer offset, Integer limit) {
+    public Page<BookEntity> getPageOfRecommendedBooks(Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
+        if (offset == null || limit == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findAll(nextPage);
     }
 
-    public Page<BookEntity> getPageOfRecentBooks(Integer offset, Integer limit) {
+    public Page<BookEntity> getPageOfRecentBooks(Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
+        if (offset == null || limit == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findAllDesc(nextPage);
     }
 
-    public Page<BookEntity> getPageOfSearchResultBooks(String searchWord, Integer offset, Integer limit) {
+    public Page<BookEntity> getPageOfSearchResultBooks(String searchWord, Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
+        if (searchWord == null || offset == null || limit == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findBookEntitiesByTitleContaining(searchWord, nextPage);
     }
 
-    public Page<BookEntity> getPageOfRecentBooksInterval(String dateFrom, String dateTo, Integer offset, Integer limit) {
+    public Page<BookEntity> getPageOfRecentBooksInterval(String dateFrom, String dateTo, Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
+        if (dateFrom == null || dateTo == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         Pageable nextPage0 = PageRequest.of(DEFAULT_OFFSET, DEFAULT_LIMIT);
 
         OffsetDateTime dateTimeFrom = getDateOffset(dateFrom);
@@ -134,7 +152,17 @@ public class BookService {
         return bookRepository.findBookEntitiesByPubDateAfterAndPubDateBefore(dateTimeFrom, dateTimeTo, nextPage0);
     }
 
-    private OffsetDateTime getDateOffset(String inputString) {
+    public OffsetDateTime getDateOffset(String inputString) throws BookstoreAPiWrongParameterException {
+        if (inputString == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
+
+        DateValidator validator = new DateValidatorUsingDateFormat("dd.MM.yyyy");
+
+        if (!validator.isValid(inputString)) {
+            throw new BookstoreAPiWrongParameterException("Invalid date format");
+        }
+
         SimpleDateFormat fromUser = new SimpleDateFormat("dd.MM.yyyy");
         SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -144,25 +172,37 @@ public class BookService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return OffsetDateTime.parse(reformattedStr + "T01:00:00+03:00");
+        return OffsetDateTime.parse(reformattedStr + "T01:00+03:00");
     }
 
-    public Page<BookEntity> getPageOfPopularBooksOrdered(Integer offset, Integer limit) {
+    public Page<BookEntity> getPageOfPopularBooksOrdered(Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
+        if (offset == null || limit == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findBooksByPopularRate(nextPage);
     }
 
-    public Page<BookEntity> getPageOfTaggedBooks(String tagName, Integer offset, Integer limit) {
+    public Page<BookEntity> getPageOfTaggedBooks(String tagName, Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
+        if (tagName == null || offset == null || limit == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findBooksByTagName(tagName, nextPage);
     }
 
-    public String getBookTag(Long bookId) {
+    public String getBookTag(Long bookId) throws BookstoreAPiWrongParameterException {
+        if (bookId == null || bookId <= 0) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         Book2TagEntity book2TagEntity = book2TagRepository.findByBookId(bookId);
         return tagRepository.findById(book2TagEntity.getTagId()).get().getName();
     }
 
-    public Page<BookEntity> getPageOfBooksByGenreName(String genreName, Integer offset, Integer limit) {
+    public Page<BookEntity> getPageOfBooksByGenreName(String genreName, Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
+        if (genreName == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         Pageable nextPage;
         if (offset != null || limit != null) {
             nextPage = PageRequest.of(offset, limit);
@@ -172,7 +212,10 @@ public class BookService {
         return bookRepository.findBooksByGenreName(genreName, nextPage);
     }
 
-    public Page<BookEntity> getPageOfBooksByAuthorName(String authorName, Integer offset, Integer limit) {
+    public Page<BookEntity> getPageOfBooksByAuthorName(String authorName, Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
+        if (authorName == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         Pageable nextPage;
         if (offset != null || limit != null) {
             nextPage = PageRequest.of(offset, limit);
@@ -182,7 +225,10 @@ public class BookService {
         return bookRepository.findBooksByAuthor(authorName, nextPage);
     }
 
-    public Page<BookEntity> getPageOfBooksByFolderId(Long folderId, Integer offset, Integer limit) {
+    public Page<BookEntity> getPageOfBooksByFolderId(Long folderId, Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
+        if (folderId == null || folderId < 0) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         Pageable nextPage;
         if (offset != null || limit != null) {
             nextPage = PageRequest.of(offset, limit);

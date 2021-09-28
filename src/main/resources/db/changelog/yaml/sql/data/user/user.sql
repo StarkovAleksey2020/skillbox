@@ -98,3 +98,4 @@ insert into user_entity (id, balance, name, hash, reg_time) values (97, 20189, '
 insert into user_entity (id, balance, name, hash, reg_time) values (98, 47381, 'Codee Howsden', 'PT63 5074 1168 1854 5277 5715 1', '2021-08-05 01:36:09');
 insert into user_entity (id, balance, name, hash, reg_time) values (99, 4850, 'Regine Hateley', 'GE68 PZ67 5594 0384 1379 74', '2020-03-04 10:07:14');
 insert into user_entity (id, balance, name, hash, reg_time) values (100, 9567, 'Tadeo Hedney', 'FR92 4703 8356 50WE WHFU H6DC C64', '2021-06-16 11:14:46');
+insert into user_entity (id, balance, name, hash, reg_time) values (101, 1000, 'test', 'FR92 4703 8356 50WE WHFU H6DC 111', '2021-07-16 11:14:46');

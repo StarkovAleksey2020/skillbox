@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.entity.AuthorEntity;
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.service.AuthorService;
 import com.example.MyBookShopApp.service.BookService;
 import io.swagger.annotations.Api;
@@ -45,7 +46,7 @@ public class AuthorsPage {
                            @RequestParam(value = "description", required = false) String description,
                            @RequestParam(value = "photo", required = false) String photo,
                            @RequestParam(value = "authorId", required = false) Long authorId,
-                           Model model) {
+                           Model model) throws BookstoreAPiWrongParameterException {
         model.addAttribute("authorName", authorName);
         model.addAttribute("descriptionVisible", authorService.getDescriptionVisible(description));
         model.addAttribute("descriptionHidden", authorService.getDescriptionHidden(description));
