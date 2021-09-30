@@ -13,9 +13,11 @@ import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.mapper.BookReviewRLDtoMapper;
 import com.example.MyBookShopApp.repository.*;
+import com.example.MyBookShopApp.security.UserEntityDetails;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import org.apache.commons.validator.routines.DateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -238,52 +240,17 @@ public class BookService {
         return bookRepository.findBooksByFolder(folderId, nextPage);
     }
 
-    public Integer getAuthorBooksCount(String authorName) {
+    public Integer getAuthorBooksCount(String authorName) throws BookstoreAPiWrongParameterException {
+        if (authorName == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
         return bookRepository.findBooksCountByAuthor(authorName);
     }
 
-    public void addCartContentsItem(@PathVariable("slug") String slug,
-                                    @CookieValue(name = "cartContents", required = false) String cartContents,
-                                    HttpServletResponse response,
-                                    Model model) {
-        if (cartContents == null || cartContents.equals("")) {
-            Cookie cookie = new Cookie("cartContents", "/" + slug);
-            cookie.setMaxAge(24 * 60 * 60);
-            cookie.setPath("/books");
-            response.addCookie(cookie);
-            model.addAttribute("isCartEmpty", false);
-            model.addAttribute("cartContentsSize", 1);
-        } else if (!cartContents.contains(slug)) {
-            StringJoiner stringJoiner = new StringJoiner("/");
-            stringJoiner.add(cartContents).add(slug);
-            Cookie cookie = new Cookie("cartContents", stringJoiner.toString());
-            cookie.setMaxAge(24 * 60 * 60);
-            cookie.setPath("/books");
-            response.addCookie(cookie);
-            model.addAttribute("isCartEmpty", false);
-            model.addAttribute("cartContentsSize", cookie.getValue().split("/").length);
+    public void removePostponedItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
+        if (slug == null) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
-    }
-
-    public void removeCartContentsItemFromCart(@PathVariable("slug") String slug,
-                                               @CookieValue(name = "cartContents", required = false) String cartContents,
-                                               HttpServletResponse response,
-                                               Model model) {
-        if (cartContents != null || !cartContents.equals("")) {
-            ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(cartContents.split("/")));
-            cookieBooks.remove(slug);
-            Cookie cookie = new Cookie("cartContents", String.join("/", cookieBooks));
-            cookie.setPath("/books");
-            response.addCookie(cookie);
-            model.addAttribute("isCartEmpty", false);
-            model.addAttribute("cartContentsSize", cookie.getValue().split("/").length);
-        } else {
-            model.addAttribute("isCartEmpty", true);
-            model.addAttribute("cartContentsSize", 0);
-        }
-    }
-
-    public void removePostponedItem(String slug) {
 
         Gson gson = new Gson();
 
@@ -317,11 +284,11 @@ public class BookService {
         }
     }
 
-    public void addPostponedItem(String slug) {
+    public void addPostponedItem(String slug, Object principal) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
 
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         if (cartEntity != null) {
@@ -329,7 +296,7 @@ public class BookService {
             if (!cartItemEntity.getPostponedString().contains(slug)) {
 
                 cartItemEntity.setPostponedString(cartItemEntity.getPostponedString() + "/" + slug);
-                if (cartItemEntity.getCartString().contains(slug)) {
+                if (cartItemEntity.getCartString() != null && cartItemEntity.getCartString().contains(slug)) {
                     cartItemEntity.setCartString(cartItemEntity.getCartString().replace("/" + slug, ""));
                 }
                 cartEntity.setValue(gson.toJson(cartItemEntity));
@@ -344,6 +311,23 @@ public class BookService {
             entity.setEditDate(OffsetDateTime.now());
             cartRepository.save(entity);
         }
+    }
+
+    public Cookie addPostponedItemTempUser(String slug, String postponedCookieString) {
+        if (postponedCookieString == null || postponedCookieString.equals("")) {
+            Cookie cookie = new Cookie("postponedContents", slug);
+            cookie.setMaxAge(2 * 60 * 60);
+            cookie.setPath("/books");
+            return cookie;
+        } else if (!postponedCookieString.contains(slug)) {
+            StringJoiner stringJoiner = new StringJoiner("/");
+            stringJoiner.add(postponedCookieString).add(slug);
+            Cookie cookie = new Cookie("postponedContents", stringJoiner.toString());
+            cookie.setMaxAge(2 * 60 * 60);
+            cookie.setPath("/books");
+            return cookie;
+        }
+        return null;
     }
 
     public void addCartItem(String slug) {
@@ -372,7 +356,7 @@ public class BookService {
         }
     }
 
-    private CartItemEntity getCartItemEntity(String valueString) {
+    public CartItemEntity getCartItemEntity(String valueString) {
         if (valueString.length() > 0 && valueString != null) {
             Gson gson = new Gson();
             JsonParser parser = new JsonParser();
@@ -396,47 +380,6 @@ public class BookService {
 
         cartRepository.save(entity);
         return entity;
-    }
-
-    public void addPostponedContentsItem(@PathVariable("slug") String slug,
-                                         @CookieValue(name = "postponedContents", required = false) String postponedContents,
-                                         HttpServletResponse response,
-                                         Model model) {
-        if (postponedContents == null || postponedContents.equals("")) {
-            Cookie cookie = new Cookie("postponedContents", "/" + slug);
-            cookie.setMaxAge(24 * 60 * 60);
-            cookie.setPath("/books");
-            response.addCookie(cookie);
-            model.addAttribute("isPostponedEmpty", false);
-            model.addAttribute("postponedSize", 1);
-        } else if (!postponedContents.contains(slug)) {
-            StringJoiner stringJoiner = new StringJoiner("/");
-            stringJoiner.add(postponedContents).add(slug);
-            Cookie cookie = new Cookie("postponedContents", stringJoiner.toString());
-            cookie.setMaxAge(24 * 60 * 60);
-            cookie.setPath("/books");
-            response.addCookie(cookie);
-            model.addAttribute("isPostponedEmpty", false);
-            model.addAttribute("postponedSize", cookie.getValue().split("/").length);
-        }
-    }
-
-    public void removePostponedContentsItemFromPostponed(@PathVariable("slug") String slug,
-                                                         @CookieValue(name = "postponedContents", required = false) String postponedContents,
-                                                         HttpServletResponse response,
-                                                         Model model) {
-        if (postponedContents != null || !postponedContents.equals("")) {
-            ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(postponedContents.split("/")));
-            cookieBooks.remove(slug);
-            Cookie cookie = new Cookie("postponedContents", String.join("/", cookieBooks));
-            cookie.setPath("/books");
-            response.addCookie(cookie);
-            model.addAttribute("isPostponedEmpty", false);
-            model.addAttribute("postponedSize", cookie.getValue().split("/").length);
-        } else {
-            model.addAttribute("isPostponedEmpty", true);
-            model.addAttribute("postponedSize", 0);
-        }
     }
 
     public Integer getCartCount() {
@@ -473,6 +416,17 @@ public class BookService {
         }
     }
 
+    public Integer getCartCountTempUser(String cartContents) {
+        if (cartContents == null || cartContents.equals("")) {
+            return 0;
+        } else {
+            Gson gson = new Gson();
+            JsonParser parser = new JsonParser();
+            JsonObject object = (JsonObject) parser.parse(cartContents);
+            return gson.fromJson(object, CartItemEntity.class).getCartString().split("/").length - 1;
+        }
+    }
+
     public Integer getPostponedCount() {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
@@ -504,6 +458,14 @@ public class BookService {
         } else {
             createCartEntity(userEntity);
             return 0;
+        }
+    }
+
+    public Integer getPostponedCountTempUser(String postponedContents) {
+        if (postponedContents == null || postponedContents.equals("")) {
+            return 0;
+        } else {
+            return postponedContents.split("/").length;
         }
     }
 

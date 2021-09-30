@@ -40,15 +40,15 @@ public class GlobalExceptionHandler {
     }
 
     // 400
-    @ExceptionHandler(Throwable.class)
-    public @ResponseBody ResponseEntity<CustomErrorResponse> handleDefaultException(Throwable ex) {
-        CustomErrorResponse errors = new CustomErrorResponse();
-        errors.setError("request has empty body or exception occured");
-        errors.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        errors.setTimestamp(LocalDateTime.now());
-        errors.setResult("false");
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(Throwable.class)
+//    public @ResponseBody ResponseEntity<CustomErrorResponse> handleDefaultException(Throwable ex) {
+//        CustomErrorResponse errors = new CustomErrorResponse();
+//        errors.setError("request has empty body or exception occured!");
+//        errors.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//        errors.setTimestamp(LocalDateTime.now());
+//        errors.setResult("false");
+//        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+//    }
 
     // 401 (but 200)
     @ExceptionHandler(UserNotFoundException.class)

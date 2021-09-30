@@ -1,7 +1,9 @@
 package com.example.MyBookShopApp.security;
 
 import com.example.MyBookShopApp.entity.user.UserEntity;
+import com.example.MyBookShopApp.utils.TestUtil;
 import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +11,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,14 +27,21 @@ class UserEntityRegisterTest {
     private final UserEntityRegister userEntityRegister;
     private final PasswordEncoder passwordEncoder;
     private RegistrationForm registrationForm;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private UserEntityRepository userEntityRepository;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @MockBean
     private UserEntityRepository userEntityRepositoryMock;
 
     @Autowired
-    public UserEntityRegisterTest(UserEntityRegister userEntityRegister, PasswordEncoder passwordEncoder) {
+    public UserEntityRegisterTest(UserEntityRegister userEntityRegister, PasswordEncoder passwordEncoder, BCryptPasswordEncoder bCryptPasswordEncoder, UserEntityRepository userEntityRepository) {
         this.userEntityRegister = userEntityRegister;
         this.passwordEncoder = passwordEncoder;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userEntityRepository = userEntityRepository;
     }
 
     @BeforeEach
@@ -40,6 +55,10 @@ class UserEntityRegisterTest {
 
     @AfterEach
     void tearDown() {
+        UserEntity userEntity = userEntityRepository.findUserEntityByEmail("test@mail.org");
+        if (userEntity != null) {
+            userEntityRepository.delete(userEntity);
+        }
         registrationForm = null;
     }
 
@@ -63,6 +82,53 @@ class UserEntityRegisterTest {
                 .findUserEntityByEmail(registrationForm.getEmail());
 
         UserEntity userEntity = userEntityRegister.registerNewUser(registrationForm);
-        assertNull(userEntity);
+        assertNotNull(userEntity);
+    }
+
+    @Test
+    public void testLogin() {
+        UserEntity userEntity = userEntityRegister.registerNewUser(registrationForm);
+        userEntityRepository.save(userEntity);
+
+        ContactConfirmationPayload payload = new ContactConfirmationPayload();
+        payload.setContact(userEntity.getEmail());
+        payload.setCode("iddqd");
+
+        ContactConfirmationResponse response = userEntityRegister.login(payload);
+        assertNotNull(response);
+    }
+
+
+    @Test
+    public void testSignIn() {
+        String email = "test@example.com";
+        String password = "1234567";
+        createTestUser(email, password);
+        String url = "https://localhost:8085/login";
+//        String body = "{" +
+//                "  \"email\": \"" + email + "\"," +
+//                "  \"password\": \"" + password + "\"" +
+//                "}";
+        HttpHeaders headers = new HttpHeaders();
+
+        ContactConfirmationPayload payload = new ContactConfirmationPayload();
+        payload.setContact(email);
+        payload.setCode(password);
+        HttpEntity<ContactConfirmationPayload> entity = new HttpEntity<>(payload, headers);
+
+        // act
+        ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+        // verify
+        assertNull(result);
+//        Assert.assertNotNull(result);
+//        Assert.assertEquals(result.getStatusCodeValue(), 200);
+//        String token = Objects.requireNonNull(result.getHeaders().get("Authorization")).get(0);
+//        Assert.assertNotNull(token);
+
+    }
+
+    private void createTestUser(String email, String password) {
+        userEntityRepositoryMock.save(TestUtil.createUser(email, password, bCryptPasswordEncoder, userEntityRepositoryMock));
     }
 }

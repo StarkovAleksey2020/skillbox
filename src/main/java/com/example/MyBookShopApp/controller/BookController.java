@@ -5,6 +5,7 @@ import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.exception.ForbiddenException;
 import com.example.MyBookShopApp.exception.InsufficientRightsToChangeCoverException;
 import com.example.MyBookShopApp.repository.BookRepository;
+import com.example.MyBookShopApp.security.UserEntityDetails;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.ResourceStorage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +39,30 @@ public class BookController {
     }
 
     @ModelAttribute("postponedSize")
-    public Integer getPostponedSize() {
-        return bookService.getPostponedCount();
+    public Integer getPostponedSize(@CookieValue(name = "postponedContents", required = false) String postponedContents) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
+                return bookService.getPostponedCount();
+            }
+        } catch (Exception e) {
+            return bookService.getPostponedCountTempUser(postponedContents);
+        }
+        return 0;
     }
 
     @ModelAttribute("cartContentsSize")
-    public Integer getCartContentsSize() {
-        return bookService.getCartCount();
+    public Integer getCartContentsSize(@CookieValue(name = "cartContents", required = false) String cartContents) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
+                return bookService.getCartCount();
+            }
+        } catch (Exception e) {
+            return bookService.getCartCountTempUser(cartContents);
+        }
+        return 0;
     }
-
 
     @GetMapping("/{slug}")
     public String getBookPage(@PathVariable("slug") String slug,

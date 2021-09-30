@@ -6,7 +6,9 @@ import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.Book2TagRepository;
 import com.example.MyBookShopApp.repository.BookRepository;
 import com.example.MyBookShopApp.repository.TagRepository;
+import com.example.MyBookShopApp.security.UserEntityRepository;
 import com.example.MyBookShopApp.utils.NullableConverter;
+import com.example.MyBookShopApp.utils.TestUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +22,10 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -37,18 +41,25 @@ class BookServiceTest {
     private final BookRepository bookRepository;
     private final Book2TagRepository book2TagRepository;
     private final TagRepository tagRepository;
+    private TestRestTemplate testRestTemplate;
+    private UserEntityRepository userEntityRepository;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private Integer DEFAULT_LIMIT = 10;
 
 //    @MockBean
 //    private BookRepository bookRepositoryMock;
 
+
     @Autowired
-    BookServiceTest(BookService bookService, BookRepository bookRepository, Book2TagRepository book2TagRepository, TagRepository tagRepository) {
+    BookServiceTest(BookService bookService, BookRepository bookRepository, Book2TagRepository book2TagRepository, TagRepository tagRepository, TestRestTemplate testRestTemplate, UserEntityRepository userEntityRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bookService = bookService;
         this.bookRepository = bookRepository;
         this.book2TagRepository = book2TagRepository;
         this.tagRepository = tagRepository;
+        this.testRestTemplate = testRestTemplate;
+        this.userEntityRepository = userEntityRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @BeforeEach
@@ -420,16 +431,47 @@ class BookServiceTest {
         assertEquals("Randy and the Mob", bookService.getPageOfBooksByFolderId(folderId, offset, limit).getContent().get(0).getTitle());
     }
 
+    @ParameterizedTest
+    @CsvSource({"null"})
+    void getAuthorBooksCount_withNullAuthorNameInputParams_getException(@ConvertWith(NullableConverter.class) String authorName) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getAuthorBooksCount(authorName));
+    }
 
-//    @Test
-//    void getPageOfBooksByFolderId() {
-//    }
-//
-//    @Test
-//    void getAuthorBooksCount() {
-//    }
-//
-//    @Test
-//    void addCartContentsItem() {
-//    }
+    @ParameterizedTest
+    @CsvSource({"Tatum Gerb"})
+    void getAuthorBooksCount_withCorrectPageParamsInputParams_getAuthorBooksCount(String authorName) throws BookstoreAPiWrongParameterException {
+        assertEquals(11, bookService.getAuthorBooksCount(authorName));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null, null"})
+    void removePostponedItem_withNullSlugInputParams_getException(@ConvertWith(NullableConverter.class) String slug,
+                                                                  @ConvertWith(NullableConverter.class) Object principal) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removePostponedItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"{\"cartString\":\"\",\"postponedString\":\"/lNv3IiN\"}"})
+    void getCartItemEntity_withCorrectPostponedValue_getCartItemEntityWithPostponed(String valueString) {
+        assertEquals("/lNv3IiN", bookService.getCartItemEntity(valueString).getPostponedString());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"{\"cartString\":\"/lNv3IiN\",\"postponedString\":\"\"}"})
+    void getCartItemEntity_withCorrectPostponedValue_getCartItemEntityWithCart(String valueString) {
+        assertEquals("/lNv3IiN", bookService.getCartItemEntity(valueString).getCartString());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {""})
+    void getCartItemEntity_withCorrectPostponedValue_getNewCartItemEntity(String valueString) {
+        assertNull(bookService.getCartItemEntity(valueString).getCartString());
+        assertNull(bookService.getCartItemEntity(valueString).getPostponedString());
+    }
+
+
+    private void createTestUser(String email, String password) {
+        userEntityRepository.save(TestUtil.createUser(email, password, bCryptPasswordEncoder, userEntityRepository));
+    }
+
 }

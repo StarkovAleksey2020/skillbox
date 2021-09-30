@@ -2,8 +2,10 @@ package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.repository.BookRepository;
+import com.example.MyBookShopApp.security.UserEntityDetails;
 import com.example.MyBookShopApp.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +23,29 @@ public class BookShopCart {
     }
 
     @ModelAttribute("postponedSize")
-    public Integer getPostponedSize() {
-        return bookService.getPostponedCount();
+    public Integer getPostponedSize(@CookieValue(name = "postponedContents", required = false) String postponedContents) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
+                return bookService.getPostponedCount();
+            }
+        } catch (Exception e) {
+            return bookService.getPostponedCountTempUser(postponedContents);
+        }
+        return 0;
     }
 
     @ModelAttribute("cartContentsSize")
-    public Integer getCartContentsSize() {
-        return bookService.getCartCount();
+    public Integer getCartContentsSize(@CookieValue(name = "cartContents", required = false) String cartContents) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
+                return bookService.getCartCount();
+            }
+        } catch (Exception e) {
+            return bookService.getCartCountTempUser(cartContents);
+        }
+        return 0;
     }
 
     private final BookRepository bookRepository;
@@ -63,7 +81,8 @@ public class BookShopCart {
     @PostMapping("/changeBookStatus/cart/kept/{slug}")
     public String handleMoveBookFromCartToKeptRequest(@PathVariable("slug") String slug,
                                                       Model model) {
-        bookService.addPostponedItem(slug);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        bookService.addPostponedItem(slug, principal);
         model.addAttribute("postponedSize", bookService.getPostponedCount());
         model.addAttribute("cartContentsSize", bookService.getCartCount());
         return "redirect:/books/cart";

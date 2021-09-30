@@ -3,11 +3,15 @@ package com.example.MyBookShopApp.controller;
 import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
+import com.example.MyBookShopApp.security.UserEntityDetails;
 import com.example.MyBookShopApp.service.BookService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,13 +39,30 @@ public class MainPage {
     }
 
     @ModelAttribute("postponedSize")
-    public Integer getPostponedSize() {
-        return bookService.getPostponedCount();
+    public Integer getPostponedSize(@CookieValue(name = "postponedContents", required = false) String postponedContents,
+                                    Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
+                return bookService.getPostponedCount();
+            }
+        } catch (Exception e) {
+            return bookService.getPostponedCountTempUser(postponedContents);
+        }
+        return 0;
     }
 
     @ModelAttribute("cartContentsSize")
-    public Integer getCartContentsSize() {
-        return bookService.getCartCount();
+    public Integer getCartContentsSize(@CookieValue(name = "cartContents", required = false) String cartContents) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
+                return bookService.getCartCount();
+            }
+        } catch (Exception e) {
+            return bookService.getCartCountTempUser(cartContents);
+        }
+        return 0;
     }
 
     @ModelAttribute("popularBooks")
