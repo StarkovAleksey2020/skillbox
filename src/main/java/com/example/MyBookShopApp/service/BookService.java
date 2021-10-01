@@ -17,20 +17,14 @@ import com.example.MyBookShopApp.security.UserEntityDetails;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import org.apache.commons.validator.routines.DateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -51,7 +45,6 @@ public class BookService {
     private final BookRateRepository bookRateRepository;
     private final BookReviewRepository bookReviewRepository;
     private final UserRepository userRepository;
-    private final BookReviewRLDtoRepository bookReviewRLDtoRepository;
     private final BookReviewRLDtoMapper bookReviewRLDtoMapper;
     private final BookReviewLikeRepository bookReviewLikeRepository;
     private final CartRepository cartRepository;
@@ -60,7 +53,7 @@ public class BookService {
     private Integer DEFAULT_LIMIT = 10;
 
     @Autowired
-    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, BookRateRepository bookRateRepository, BookReviewRepository bookReviewRepository, UserRepository userRepository, BookReviewRLDtoRepository bookReviewRLDtoRepository, BookReviewRLDtoMapper bookReviewRLDtoMapper, BookReviewLikeRepository bookReviewLikeRepository, CartRepository cartRepository) {
+    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, TagRepository tagRepository, Book2TagRepository book2TagRepository, BookRateRepository bookRateRepository, BookReviewRepository bookReviewRepository, UserRepository userRepository, BookReviewRLDtoMapper bookReviewRLDtoMapper, BookReviewLikeRepository bookReviewLikeRepository, CartRepository cartRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.tagRepository = tagRepository;
@@ -68,7 +61,6 @@ public class BookService {
         this.bookRateRepository = bookRateRepository;
         this.bookReviewRepository = bookReviewRepository;
         this.userRepository = userRepository;
-        this.bookReviewRLDtoRepository = bookReviewRLDtoRepository;
         this.bookReviewRLDtoMapper = bookReviewRLDtoMapper;
         this.bookReviewLikeRepository = bookReviewLikeRepository;
         this.cartRepository = cartRepository;
@@ -254,7 +246,7 @@ public class BookService {
 
         Gson gson = new Gson();
 
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         if (cartEntity != null) {
@@ -267,11 +259,22 @@ public class BookService {
         }
     }
 
-    public void removeCartItem(String slug) {
+    public Cookie removePostponedItemTempUser(String slug, String postponedCookieString) {
+        if (postponedCookieString != null || !postponedCookieString.equals("")) {
+            ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(postponedCookieString.split("/")));
+            cookieBooks.remove(slug);
+            Cookie cookie = new Cookie("postponedContents", String.join("/", cookieBooks));
+            cookie.setPath("/");
+            return cookie;
+        }
+        return null;
+    }
+
+    public void removeCartItem(String slug, Object principal) {
 
         Gson gson = new Gson();
 
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         if (cartEntity != null) {
@@ -284,6 +287,17 @@ public class BookService {
         }
     }
 
+    public Cookie removeCartItemTempUser(String slug, String cartCookieString) {
+        if (cartCookieString != null || !cartCookieString.equals("")) {
+            ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(cartCookieString.split("/")));
+            cookieBooks.remove(slug);
+            Cookie cookie = new Cookie("cartContents", String.join("/", cookieBooks));
+            cookie.setPath("/");
+            return cookie;
+        }
+        return null;
+    }
+
     public void addPostponedItem(String slug, Object principal) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
@@ -292,13 +306,31 @@ public class BookService {
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         if (cartEntity != null) {
-            CartItemEntity cartItemEntity = getCartItemEntity(cartEntity.getValue());
-            if (!cartItemEntity.getPostponedString().contains(slug)) {
+            if (!cartEntity.getValue().equals("")) {
+                CartItemEntity cartItemEntity = getCartItemEntity(cartEntity.getValue());
+                if (cartItemEntity.getPostponedString() != null) {
+                    if (!cartItemEntity.getPostponedString().contains(slug)) {
 
-                cartItemEntity.setPostponedString(cartItemEntity.getPostponedString() + "/" + slug);
-                if (cartItemEntity.getCartString() != null && cartItemEntity.getCartString().contains(slug)) {
-                    cartItemEntity.setCartString(cartItemEntity.getCartString().replace("/" + slug, ""));
+                        cartItemEntity.setPostponedString(cartItemEntity.getPostponedString() + "/" + slug);
+                        if (cartItemEntity.getCartString() != null && cartItemEntity.getCartString().contains(slug)) {
+                            cartItemEntity.setCartString(cartItemEntity.getCartString().replace("/" + slug, ""));
+                        }
+                        cartEntity.setValue(gson.toJson(cartItemEntity));
+                        cartEntity.setEditDate(OffsetDateTime.now());
+                        cartRepository.save(cartEntity);
+                    }
+                } else {
+                    cartItemEntity.setPostponedString("/" + slug);
+                    if (cartItemEntity.getCartString() != null && cartItemEntity.getCartString().contains(slug)) {
+                        cartItemEntity.setCartString(cartItemEntity.getCartString().replace("/" + slug, ""));
+                    }
+                    cartEntity.setValue(gson.toJson(cartItemEntity));
+                    cartEntity.setEditDate(OffsetDateTime.now());
+                    cartRepository.save(cartEntity);
                 }
+            } else {
+                CartItemEntity cartItemEntity = new CartItemEntity();
+                cartItemEntity.setPostponedString("/" + slug);
                 cartEntity.setValue(gson.toJson(cartItemEntity));
                 cartEntity.setEditDate(OffsetDateTime.now());
                 cartRepository.save(cartEntity);
@@ -317,31 +349,49 @@ public class BookService {
         if (postponedCookieString == null || postponedCookieString.equals("")) {
             Cookie cookie = new Cookie("postponedContents", slug);
             cookie.setMaxAge(2 * 60 * 60);
-            cookie.setPath("/books");
+            cookie.setPath("/");
             return cookie;
         } else if (!postponedCookieString.contains(slug)) {
             StringJoiner stringJoiner = new StringJoiner("/");
             stringJoiner.add(postponedCookieString).add(slug);
             Cookie cookie = new Cookie("postponedContents", stringJoiner.toString());
             cookie.setMaxAge(2 * 60 * 60);
-            cookie.setPath("/books");
+            cookie.setPath("/");
             return cookie;
         }
         return null;
     }
 
-    public void addCartItem(String slug) {
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+    public void addCartItem(String slug, Object principal) {
+        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
+
         Gson gson = new Gson();
         if (cartEntity != null) {
-            CartItemEntity cartItemEntity = getCartItemEntity(cartEntity.getValue());
-            if (!cartItemEntity.getCartString().contains(slug)) {
-                cartItemEntity.setCartString(cartItemEntity.getCartString() + "/" + slug);
-                if (cartItemEntity.getPostponedString().contains(slug)) {
-                    cartItemEntity.setPostponedString(cartItemEntity.getPostponedString().replace("/" + slug, ""));
+            if (!cartEntity.getValue().equals("")) {
+                CartItemEntity cartItemEntity = getCartItemEntity(cartEntity.getValue());
+                if (cartItemEntity.getCartString() != null) {
+                    if (!cartItemEntity.getCartString().contains(slug)) {
+                        cartItemEntity.setCartString(cartItemEntity.getCartString() + "/" + slug);
+                        if (cartItemEntity.getPostponedString().contains(slug)) {
+                            cartItemEntity.setPostponedString(cartItemEntity.getPostponedString().replace("/" + slug, ""));
+                        }
+                        cartEntity.setValue(gson.toJson(cartItemEntity));
+                        cartEntity.setEditDate(OffsetDateTime.now());
+                        cartRepository.save(cartEntity);
+                    }
+                } else {
+                    cartItemEntity.setCartString("/" + slug);
+                    if (cartItemEntity.getPostponedString().contains(slug)) {
+                        cartItemEntity.setPostponedString(cartItemEntity.getPostponedString().replace("/" + slug, ""));
+                    }
+                    cartEntity.setValue(gson.toJson(cartItemEntity));
+                    cartEntity.setEditDate(OffsetDateTime.now());
+                    cartRepository.save(cartEntity);
                 }
-
+            } else {
+                CartItemEntity cartItemEntity = new CartItemEntity();
+                cartItemEntity.setCartString("/" + slug);
                 cartEntity.setValue(gson.toJson(cartItemEntity));
                 cartEntity.setEditDate(OffsetDateTime.now());
                 cartRepository.save(cartEntity);
@@ -354,6 +404,23 @@ public class BookService {
             entity.setEditDate(OffsetDateTime.now());
             cartRepository.save(entity);
         }
+    }
+
+    public Cookie addCartItemTempUser(String slug, String cartContents) {
+        if (cartContents == null || cartContents.equals("")) {
+            Cookie cookie = new Cookie("cartContents", slug);
+            cookie.setMaxAge(2 * 60 * 60);
+            cookie.setPath("/");
+            return cookie;
+        } else if (!cartContents.contains(slug)) {
+            StringJoiner stringJoiner = new StringJoiner("/");
+            stringJoiner.add(cartContents).add(slug);
+            Cookie cookie = new Cookie("cartContents", stringJoiner.toString());
+            cookie.setMaxAge(2 * 60 * 60);
+            cookie.setPath("/");
+            return cookie;
+        }
+        return null;
     }
 
     public CartItemEntity getCartItemEntity(String valueString) {
@@ -382,11 +449,11 @@ public class BookService {
         return entity;
     }
 
-    public Integer getCartCount() {
+    public Integer getCartCount(Object principal) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
 
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         if (cartEntity != null) {
@@ -400,7 +467,12 @@ public class BookService {
                     return 0;
                 } else {
                     JsonObject object = (JsonObject) parser.parse(cartEntity.getValue());
-                    return gson.fromJson(object, CartItemEntity.class).getCartString().split("/").length - 1;
+                    String cartString = gson.fromJson(object, CartItemEntity.class).getCartString();
+                    if (cartString != null && !cartString.equals("")) {
+                        return gson.fromJson(object, CartItemEntity.class).getCartString().split("/").length - 1;
+                    } else {
+                        return 0;
+                    }
                 }
             } else {
                 if (!cartEntity.getValue().equals("") && cartEntity.getValue() != null) {
@@ -420,18 +492,15 @@ public class BookService {
         if (cartContents == null || cartContents.equals("")) {
             return 0;
         } else {
-            Gson gson = new Gson();
-            JsonParser parser = new JsonParser();
-            JsonObject object = (JsonObject) parser.parse(cartContents);
-            return gson.fromJson(object, CartItemEntity.class).getCartString().split("/").length - 1;
+            return cartContents.split("/").length;
         }
     }
 
-    public Integer getPostponedCount() {
+    public Integer getPostponedCount(Object principal) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
 
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         if (cartEntity != null) {
@@ -445,7 +514,12 @@ public class BookService {
                     return 0;
                 } else {
                     JsonObject object = (JsonObject) parser.parse(cartEntity.getValue());
-                    return gson.fromJson(object, CartItemEntity.class).getPostponedString().split("/").length - 1;
+                    String postponedString = gson.fromJson(object, CartItemEntity.class).getPostponedString();
+                    if (postponedString != null && !postponedString.equals("")) {
+                        return gson.fromJson(object, CartItemEntity.class).getPostponedString().split("/").length - 1;
+                    } else {
+                        return 0;
+                    }
                 }
             } else {
                 if (!cartEntity.getValue().equals("") && cartEntity.getValue() != null) {
@@ -469,8 +543,8 @@ public class BookService {
         }
     }
 
-    public List<BookEntity> getBookListInCart() {
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+    public List<BookEntity> getBookListInCart(Object principal) {
+        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
         if (cartEntity != null) {
             Gson gson = new Gson();
@@ -482,8 +556,8 @@ public class BookService {
         return new ArrayList<>();
     }
 
-    public List<BookEntity> getBookListInPostponed() {
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
+    public List<BookEntity> getBookListInPostponed(Object principal) {
+        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
         if (cartEntity != null) {
             Gson gson = new Gson();
@@ -493,6 +567,16 @@ public class BookService {
             return bookRepository.findBookEntityBySlugIn(cookieSlugs);
         }
         return new ArrayList<>();
+    }
+
+    public List<BookEntity> getBookListInCartUserTemp(String cartContents) {
+        String[] cookieSlugs = cartContents.split("/");
+        return bookRepository.findBookEntityBySlugIn(cookieSlugs);
+    }
+
+    public List<BookEntity> getBookListInPostponedUserTemp(String postponedContents) {
+        String[] cookieSlugs = postponedContents.split("/");
+        return bookRepository.findBookEntityBySlugIn(cookieSlugs);
     }
 
     public Integer getBookRate(String slug) {
@@ -547,7 +631,7 @@ public class BookService {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
         UserEntity userEntity = userRepository.findByName("Carita Gunn");
         if (bookEntity != null) {
-            List<BookReviewEntity> bookReviewEntities = bookReviewRepository.findByUserEntityAndBookEntity(bookEntity);
+            List<BookReviewEntity> bookReviewEntities = bookReviewRepository.findByBookId(bookEntity.getId());
             List<BookReviewRLDto> bookReviewRLDtos = new ArrayList<>();
             if (bookReviewEntities != null || bookReviewEntities.size() == 0) {
                 bookReviewRLDtos = bookReviewRLDtoMapper.map(bookReviewEntities);

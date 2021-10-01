@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class BookShopCart {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
-                return bookService.getPostponedCount();
+                return bookService.getPostponedCount(principal);
             }
         } catch (Exception e) {
             return bookService.getPostponedCountTempUser(postponedContents);
@@ -40,7 +42,7 @@ public class BookShopCart {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
-                return bookService.getCartCount();
+                return bookService.getCartCount(principal);
             }
         } catch (Exception e) {
             return bookService.getCartCountTempUser(cartContents);
@@ -60,40 +62,106 @@ public class BookShopCart {
     @GetMapping("/cart")
     public String handleCartRequest(@CookieValue(name = "cartContents", required = false) String cartContents,
                                     Model model) {
-        if (bookService.getCartCount() == 0) {
-            model.addAttribute("isCartEmpty", true);
-        } else {
-            model.addAttribute("isCartEmpty", false);
-            model.addAttribute("bookCart", bookService.getBookListInCart());
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        try {
+            if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
+                if (bookService.getCartCount(principal) == 0) {
+                    model.addAttribute("isCartEmpty", true);
+                } else {
+                    model.addAttribute("isCartEmpty", false);
+                    model.addAttribute("bookCart", bookService.getBookListInCart(principal));
+                }
+            }
+        } catch (Exception e) {
+            if (bookService.getCartCountTempUser(cartContents) == 0) {
+                model.addAttribute("isCartEmpty", true);
+            } else {
+                model.addAttribute("isCartEmpty", false);
+                model.addAttribute("bookCart", bookService.getBookListInCartUserTemp(cartContents));
+            }
         }
         return "cart";
     }
 
     @PostMapping("/changeBookStatus/cart/remove/{slug}")
     public String handleRemoveBookFromCartRequest(@PathVariable("slug") String slug,
+                                                  @CookieValue(name = "cartContents", required = false) String cartContents,
+                                                  @CookieValue(name = "postponedContents", required = false) String postponedContents,
+                                                  HttpServletResponse response,
                                                   Model model) {
-        bookService.removeCartItem(slug);
-        model.addAttribute("postponedSize", bookService.getPostponedCount());
-        model.addAttribute("cartContentsSize", bookService.getCartCount());
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        try {
+            if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
+                bookService.removeCartItem(slug, principal);
+                model.addAttribute("postponedSize", bookService.getPostponedCount(principal));
+                model.addAttribute("cartContentsSize", bookService.getCartCount(principal));
+                model.addAttribute("bookCart", bookService.getBookListInCart(principal));
+            }
+        } catch (Exception e) {
+            Cookie cookie = bookService.removeCartItemTempUser(slug, cartContents);
+            response.addCookie(cookie);
+            model.addAttribute("cartSize", bookService.getCartCountTempUser(cartContents));
+            model.addAttribute("isCartEmpty", bookService.getCartCountTempUser(cartContents) == 0);
+            model.addAttribute("bookCart", bookService.getBookListInCartUserTemp(cartContents));
+        }
         return "redirect:/books/cart";
     }
 
     @PostMapping("/changeBookStatus/cart/kept/{slug}")
     public String handleMoveBookFromCartToKeptRequest(@PathVariable("slug") String slug,
+                                                      @CookieValue(name = "cartContents", required = false) String cartContents,
+                                                      @CookieValue(name = "postponedContents", required = false) String postponedContents,
+                                                      HttpServletResponse response,
                                                       Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        bookService.addPostponedItem(slug, principal);
-        model.addAttribute("postponedSize", bookService.getPostponedCount());
-        model.addAttribute("cartContentsSize", bookService.getCartCount());
+
+        try {
+            if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
+                bookService.addPostponedItem(slug, principal);
+                model.addAttribute("postponedSize", bookService.getPostponedCount(principal));
+                model.addAttribute("cartContentsSize", bookService.getCartCount(principal));
+                model.addAttribute("bookCart", bookService.getBookListInCart(principal));
+            }
+        } catch (Exception e) {
+            Cookie cookie = bookService.addPostponedItemTempUser(slug, postponedContents);
+            response.addCookie(cookie);
+            model.addAttribute("isPostponedEmpty", false);
+
+            Cookie cookieCart = bookService.removeCartItemTempUser(slug, cartContents);
+            response.addCookie(cookieCart);
+
+            model.addAttribute("postponedSize", bookService.getPostponedCountTempUser(postponedContents));
+            model.addAttribute("cartContentsSize", bookService.getCartCountTempUser(cartContents));
+            model.addAttribute("bookCart", bookService.getBookListInCartUserTemp(cartContents));
+        }
         return "redirect:/books/cart";
     }
 
     @PostMapping("/changeBookStatus/{slug}")
     public String handleChangeBookStatus(@PathVariable("slug") String slug,
+                                         @CookieValue(name = "cartContents", required = false) String cartContents,
+                                         @CookieValue(name = "postponedContents", required = false) String postponedContents,
+                                         HttpServletResponse response,
                                          Model model) {
-        bookService.addCartItem(slug);
-        model.addAttribute("postponedSize", bookService.getPostponedCount());
-        model.addAttribute("cartContentsSize", bookService.getCartCount());
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        try {
+            if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
+                bookService.addCartItem(slug, principal);
+                model.addAttribute("postponedSize", bookService.getPostponedCount(principal));
+                model.addAttribute("cartContentsSize", bookService.getCartCount(principal));
+            }
+        } catch (Exception e) {
+            Cookie cookie = bookService.addCartItemTempUser(slug, cartContents);
+            response.addCookie(cookie);
+            model.addAttribute("isPostponedEmpty", false);
+
+            model.addAttribute("postponedSize", bookService.getPostponedCountTempUser(postponedContents));
+            model.addAttribute("cartContentsSize", bookService.getCartCountTempUser(cartContents));
+        }
+
         return "redirect:/books/" + slug;
     }
 }

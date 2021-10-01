@@ -13,6 +13,9 @@ import java.util.List;
 public interface BookReviewRepository extends JpaRepository<BookReviewEntity, Long> {
 
     @Query(value = "FROM BookReviewEntity br WHERE br.bookEntity = :bookEntity")
-    List<BookReviewEntity> findByUserEntityAndBookEntity(@RequestParam("bookEntity") BookEntity bookEntity);
+    List<BookReviewEntity> findByBookEntity(@RequestParam("bookEntity") BookEntity bookEntity);
+
+    @Query(value = "select * FROM book_review br WHERE br.book_id = :bookId", nativeQuery = true)
+    List<BookReviewEntity> findByBookId(@RequestParam("bookId") Long bookId);
 
 }

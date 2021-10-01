@@ -44,7 +44,7 @@ public class MainPage {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
-                return bookService.getPostponedCount();
+                return bookService.getPostponedCount(principal);
             }
         } catch (Exception e) {
             return bookService.getPostponedCountTempUser(postponedContents);
@@ -57,7 +57,7 @@ public class MainPage {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             if (((UserEntityDetails) principal).getUsername() != null && !((UserEntityDetails) principal).getUsername().equals("")) {
-                return bookService.getCartCount();
+                return bookService.getCartCount(principal);
             }
         } catch (Exception e) {
             return bookService.getCartCountTempUser(cartContents);
