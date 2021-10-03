@@ -20,6 +20,7 @@ public class TestUtil {
         userEntity.setHash(UUID.randomUUID().toString());
         userEntity.setBalance(100);
         userEntity.setPhone("89011011122");
+        userEntity.setName("test9");
         return testUserRepository.save(userEntity);
     }
 }

@@ -3,7 +3,6 @@ package com.example.MyBookShopApp.security;
 import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.utils.TestUtil;
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,13 +10,16 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,6 +31,8 @@ class UserEntityRegisterTest {
     private RegistrationForm registrationForm;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private UserEntityRepository userEntityRepository;
+
+    private String token;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -51,11 +55,20 @@ class UserEntityRegisterTest {
         registrationForm.setName("Tester");
         registrationForm.setPassword("iddqd");
         registrationForm.setPhone("9011234567");
+
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+        token = getToken();
     }
 
     @AfterEach
     void tearDown() {
-        UserEntity userEntity = userEntityRepository.findUserEntityByEmail("test@mail.org");
+        UserEntity userEntity = userEntityRepository.findUserEntityByEmail("test9@example.com");
         if (userEntity != null) {
             userEntityRepository.delete(userEntity);
         }
@@ -86,29 +99,11 @@ class UserEntityRegisterTest {
     }
 
     @Test
-    public void testLogin() {
-        UserEntity userEntity = userEntityRegister.registerNewUser(registrationForm);
-        userEntityRepository.save(userEntity);
-
-        ContactConfirmationPayload payload = new ContactConfirmationPayload();
-        payload.setContact(userEntity.getEmail());
-        payload.setCode("iddqd");
-
-        ContactConfirmationResponse response = userEntityRegister.login(payload);
-        assertNotNull(response);
-    }
-
-
-    @Test
     public void testSignIn() {
-        String email = "test@example.com";
+        String email = "test9@example.com";
         String password = "1234567";
         createTestUser(email, password);
         String url = "https://localhost:8085/login";
-//        String body = "{" +
-//                "  \"email\": \"" + email + "\"," +
-//                "  \"password\": \"" + password + "\"" +
-//                "}";
         HttpHeaders headers = new HttpHeaders();
 
         ContactConfirmationPayload payload = new ContactConfirmationPayload();
@@ -120,15 +115,27 @@ class UserEntityRegisterTest {
         ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
         // verify
-        assertNull(result);
-//        Assert.assertNotNull(result);
-//        Assert.assertEquals(result.getStatusCodeValue(), 200);
-//        String token = Objects.requireNonNull(result.getHeaders().get("Authorization")).get(0);
-//        Assert.assertNotNull(token);
-
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     private void createTestUser(String email, String password) {
         userEntityRepositoryMock.save(TestUtil.createUser(email, password, bCryptPasswordEncoder, userEntityRepositoryMock));
+    }
+
+    private String getToken() {
+        String email = "test9@example.com";
+        String password = "1234567";
+        createTestUser(email, password);
+        String url = "https://localhost:8085/login";
+        HttpHeaders headers = new HttpHeaders();
+
+        ContactConfirmationPayload payload = new ContactConfirmationPayload();
+        payload.setContact(email);
+        payload.setCode(password);
+        HttpEntity<ContactConfirmationPayload> entity = new HttpEntity<>(payload, headers);
+
+        // act
+        ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        return Objects.requireNonNull(result.getHeaders().get("Authorization")).get(0);
     }
 }

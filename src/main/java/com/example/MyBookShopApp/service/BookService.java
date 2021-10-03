@@ -570,42 +570,58 @@ public class BookService {
     }
 
     public List<BookEntity> getBookListInCartUserTemp(String cartContents) {
+        if (cartContents == null || cartContents.equals("")) {
+            return new ArrayList<>();
+        }
         String[] cookieSlugs = cartContents.split("/");
         return bookRepository.findBookEntityBySlugIn(cookieSlugs);
     }
 
     public List<BookEntity> getBookListInPostponedUserTemp(String postponedContents) {
+        if (postponedContents == null || postponedContents.equals("")) {
+            return new ArrayList<>();
+        }
         String[] cookieSlugs = postponedContents.split("/");
         return bookRepository.findBookEntityBySlugIn(cookieSlugs);
     }
 
-    public Integer getBookRate(String slug) {
-        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
-        List<Book2RateEntity> book2RateEntity = bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(bookEntity.getId(), userEntity.getId());
-        if (book2RateEntity != null && book2RateEntity.size() > 0) {
-            return book2RateEntity.get(0).getRate();
-        } else {
-            return 0;
+    public Integer getBookRate(String slug, Object principal) {
+        if (principal != null) {
+            if (!principal.equals("anonymousUser") && !principal.getClass().getName().contains("oidc")) {
+                BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+                UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+                List<Book2RateEntity> book2RateEntity = bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(bookEntity.getId(), userEntity.getId());
+                if (book2RateEntity != null && book2RateEntity.size() > 0) {
+                    return book2RateEntity.get(0).getRate();
+                } else {
+                    return 0;
+                }
+            }
         }
-
+        return 0;
     }
 
-    public Integer setBookRate(String slug, Integer rate) {
-        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
-        List<Book2RateEntity> book2RateEntity = bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(bookEntity.getId(), userEntity.getId());
-        if (book2RateEntity == null || book2RateEntity.size() == 0) {
-            Book2RateEntity entity = new Book2RateEntity();
-            entity.setRate(rate);
-            entity.setBookEntity(bookEntity);
-            entity.setUserEntity(userEntity);
-            bookRateRepository.save(entity);
-        } else {
-            book2RateEntity.get(0).setRate(rate);
-            bookRateRepository.save(book2RateEntity.get(0));
+    public Integer setBookRate(String slug, Integer rate, Object principal) {
+        if (principal != null) {
+            if (!principal.equals("anonymousUser") && !principal.getClass().getName().contains("oidc")) {
+
+                BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+                UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+                List<Book2RateEntity> book2RateEntity = bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(bookEntity.getId(), userEntity.getId());
+                if (book2RateEntity == null || book2RateEntity.size() == 0) {
+                    Book2RateEntity entity = new Book2RateEntity();
+                    entity.setRate(rate);
+                    entity.setBookEntity(bookEntity);
+                    entity.setUserEntity(userEntity);
+                    bookRateRepository.save(entity);
+                } else {
+                    book2RateEntity.get(0).setRate(rate);
+                    bookRateRepository.save(book2RateEntity.get(0));
+                }
+                return rate;
+            }
         }
-        return rate;
+        return 0;
     }
 
     public Boolean createBookReview(String slug, String comment, UserEntity userEntity) throws BookstoreAPiWrongParameterException {
@@ -629,7 +645,6 @@ public class BookService {
 
     public List<BookReviewRLDto> getBookReviewInfo(String slug) throws BookstoreAPiWrongParameterException {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
         if (bookEntity != null) {
             List<BookReviewEntity> bookReviewEntities = bookReviewRepository.findByBookId(bookEntity.getId());
             List<BookReviewRLDto> bookReviewRLDtos = new ArrayList<>();
@@ -642,11 +657,11 @@ public class BookService {
         }
     }
 
-    public void handleReviewLikesDislikes(String slug, Long reviewid, Long value) throws BookstoreAPiWrongParameterException {
+    public void handleReviewLikesDislikes(String slug, Long reviewId, Long value, Long userId) throws BookstoreAPiWrongParameterException {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        UserEntity userEntity = userRepository.findByName("Carita Gunn");
-        if (bookEntity != null && reviewid != null && userEntity != null) {
-            BookReviewLikeEntity bookReviewLikeEntity = bookReviewLikeRepository.getReviewLikeEntityByReviewIdAndUserId(reviewid, userEntity.getId());
+        UserEntity userEntity = userRepository.findByIdExactly(userId);
+        if (bookEntity != null && reviewId != null && userEntity != null) {
+            BookReviewLikeEntity bookReviewLikeEntity = bookReviewLikeRepository.getReviewLikeEntityByReviewIdAndUserId(reviewId, userEntity.getId());
             if (bookReviewLikeEntity != null) {
                 bookReviewLikeEntity.setValue(value > 0 ? (short) 1 : 0);
                 bookReviewLikeRepository.save(bookReviewLikeEntity);
@@ -654,7 +669,7 @@ public class BookService {
                 BookReviewLikeEntity entity = new BookReviewLikeEntity();
                 entity.setValue(value > 0 ? (short) 1 : 0);
                 entity.setTime(LocalDateTime.now());
-                entity.setReviewId(reviewid);
+                entity.setReviewId(reviewId);
                 entity.setUser(userEntity);
                 bookReviewLikeRepository.save(entity);
             }
@@ -663,49 +678,76 @@ public class BookService {
         }
     }
 
-    public Integer getBookRateTotal(String slug) {
-        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
-        if (book2RateEntities != null && book2RateEntities.size() > 0) {
-            int sum = book2RateEntities.stream().mapToInt(o -> o.getRate()).sum();
-            return (int) (Math.round(sum / book2RateEntities.size()));
-        } else {
-            return 0;
+    public Integer getBookRateTotal(String slug) throws BookstoreAPiWrongParameterException {
+        if (slug == null || slug.equals("")) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
-
-    }
-
-    public Integer getBookRateTotalCount(String slug) {
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
-        if (book2RateEntities != null && book2RateEntities.size() > 0) {
-            return book2RateEntities.size();
+        if (bookEntity != null) {
+            List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
+            if (book2RateEntities != null && book2RateEntities.size() > 0) {
+                int sum = book2RateEntities.stream().mapToInt(o -> o.getRate()).sum();
+                return (int) (Math.round(sum / book2RateEntities.size()));
+            } else {
+                return 0;
+            }
         } else {
-            return 0;
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
     }
 
-    public Integer getBookRateSubTotal(String slug, int rate) {
-        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntityAndRate(bookEntity, rate);
-        if (book2RateEntities != null && book2RateEntities.size() > 0) {
-            int sum = book2RateEntities.stream().mapToInt(o -> o.getRate()).sum();
-            return (int) (Math.round(sum / book2RateEntities.size()));
-        } else {
-            return 0;
+    public Integer getBookRateTotalCount(String slug) throws BookstoreAPiWrongParameterException {
+        if (slug == null || slug.equals("")) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
 
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        if (bookEntity != null) {
+            List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
+            if (book2RateEntities != null && book2RateEntities.size() > 0) {
+                return book2RateEntities.size();
+            } else {
+                return 0;
+            }
+        } else {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
     }
 
-    public Integer getBookRateSubTotalCount(String slug, int rate) {
-        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-        List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntityAndRate(bookEntity, rate);
-        if (book2RateEntities != null && book2RateEntities.size() > 0) {
-            return book2RateEntities.size();
-        } else {
-            return 0;
+    public Integer getBookRateSubTotal(String slug, int rate) throws BookstoreAPiWrongParameterException {
+        if (slug == null || slug.equals("") || rate < 0 || rate > 5) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
 
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        if (bookEntity != null) {
+            List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntityAndRate(bookEntity, rate);
+            if (book2RateEntities != null && book2RateEntities.size() > 0) {
+                int sum = book2RateEntities.stream().mapToInt(o -> o.getRate()).sum();
+                return (int) (Math.round(sum / book2RateEntities.size()));
+            } else {
+                return 0;
+            }
+        } else {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
+    }
+
+    public Integer getBookRateSubTotalCount(String slug, int rate) throws BookstoreAPiWrongParameterException {
+        if (slug == null || slug.equals("") || rate < 0 || rate > 5) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
+        BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+        if (bookEntity != null) {
+            List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntityAndRate(bookEntity, rate);
+            if (book2RateEntities != null && book2RateEntities.size() > 0) {
+                return book2RateEntities.size();
+            } else {
+                return 0;
+            }
+        } else {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
     }
 
     public Boolean checkCredentials(Object principal) {

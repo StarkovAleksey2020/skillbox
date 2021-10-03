@@ -5,6 +5,7 @@ import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.exception.ForbiddenException;
 import com.example.MyBookShopApp.exception.InsufficientRightsToChangeCoverException;
 import com.example.MyBookShopApp.repository.BookRepository;
+import com.example.MyBookShopApp.repository.UserRepository;
 import com.example.MyBookShopApp.security.UserEntityDetails;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.ResourceStorage;
@@ -30,12 +31,14 @@ public class BookController {
     private final BookRepository bookRepository;
     private final ResourceStorage storage;
     private final BookService bookService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public BookController(BookRepository bookRepository, ResourceStorage storage, BookService bookService) {
+    public BookController(BookRepository bookRepository, ResourceStorage storage, BookService bookService, UserRepository userRepository) {
         this.bookRepository = bookRepository;
         this.storage = storage;
         this.bookService = bookService;
+        this.userRepository = userRepository;
     }
 
     @ModelAttribute("postponedSize")
@@ -67,10 +70,13 @@ public class BookController {
     @GetMapping("/{slug}")
     public String getBookPage(@PathVariable("slug") String slug,
                               Model model) throws BookstoreAPiWrongParameterException {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         if ((slug != null || !slug.equals("")) && !slug.equals("favicon.ico")) {
             BookEntity bookEntity = bookRepository.getBookBySlug(slug);
             model.addAttribute("slugBook", bookEntity);
-            model.addAttribute("bookRate", bookService.getBookRate(slug));
+            model.addAttribute("bookRate", bookService.getBookRate(slug, principal));
             model.addAttribute("bookRateTotal", bookService.getBookRateTotal(slug));
             model.addAttribute("bookRateTotalCount", bookService.getBookRateTotalCount(slug));
             model.addAttribute("bookRateSubTotal1", bookService.getBookRateSubTotal(slug, 1));
@@ -109,7 +115,7 @@ public class BookController {
     }
 
     @GetMapping("/download/{hash}")
-    public ResponseEntity<ByteArrayResource> getBookFile(@PathVariable("hash") String hash) throws IOException {
+    public ResponseEntity<ByteArrayResource> getBookFile(@PathVariable("hash") String hash) throws IOException, BookstoreAPiWrongParameterException {
 
         Path path = storage.getBookFilePath(hash);
         Logger.getLogger(this.getClass().getSimpleName()).info("book file path: " + path);
@@ -129,12 +135,17 @@ public class BookController {
 
     @PostMapping(value = "/rateBookReview")
     public String handleLikesDislikes(@RequestParam("slug") String slug,
-                                      @RequestParam("reviewid") Long reviewid,
+                                      @RequestParam("reviewid") Long reviewId,
                                       @RequestParam("value") Long value,
                                       Model model) throws BookstoreAPiWrongParameterException {
-        if (slug != null || !slug.equals("")) {
-            bookService.handleReviewLikesDislikes(slug, reviewid, value);
-            model.addAttribute("bookReviewInfo", bookService.getBookReviewInfo(slug));
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal != null && !principal.equals("anonymousUser") && !principal.getClass().getName().contains("oidc")) {
+            Long userId = userRepository.findByEmail(principal.toString()).getId();
+            if (slug != null || !slug.equals("")) {
+                bookService.handleReviewLikesDislikes(slug, reviewId, value, userId);
+                model.addAttribute("bookReviewInfo", bookService.getBookReviewInfo(slug));
+            }
         }
 
         return ("redirect:/books/" + slug);

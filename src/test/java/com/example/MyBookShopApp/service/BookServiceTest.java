@@ -1,11 +1,14 @@
 package com.example.MyBookShopApp.service;
 
+import com.example.MyBookShopApp.data.BookReviewRLDto;
 import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.entity.book.links.Book2TagEntity;
+import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.Book2TagRepository;
 import com.example.MyBookShopApp.repository.BookRepository;
 import com.example.MyBookShopApp.repository.TagRepository;
+import com.example.MyBookShopApp.repository.UserRepository;
 import com.example.MyBookShopApp.security.UserEntityRepository;
 import com.example.MyBookShopApp.utils.NullableConverter;
 import com.example.MyBookShopApp.utils.TestUtil;
@@ -22,7 +25,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -41,8 +43,8 @@ class BookServiceTest {
     private final BookRepository bookRepository;
     private final Book2TagRepository book2TagRepository;
     private final TagRepository tagRepository;
-    private TestRestTemplate testRestTemplate;
     private UserEntityRepository userEntityRepository;
+    private UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private Integer DEFAULT_LIMIT = 10;
@@ -52,13 +54,13 @@ class BookServiceTest {
 
 
     @Autowired
-    BookServiceTest(BookService bookService, BookRepository bookRepository, Book2TagRepository book2TagRepository, TagRepository tagRepository, TestRestTemplate testRestTemplate, UserEntityRepository userEntityRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    BookServiceTest(BookService bookService, BookRepository bookRepository, Book2TagRepository book2TagRepository, TagRepository tagRepository, UserEntityRepository userEntityRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bookService = bookService;
         this.bookRepository = bookRepository;
         this.book2TagRepository = book2TagRepository;
         this.tagRepository = tagRepository;
-        this.testRestTemplate = testRestTemplate;
         this.userEntityRepository = userEntityRepository;
+        this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -386,8 +388,8 @@ class BookServiceTest {
     @ParameterizedTest
     @CsvSource({"null, 0, 10"})
     void getPageOfBooksByAuthorName_withNullAuthorNameInputParams_getException(@ConvertWith(NullableConverter.class) String authorName,
-                                                                              @ConvertWith(NullableConverter.class) Integer offset,
-                                                                              @ConvertWith(NullableConverter.class) Integer limit) {
+                                                                               @ConvertWith(NullableConverter.class) Integer offset,
+                                                                               @ConvertWith(NullableConverter.class) Integer limit) {
         assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getPageOfBooksByAuthorName(authorName, offset, limit));
     }
 
@@ -410,24 +412,24 @@ class BookServiceTest {
     @ParameterizedTest
     @CsvSource({"null, 0, 10"})
     void getPageOfBooksByFolderId_withNullGenreNameInputParams_getException(@ConvertWith(NullableConverter.class) Long folderId,
-                                                                              @ConvertWith(NullableConverter.class) Integer offset,
-                                                                              @ConvertWith(NullableConverter.class) Integer limit) {
+                                                                            @ConvertWith(NullableConverter.class) Integer offset,
+                                                                            @ConvertWith(NullableConverter.class) Integer limit) {
         assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getPageOfBooksByFolderId(folderId, offset, limit));
     }
 
     @ParameterizedTest
     @CsvSource({"1, null, null"})
     void getPageOfBooksByFolderId_withNullPageParamsInputParams_getDefaultPageParams(@ConvertWith(NullableConverter.class) Long folderId,
-                                                                                       @ConvertWith(NullableConverter.class) Integer offset,
-                                                                                       @ConvertWith(NullableConverter.class) Integer limit) throws BookstoreAPiWrongParameterException {
+                                                                                     @ConvertWith(NullableConverter.class) Integer offset,
+                                                                                     @ConvertWith(NullableConverter.class) Integer limit) throws BookstoreAPiWrongParameterException {
         assertEquals(DEFAULT_LIMIT, bookService.getPageOfBooksByFolderId(folderId, offset, limit).getSize());
     }
 
     @ParameterizedTest
     @CsvSource({"1, 0, 10"})
     void getPageOfBooksByFolderId_withCorrectPageParamsInputParams_getDefaultPageParams(@ConvertWith(NullableConverter.class) Long folderId,
-                                                                                          @ConvertWith(NullableConverter.class) Integer offset,
-                                                                                          @ConvertWith(NullableConverter.class) Integer limit) throws BookstoreAPiWrongParameterException {
+                                                                                        @ConvertWith(NullableConverter.class) Integer offset,
+                                                                                        @ConvertWith(NullableConverter.class) Integer limit) throws BookstoreAPiWrongParameterException {
         assertEquals("Randy and the Mob", bookService.getPageOfBooksByFolderId(folderId, offset, limit).getContent().get(0).getTitle());
     }
 
@@ -473,5 +475,221 @@ class BookServiceTest {
     private void createTestUser(String email, String password) {
         userEntityRepository.save(TestUtil.createUser(email, password, bCryptPasswordEncoder, userEntityRepository));
     }
+
+    @Test
+    void getCartCountTempUser_withNull_getZero() {
+        assertEquals(0, bookService.getCartCountTempUser(null));
+    }
+
+    @Test
+    void getCartCountTempUser_withEmpty_getZero() {
+        assertEquals(0, bookService.getCartCountTempUser(""));
+    }
+
+    @Test
+    void getCartCountTempUser_withCorrectvalue_getBooksCount() {
+        assertEquals(3, bookService.getCartCountTempUser("aaaa/bbbbb/cccc"));
+    }
+
+    @Test
+    void getPostponedCountTempUser_withNull_getZero() {
+        assertEquals(0, bookService.getPostponedCountTempUser(null));
+    }
+
+    @Test
+    void getPostponedCountTempUser_withEmpty_getZero() {
+        assertEquals(0, bookService.getPostponedCountTempUser(""));
+    }
+
+    @Test
+    void getPostponedCountTempUser_withCorrectvalue_getBooksCount() {
+        assertEquals(3, bookService.getPostponedCountTempUser("aaaa/bbbbb/cccc"));
+    }
+
+
+    @Test
+    void getBookListInCartUserTemp_withNull_getEmptyArray() {
+        assertEquals(0, bookService.getBookListInCartUserTemp(null).size());
+    }
+
+    @Test
+    void getBookListInCartUserTemp_withEmpty_getEmptyArray() {
+        assertEquals(0, bookService.getBookListInCartUserTemp("").size());
+    }
+
+    @Test
+    void getBookListInCartUserTemp_withCorrectValue_getNotEmptyArray() {
+        assertEquals(2, bookService.getBookListInCartUserTemp("lNv3IiN/QJFBcrET").size());
+    }
+
+    @Test
+    void getBookListInPostponedUserTemp_withNull_getEmptyArray() {
+        assertEquals(0, bookService.getBookListInPostponedUserTemp(null).size());
+    }
+
+    @Test
+    void getBookListInPostponedUserTemp_withEmpty_getEmptyArray() {
+        assertEquals(0, bookService.getBookListInPostponedUserTemp("").size());
+    }
+
+    @Test
+    void getBookListInPostponedUserTemp_withCorrectValue_getNotEmptyArray() {
+        assertEquals(2, bookService.getBookListInPostponedUserTemp("lNv3IiN/QJFBcrET").size());
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null, test_comment"})
+    void createBookReview_withInvalidSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                 @ConvertWith(NullableConverter.class) String comment) {
+        UserEntity userEntity = userRepository.findByName("Davine Fassan");
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.createBookReview(slug, comment, userEntity));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"QJFBcrET, null"})
+    void createBookReview_withInvalidComment_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                    @ConvertWith(NullableConverter.class) String comment) {
+        UserEntity userEntity = userRepository.findByName("Davine Fassan");
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.createBookReview(slug, comment, userEntity));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null, null"})
+    void createBookReview_withInvalidSlugAndComment_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                           @ConvertWith(NullableConverter.class) String comment) {
+        UserEntity userEntity = userRepository.findByName("Davine Fassan");
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.createBookReview(slug, comment, userEntity));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"aaaaa"})
+    void getBookReviewInfo_withInvalidSlug_getBookstoreAPiWrongParameterException(String slug) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookReviewInfo(slug));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"erileQ20vp"})
+    void getBookReviewInfo_withCorrectSlug_getPositiveBookReviewInfoArraySize(String slug) throws BookstoreAPiWrongParameterException {
+        assertEquals(1, bookService.getBookReviewInfo(slug).size());
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null, 1, 1, 1"})
+    void handleReviewLikesDislikes_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                       @ConvertWith(NullableConverter.class) Long reviewId,
+                                                                                       @ConvertWith(NullableConverter.class) Long value,
+                                                                                       @ConvertWith(NullableConverter.class) Long userId) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.handleReviewLikesDislikes(slug, reviewId, value, userId));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN, null, 1, 1"})
+    void handleReviewLikesDislikes_withNullReviewId_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                           @ConvertWith(NullableConverter.class) Long reviewId,
+                                                                                           @ConvertWith(NullableConverter.class) Long value,
+                                                                                           @ConvertWith(NullableConverter.class) Long userId) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.handleReviewLikesDislikes(slug, reviewId, value, userId));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN, 1, 1, null"})
+    void handleReviewLikesDislikes_withNullUserId_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                         @ConvertWith(NullableConverter.class) Long reviewId,
+                                                                                         @ConvertWith(NullableConverter.class) Long value,
+                                                                                         @ConvertWith(NullableConverter.class) Long userId) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.handleReviewLikesDislikes(slug, reviewId, value, userId));
+    }
+
+
+    @ParameterizedTest
+    @CsvSource({"null"})
+    void getBookRateTotal_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRateTotal(slug));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {""})
+    void getBookRateTotal_withEmptySlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRateTotal(slug));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"invalidValue"})
+    void getBookRateTotal_withInvalidSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRateTotal(slug));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"lNv3IiN"})
+    void getBookRateTotal_withValidSlug_getRateCount(String slug) throws BookstoreAPiWrongParameterException {
+        assertTrue(bookService.getBookRateTotal(slug) >= 0);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null"})
+    void getBookRateTotalCount_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRateTotalCount(slug));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {""})
+    void getBookRateTotalCount_withEmptySlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRateTotalCount(slug));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"invalidValue"})
+    void getBookRateTotalCount_withInvalidSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRateTotalCount(slug));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"lNv3IiN"})
+    void getBookRateTotalCount_withValidSlug_getRateCount(String slug) throws BookstoreAPiWrongParameterException {
+        assertTrue(bookService.getBookRateTotalCount(slug) >= 0);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null, 1"})
+    void getBookRateSubTotal_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                 @ConvertWith(NullableConverter.class) int rate) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRateSubTotal(slug, rate));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN, -1"})
+    void getBookRateSubTotal_withLessZeroRate_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                     @ConvertWith(NullableConverter.class) int rate) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRateSubTotal(slug, rate));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN, 2"})
+    void getBookRateSubTotal_withValidParams_getBookRateSubTotal(@ConvertWith(NullableConverter.class) String slug,
+                                                                 @ConvertWith(NullableConverter.class) int rate) throws BookstoreAPiWrongParameterException {
+        assertTrue(bookService.getBookRateSubTotal(slug, rate) >= 0);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null, 1"})
+    void getBookRateSubTotalCount_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                      @ConvertWith(NullableConverter.class) int rate) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRateSubTotalCount(slug, rate));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN, -1"})
+    void getBookRateSubTotalCount_withLessZeroRate_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                          @ConvertWith(NullableConverter.class) int rate) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRateSubTotalCount(slug, rate));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN, 2"})
+    void getBookRateSubTotalCount_withValidParams_getBookRateSubTotal(@ConvertWith(NullableConverter.class) String slug,
+                                                                      @ConvertWith(NullableConverter.class) int rate) throws BookstoreAPiWrongParameterException {
+        assertTrue(bookService.getBookRateSubTotalCount(slug, rate) >= 0);
+    }
+
 
 }

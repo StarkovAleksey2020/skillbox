@@ -31,7 +31,7 @@ public class BookReview {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (!principal.equals("anonymousUser")) {
+        if (principal != null && !principal.equals("anonymousUser") && !principal.getClass().getName().contains("oidc")) {
 
             try {
                 UserEntity userEntity = ((UserEntityDetails) principal).getUserEntity();

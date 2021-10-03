@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.service;
 
 import com.example.MyBookShopApp.entity.book.file.BookFileEntity;
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.BookFileRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,18 +52,26 @@ public class ResourceStorage {
         return resourceURI;
     }
 
-    public Path getBookFilePath(String hash) {
-        BookFileEntity bookFileEntity = bookFileRepository.findBookFileEntityByHash(hash);
-        return Paths.get(bookFileEntity.getPath());
+    public Path getBookFilePath(String hash) throws BookstoreAPiWrongParameterException {
+        if (hash != null && !hash.equals("")) {
+            BookFileEntity bookFileEntity = bookFileRepository.findBookFileEntityByHash(hash);
+            return Paths.get(bookFileEntity.getPath());
+        } else {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
     }
 
-    public MediaType getBookFileMime(String hash) {
-        BookFileEntity bookFileEntity = bookFileRepository.findBookFileEntityByHash(hash);
-        String mimeType = URLConnection.guessContentTypeFromName(Paths.get(bookFileEntity.getPath()).getFileName().toString());
-        if (mimeType != null) {
-            return MediaType.parseMediaType(mimeType);
+    public MediaType getBookFileMime(String hash) throws BookstoreAPiWrongParameterException {
+        if (hash != null && !hash.equals("")) {
+            BookFileEntity bookFileEntity = bookFileRepository.findBookFileEntityByHash(hash);
+            String mimeType = URLConnection.guessContentTypeFromName(Paths.get(bookFileEntity.getPath()).getFileName().toString());
+            if (mimeType != null) {
+                return MediaType.parseMediaType(mimeType);
+            } else {
+                return MediaType.APPLICATION_OCTET_STREAM;
+            }
         } else {
-            return MediaType.APPLICATION_OCTET_STREAM;
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.service;
 
 import com.example.MyBookShopApp.entity.AuthorEntity;
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,18 +32,26 @@ public class AuthorService {
         }));
     }
 
-    public String getDescriptionVisible(String description) {
-        String[] strings = description.split("\\.");
-        return strings[0] + ". " + strings[1] + ".";
+    public String getDescriptionVisible(String description) throws BookstoreAPiWrongParameterException {
+        if (description != null) {
+            String[] strings = description.split("\\.");
+            return strings[0] + ". " + strings[1] + ".";
+        } else {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
     }
 
-    public String getDescriptionHidden(String description) {
-        String[] strings = description.split("\\.");
-        StringBuilder descriptionHidden = new StringBuilder();
-        for (int i = 2; i < strings.length; i++) {
-            descriptionHidden.append(strings[i]).append(". ");
+    public String getDescriptionHidden(String description) throws BookstoreAPiWrongParameterException {
+        if (description != null) {
+            String[] strings = description.split("\\.");
+            StringBuilder descriptionHidden = new StringBuilder();
+            for (int i = 2; i < strings.length; i++) {
+                descriptionHidden.append(strings[i]).append(". ");
+            }
+            return descriptionHidden.toString();
+        } else {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
-        return descriptionHidden.toString();
     }
 
 }

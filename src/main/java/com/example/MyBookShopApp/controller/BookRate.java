@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.service.BookService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,9 @@ public class BookRate {
     public String handleBookRate(@PathVariable("slug") String slug,
                                  @PathVariable("rate") Integer rate,
                                  Model model) {
-        model.addAttribute("bookRate", bookService.setBookRate(slug, rate));
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        model.addAttribute("bookRate", bookService.setBookRate(slug, rate, principal));
         return "redirect:/books/" + slug;
     }
 
