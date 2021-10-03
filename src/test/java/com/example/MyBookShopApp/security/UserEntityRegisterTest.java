@@ -2,6 +2,8 @@ package com.example.MyBookShopApp.security;
 
 import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.utils.TestUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +20,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
-
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,7 +49,7 @@ class UserEntityRegisterTest {
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws JsonProcessingException {
         registrationForm = new RegistrationForm();
         registrationForm.setEmail("test@mail.org");
         registrationForm.setName("Tester");
@@ -84,7 +84,7 @@ class UserEntityRegisterTest {
         assertTrue(CoreMatchers.is(userEntity.getEmail()).matches(registrationForm.getEmail()));
         assertTrue(CoreMatchers.is(userEntity.getName()).matches(registrationForm.getName()));
 
-        Mockito.verify(userEntityRepositoryMock, Mockito.times(1))
+        Mockito.verify(userEntityRepositoryMock, Mockito.times(2))
                 .save((Mockito.any(UserEntity.class)));
     }
 
@@ -122,7 +122,7 @@ class UserEntityRegisterTest {
         userEntityRepositoryMock.save(TestUtil.createUser(email, password, bCryptPasswordEncoder, userEntityRepositoryMock));
     }
 
-    private String getToken() {
+    private String getToken() throws JsonProcessingException {
         String email = "test9@example.com";
         String password = "1234567";
         createTestUser(email, password);
@@ -136,6 +136,8 @@ class UserEntityRegisterTest {
 
         // act
         ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        return Objects.requireNonNull(result.getHeaders().get("Authorization")).get(0);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return objectMapper.readTree(result.getBody()).get("result").toString();
     }
 }
