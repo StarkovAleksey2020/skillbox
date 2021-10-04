@@ -73,6 +73,12 @@ public class AuthUserController {
         return loginResponse;
     }
 
+    @PostMapping("/principal")
+    @ResponseBody
+    public Object handlePrincipal(@RequestBody ContactConfirmationPayload payload) {
+        return userEntityRegister.getPrincipal(payload);
+    }
+
     @GetMapping("/my")
     public String handleMy() {
         return "/my";

@@ -1,14 +1,13 @@
 package com.example.MyBookShopApp.service;
 
-import com.example.MyBookShopApp.data.BookReviewRLDto;
 import com.example.MyBookShopApp.entity.BookEntity;
 import com.example.MyBookShopApp.entity.book.links.Book2TagEntity;
+import com.example.MyBookShopApp.entity.cart.CartEntity;
 import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
-import com.example.MyBookShopApp.repository.Book2TagRepository;
-import com.example.MyBookShopApp.repository.BookRepository;
-import com.example.MyBookShopApp.repository.TagRepository;
-import com.example.MyBookShopApp.repository.UserRepository;
+import com.example.MyBookShopApp.repository.*;
+import com.example.MyBookShopApp.security.ContactConfirmationPayload;
+import com.example.MyBookShopApp.security.UserEntityDetails;
 import com.example.MyBookShopApp.security.UserEntityRepository;
 import com.example.MyBookShopApp.utils.NullableConverter;
 import com.example.MyBookShopApp.utils.TestUtil;
@@ -25,15 +24,25 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.WebApplicationContext;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+import java.security.Principal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -49,9 +58,22 @@ class BookServiceTest {
 
     private Integer DEFAULT_LIMIT = 10;
 
-//    @MockBean
-//    private BookRepository bookRepositoryMock;
+    private Object principal;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
+    //    @MockBean
+    //    private BookRepository bookRepositoryMock;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+    private MockMvc mockMvc;
+
+    @MockBean
+    private CartRepository cartRepositoryMock;
+
+    @MockBean
+    private UserEntityRepository userEntityRepositoryMock;
 
     @Autowired
     BookServiceTest(BookService bookService, BookRepository bookRepository, Book2TagRepository book2TagRepository, TagRepository tagRepository, UserEntityRepository userEntityRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
@@ -71,10 +93,21 @@ class BookServiceTest {
 //        bookEntity.setTitle("Test Title");
 //        bookEntity.setDescription("Test Book Description");
 //        bookRepositoryMock.save(bookEntity);
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+        principal = getPrincipal();
     }
 
     @AfterEach
     void tearDown() {
+        UserEntity userEntity = userEntityRepository.findUserEntityByEmail("test9@example.com");
+        if (userEntity != null) {
+            userEntityRepository.delete(userEntity);
+        }
     }
 
     @ParameterizedTest
@@ -691,5 +724,21 @@ class BookServiceTest {
         assertTrue(bookService.getBookRateSubTotalCount(slug, rate) >= 0);
     }
 
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void addPostponedItem_withCorrectSlug_getAddedPostponed(String slug) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(1L);
+        userEntity.setEmail("test9@example.com");
+
+        Mockito.when(userEntityRepositoryMock.findUserEntityByEmail(any())).thenReturn(userEntity);
+        assertTrue(bookService.addPostponedItem(slug, principal));
+    }
+
+    private Object getPrincipal() {
+        UserEntityDetails mockPrincipal = Mockito.mock(UserEntityDetails.class);
+        Mockito.when(mockPrincipal.getUsername()).thenReturn("test9@example.com");
+        return mockPrincipal;
+    }
 
 }

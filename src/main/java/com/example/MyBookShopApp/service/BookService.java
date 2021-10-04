@@ -298,7 +298,7 @@ public class BookService {
         return null;
     }
 
-    public void addPostponedItem(String slug, Object principal) {
+    public Boolean addPostponedItem(String slug, Object principal) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
 
@@ -318,6 +318,7 @@ public class BookService {
                         cartEntity.setValue(gson.toJson(cartItemEntity));
                         cartEntity.setEditDate(OffsetDateTime.now());
                         cartRepository.save(cartEntity);
+                        return true;
                     }
                 } else {
                     cartItemEntity.setPostponedString("/" + slug);
@@ -327,6 +328,7 @@ public class BookService {
                     cartEntity.setValue(gson.toJson(cartItemEntity));
                     cartEntity.setEditDate(OffsetDateTime.now());
                     cartRepository.save(cartEntity);
+                    return true;
                 }
             } else {
                 CartItemEntity cartItemEntity = new CartItemEntity();
@@ -334,6 +336,7 @@ public class BookService {
                 cartEntity.setValue(gson.toJson(cartItemEntity));
                 cartEntity.setEditDate(OffsetDateTime.now());
                 cartRepository.save(cartEntity);
+                return true;
             }
         } else {
             CartEntity entity = createCartEntity(userEntity);
@@ -342,7 +345,9 @@ public class BookService {
             entity.setValue(gson.toJson(cartItemEntity));
             entity.setEditDate(OffsetDateTime.now());
             cartRepository.save(entity);
+            return true;
         }
+        return false;
     }
 
     public Cookie addPostponedItemTempUser(String slug, String postponedCookieString) {

@@ -5,7 +5,9 @@ import com.example.MyBookShopApp.utils.TestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,13 +15,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.*;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
+import java.security.Principal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,8 +42,14 @@ class UserEntityRegisterTest {
     private RegistrationForm registrationForm;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private UserEntityRepository userEntityRepository;
+    private final AuthenticationManager authenticationManager;
 
     private String token;
+    private Object principal;
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+    private MockMvc mockMvc;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -41,11 +58,12 @@ class UserEntityRegisterTest {
     private UserEntityRepository userEntityRepositoryMock;
 
     @Autowired
-    public UserEntityRegisterTest(UserEntityRegister userEntityRegister, PasswordEncoder passwordEncoder, BCryptPasswordEncoder bCryptPasswordEncoder, UserEntityRepository userEntityRepository) {
+    public UserEntityRegisterTest(UserEntityRegister userEntityRegister, PasswordEncoder passwordEncoder, BCryptPasswordEncoder bCryptPasswordEncoder, UserEntityRepository userEntityRepository, AuthenticationManager authenticationManager) {
         this.userEntityRegister = userEntityRegister;
         this.passwordEncoder = passwordEncoder;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userEntityRepository = userEntityRepository;
+        this.authenticationManager = authenticationManager;
     }
 
     @BeforeEach
@@ -63,7 +81,9 @@ class UserEntityRegisterTest {
         };
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
 
-        token = getToken();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+//        token = getToken();
+//        principal = getPrincipal();
     }
 
     @AfterEach
@@ -136,8 +156,62 @@ class UserEntityRegisterTest {
 
         // act
         ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
         ObjectMapper objectMapper = new ObjectMapper();
 
         return objectMapper.readTree(result.getBody()).get("result").toString();
+    }
+
+    @Test
+    void getPrincipalTest() {
+        String email = "test9@example.com";
+        String password = "1234567";
+        createTestUser(email, password);
+        String url = "https://localhost:8085/principal";
+        HttpHeaders headers = new HttpHeaders();
+
+        ContactConfirmationPayload payload = new ContactConfirmationPayload();
+        payload.setContact(email);
+        payload.setCode(password);
+
+        HttpEntity<ContactConfirmationPayload> entity = new HttpEntity<>(payload, headers);
+
+        // act
+        ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        assertNotNull(result);
+    }
+
+    private Object getPrincipal() {
+        String email = "test9@example.com";
+        String password = "1234567";
+        createTestUser(email, password);
+        String url = "https://localhost:8085/principal";
+        HttpHeaders headers = new HttpHeaders();
+
+        ContactConfirmationPayload payload = new ContactConfirmationPayload();
+        payload.setContact(email);
+        payload.setCode(password);
+
+        HttpEntity<ContactConfirmationPayload> entity = new HttpEntity<>(payload, headers);
+
+        // act
+        return restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+    }
+
+    @Test
+    void testGetCurrentUser() throws Exception {
+        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn("test9@example.com");
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("https://localhost:8085/signin")
+                .principal(mockPrincipal)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+        MockHttpServletResponse response = result.getResponse();
+        int status = response.getStatus();
+        assertEquals(200, status);
     }
 }

@@ -84,4 +84,11 @@ public class UserEntityRegister {
             return userEntityDetails.getUserEntity();
         }
     }
+
+    public Object getPrincipal(ContactConfirmationPayload payload) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(payload.getContact(),
+                payload.getCode()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 }
