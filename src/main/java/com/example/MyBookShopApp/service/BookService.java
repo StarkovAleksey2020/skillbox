@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
@@ -239,14 +240,12 @@ public class BookService {
         return bookRepository.findBooksCountByAuthor(authorName);
     }
 
-    public void removePostponedItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
-        if (slug == null) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
-
+    // t-d
+    public boolean removePostponedItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
+        validateSlug(slug);
         Gson gson = new Gson();
 
-        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+        UserEntity userEntity = validateUserPrincipal(principal);
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         if (cartEntity != null) {
@@ -255,8 +254,10 @@ public class BookService {
                 cartItemEntity.setPostponedString(cartItemEntity.getPostponedString().replace("/" + slug, ""));
                 cartEntity.setValue(gson.toJson(cartItemEntity));
                 cartRepository.save(cartEntity);
+                return true;
             }
         }
+        return false;
     }
 
     public Cookie removePostponedItemTempUser(String slug, String postponedCookieString) {
@@ -270,11 +271,12 @@ public class BookService {
         return null;
     }
 
-    public void removeCartItem(String slug, Object principal) {
-
+    // t-d
+    public boolean removeCartItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
+        validateSlug(slug);
         Gson gson = new Gson();
 
-        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+        UserEntity userEntity = validateUserPrincipal(principal);
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         if (cartEntity != null) {
@@ -283,8 +285,10 @@ public class BookService {
                 cartItemEntity.setCartString(cartItemEntity.getCartString().replace("/" + slug, ""));
                 cartEntity.setValue(gson.toJson(cartItemEntity));
                 cartRepository.save(cartEntity);
+                return true;
             }
         }
+        return false;
     }
 
     public Cookie removeCartItemTempUser(String slug, String cartCookieString) {
@@ -298,11 +302,16 @@ public class BookService {
         return null;
     }
 
-    public Boolean addPostponedItem(String slug, Object principal) {
+
+    // t-d
+    public Boolean addPostponedItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
+        validateSlug(slug);
+
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
 
-        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+        UserEntity userEntity = validateUserPrincipal(principal);
+
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         if (cartEntity != null) {
@@ -367,8 +376,11 @@ public class BookService {
         return null;
     }
 
-    public void addCartItem(String slug, Object principal) {
-        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+    // t-d
+    public boolean addCartItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
+        validateSlug(slug);
+
+        UserEntity userEntity = validateUserPrincipal(principal);
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         Gson gson = new Gson();
@@ -384,6 +396,7 @@ public class BookService {
                         cartEntity.setValue(gson.toJson(cartItemEntity));
                         cartEntity.setEditDate(OffsetDateTime.now());
                         cartRepository.save(cartEntity);
+                        return true;
                     }
                 } else {
                     cartItemEntity.setCartString("/" + slug);
@@ -393,6 +406,7 @@ public class BookService {
                     cartEntity.setValue(gson.toJson(cartItemEntity));
                     cartEntity.setEditDate(OffsetDateTime.now());
                     cartRepository.save(cartEntity);
+                    return true;
                 }
             } else {
                 CartItemEntity cartItemEntity = new CartItemEntity();
@@ -400,6 +414,7 @@ public class BookService {
                 cartEntity.setValue(gson.toJson(cartItemEntity));
                 cartEntity.setEditDate(OffsetDateTime.now());
                 cartRepository.save(cartEntity);
+                return true;
             }
         } else {
             CartEntity entity = createCartEntity(userEntity);
@@ -408,7 +423,9 @@ public class BookService {
             entity.setValue(gson.toJson(cartItemEntity));
             entity.setEditDate(OffsetDateTime.now());
             cartRepository.save(entity);
+            return true;
         }
+        return false;
     }
 
     public Cookie addCartItemTempUser(String slug, String cartContents) {
@@ -454,11 +471,12 @@ public class BookService {
         return entity;
     }
 
+    // t-d
     public Integer getCartCount(Object principal) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
 
-        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+        UserEntity userEntity = validateUserPrincipal(principal);
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         if (cartEntity != null) {
@@ -480,7 +498,7 @@ public class BookService {
                     }
                 }
             } else {
-                if (!cartEntity.getValue().equals("") && cartEntity.getValue() != null) {
+                if (cartEntity.getValue() != null && !cartEntity.getValue().equals("")) {
                     JsonObject object = (JsonObject) parser.parse(cartEntity.getValue());
                     return gson.fromJson(object, CartItemEntity.class).getCartString().split("/").length - 1;
                 } else {
@@ -501,11 +519,12 @@ public class BookService {
         }
     }
 
+    // t-d
     public Integer getPostponedCount(Object principal) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
 
-        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+        UserEntity userEntity = validateUserPrincipal(principal);
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
 
         if (cartEntity != null) {
@@ -527,7 +546,7 @@ public class BookService {
                     }
                 }
             } else {
-                if (!cartEntity.getValue().equals("") && cartEntity.getValue() != null) {
+                if (cartEntity.getValue() != null && !cartEntity.getValue().equals("")) {
                     JsonObject object = (JsonObject) parser.parse(cartEntity.getValue());
                     return gson.fromJson(object, CartItemEntity.class).getPostponedString().split("/").length - 1;
                 } else {
@@ -548,8 +567,9 @@ public class BookService {
         }
     }
 
+    // t-d
     public List<BookEntity> getBookListInCart(Object principal) {
-        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+        UserEntity userEntity = validateUserPrincipal(principal);
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
         if (cartEntity != null) {
             Gson gson = new Gson();
@@ -561,8 +581,9 @@ public class BookService {
         return new ArrayList<>();
     }
 
+    //t-d
     public List<BookEntity> getBookListInPostponed(Object principal) {
-        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+        UserEntity userEntity = validateUserPrincipal(principal);
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
         if (cartEntity != null) {
             Gson gson = new Gson();
@@ -590,20 +611,27 @@ public class BookService {
         return bookRepository.findBookEntityBySlugIn(cookieSlugs);
     }
 
-    public Integer getBookRate(String slug, Object principal) {
-        if (principal != null) {
-            if (!principal.equals("anonymousUser") && !principal.getClass().getName().contains("oidc")) {
-                BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-                UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
-                List<Book2RateEntity> book2RateEntity = bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(bookEntity.getId(), userEntity.getId());
-                if (book2RateEntity != null && book2RateEntity.size() > 0) {
-                    return book2RateEntity.get(0).getRate();
-                } else {
-                    return 0;
-                }
+    //
+    public Integer getBookRate(String slug, Object principal) throws BookstoreAPiWrongParameterException {
+        validateSlug(slug);
+        if (validateJWTUserPrincipal(principal)) {
+            BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+            UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+            List<Book2RateEntity> book2RateEntity = bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(bookEntity.getId(), userEntity.getId());
+            if (book2RateEntity != null && book2RateEntity.size() > 0) {
+                return book2RateEntity.get(0).getRate();
+            } else {
+                return 0;
             }
         }
         return 0;
+    }
+
+    private boolean validateJWTUserPrincipal(Object principal) {
+        if (principal == null || principal.equals("anonymousUser") || principal.getClass().getName().contains("oidc")) {
+            return false;
+        }
+        return true;
     }
 
     public Integer setBookRate(String slug, Integer rate, Object principal) {
@@ -763,6 +791,20 @@ public class BookService {
             return userEntity.getEmail().equals("admin@example.com");
         } else {
             return false;
+        }
+    }
+
+    private UserEntity validateUserPrincipal(Object principal) {
+        UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+        if (userEntity == null) {
+            throw new UsernameNotFoundException("Bad credentials");
+        }
+        return userEntity;
+    }
+
+    private void validateSlug(String slug) throws BookstoreAPiWrongParameterException {
+        if (slug == null || slug.equals("")) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
     }
 }

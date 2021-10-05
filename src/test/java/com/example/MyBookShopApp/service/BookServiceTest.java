@@ -6,7 +6,6 @@ import com.example.MyBookShopApp.entity.cart.CartEntity;
 import com.example.MyBookShopApp.entity.user.UserEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.*;
-import com.example.MyBookShopApp.security.ContactConfirmationPayload;
 import com.example.MyBookShopApp.security.UserEntityDetails;
 import com.example.MyBookShopApp.security.UserEntityRepository;
 import com.example.MyBookShopApp.utils.NullableConverter;
@@ -27,10 +26,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
@@ -38,8 +37,8 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
-import java.security.Principal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,6 +57,9 @@ class BookServiceTest {
 
     private Integer DEFAULT_LIMIT = 10;
 
+    private UserEntity TEST_USER_ENTITY = new UserEntity();
+    private CartEntity TEST_CART_ENTITY = new CartEntity();
+
     private Object principal;
 
     @Autowired
@@ -73,7 +75,7 @@ class BookServiceTest {
     private CartRepository cartRepositoryMock;
 
     @MockBean
-    private UserEntityRepository userEntityRepositoryMock;
+    private UserRepository userRepositoryMock;
 
     @Autowired
     BookServiceTest(BookService bookService, BookRepository bookRepository, Book2TagRepository book2TagRepository, TagRepository tagRepository, UserEntityRepository userEntityRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
@@ -100,6 +102,14 @@ class BookServiceTest {
         };
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
         principal = getPrincipal();
+
+        TEST_USER_ENTITY.setId(1L);
+        TEST_USER_ENTITY.setEmail("test9@example.com");
+
+        TEST_CART_ENTITY.setUserEntity(TEST_USER_ENTITY);
+        TEST_CART_ENTITY.setEditDate(OffsetDateTime.now());
+        TEST_CART_ENTITY.setValue("{\"cartString\":\"\",\"postponedString\":\"\"}");
+
     }
 
     @AfterEach
@@ -725,14 +735,31 @@ class BookServiceTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"lNv3IiN"})
-    void addPostponedItem_withCorrectSlug_getAddedPostponed(String slug) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(1L);
-        userEntity.setEmail("test9@example.com");
+    @ValueSource(strings = {""})
+    void addPostponedItem_withEmptySlug_getBookstoreAPiWrongParameterException(String slug) {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.addPostponedItem(slug, principal));
+    }
 
-        Mockito.when(userEntityRepositoryMock.findUserEntityByEmail(any())).thenReturn(userEntity);
+    @ParameterizedTest
+    @CsvSource({"null"})
+    void addPostponedItem_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug) {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.addPostponedItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void addPostponedItem_withCorrectSlug_getTrue(String slug) throws BookstoreAPiWrongParameterException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
         assertTrue(bookService.addPostponedItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void addPostponedItem_withInvalidPrincipal_getUsernameNotFoundException(String slug) throws UsernameNotFoundException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(null);
+        assertThrows(UsernameNotFoundException.class, () -> bookService.addPostponedItem(slug, principal));
     }
 
     private Object getPrincipal() {
@@ -741,4 +768,302 @@ class BookServiceTest {
         return mockPrincipal;
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {""})
+    void removePostponedItem_withEmptySlug_getBookstoreAPiWrongParameterException(String slug) {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removePostponedItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null"})
+    void removePostponedItem_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug) {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removePostponedItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void removePostponedItem_withInvalidPrincipal_getUsernameNotFoundException(String slug) throws UsernameNotFoundException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(null);
+        assertThrows(UsernameNotFoundException.class, () -> bookService.removePostponedItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void removePostponedItem_withCorrectSlugAndHaveInPostponed_getTrue(String slug) throws BookstoreAPiWrongParameterException {
+        TEST_CART_ENTITY.setValue("{\"cartString\":\"\",\"postponedString\":\"lNv3IiN\"}");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertTrue(bookService.removePostponedItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void removePostponedItem_withCorrectSlugButHaveNotInPostponed_getFalse(String slug) throws BookstoreAPiWrongParameterException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertFalse(bookService.removePostponedItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {""})
+    void removeCartItem_withEmptySlug_getBookstoreAPiWrongParameterException(String slug) {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removeCartItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null"})
+    void removeCartItem_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug) {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removeCartItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void removeCartItem_withInvalidPrincipal_getUsernameNotFoundException(String slug) throws UsernameNotFoundException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(null);
+        assertThrows(UsernameNotFoundException.class, () -> bookService.removeCartItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void removeCartItem_withCorrectSlugAndHaveInCart_getTrue(String slug) throws BookstoreAPiWrongParameterException {
+        TEST_CART_ENTITY.setValue("{\"cartString\":\"lNv3IiN\",\"postponedString\":\"\"}");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertTrue(bookService.removeCartItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void removeCartItem_withCorrectSlugButHaveNotInCart_getFalse(String slug) throws BookstoreAPiWrongParameterException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertFalse(bookService.removeCartItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {""})
+    void addCartItem_withEmptySlug_getBookstoreAPiWrongParameterException(String slug) {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.addCartItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null"})
+    void addCartItem_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug) {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.addCartItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void addCartItem_withCorrectSlug_getTrue(String slug) throws BookstoreAPiWrongParameterException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        assertTrue(bookService.addCartItem(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void addCartItem_withInvalidPrincipal_getUsernameNotFoundException(String slug) throws UsernameNotFoundException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(null);
+        assertThrows(UsernameNotFoundException.class, () -> bookService.addCartItem(slug, principal));
+    }
+
+    @Test
+    void getCartCount_withInvalidPrincipal_getUsernameNotFoundException() throws UsernameNotFoundException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(null);
+        assertThrows(UsernameNotFoundException.class, () -> bookService.getCartCount(principal));
+    }
+
+    @Test
+    void getCartCount_withValidPrincipalAndNullCartEntity_getZero() {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(null);
+        assertEquals(0, bookService.getCartCount(principal));
+    }
+
+    @Test
+    void getCartCount_withValidPrincipalAndNullEditDateAndNotNullValue_getOne() {
+        TEST_CART_ENTITY.setEditDate(null);
+        TEST_CART_ENTITY.setValue("{\"cartString\":\"/lNv3IiN\",\"postponedString\":\"\"}");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(1, bookService.getCartCount(principal));
+    }
+
+    @Test
+    void getCartCount_withValidPrincipalAndNullEditDateAndNullValue_getZero() {
+        TEST_CART_ENTITY.setEditDate(null);
+        TEST_CART_ENTITY.setValue(null);
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(0, bookService.getCartCount(principal));
+    }
+
+    @Test
+    void getCartCount_withValidPrincipalAndNullEditDateAndEmptyValue_getZero() {
+        TEST_CART_ENTITY.setEditDate(null);
+        TEST_CART_ENTITY.setValue("");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(0, bookService.getCartCount(principal));
+    }
+
+    @Test
+    void getCartCount_withValidPrincipalAndNotNullEditDateAndExpiredEditDate_getZero() {
+        TEST_CART_ENTITY.setEditDate(OffsetDateTime.now().minusDays(5L));
+        TEST_CART_ENTITY.setValue("");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(0, bookService.getCartCount(principal));
+    }
+
+    @Test
+    void getCartCount_withValidPrincipalAndNotNullEditDateAndActualEditDate_getFour() {
+        TEST_CART_ENTITY.setEditDate(OffsetDateTime.now());
+        TEST_CART_ENTITY.setValue("{\"cartString\":\"/aaaa/bbbb/cccc/dddd\",\"postponedString\":\"\"}");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(4, bookService.getCartCount(principal));
+    }
+
+    @Test
+    void getPostponedCount_withInvalidPrincipal_getUsernameNotFoundException() throws UsernameNotFoundException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(null);
+        assertThrows(UsernameNotFoundException.class, () -> bookService.getPostponedCount(principal));
+    }
+
+    @Test
+    void getPostponedCount_withValidPrincipalAndNullCartEntity_getZero() {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(null);
+        assertEquals(0, bookService.getPostponedCount(principal));
+    }
+
+    @Test
+    void getPostponedCount_withValidPrincipalAndNullEditDateAndNotNullValue_getOne() {
+        TEST_CART_ENTITY.setEditDate(null);
+        TEST_CART_ENTITY.setValue("{\"cartString\":\"\",\"postponedString\":\"/lNv3IiN\"}");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(1, bookService.getPostponedCount(principal));
+    }
+
+    @Test
+    void getPostponedCount_withValidPrincipalAndNullEditDateAndNullValue_getZero() {
+        TEST_CART_ENTITY.setEditDate(null);
+        TEST_CART_ENTITY.setValue(null);
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(0, bookService.getPostponedCount(principal));
+    }
+
+    @Test
+    void getPostponedCount_withValidPrincipalAndNullEditDateAndEmptyValue_getZero() {
+        TEST_CART_ENTITY.setEditDate(null);
+        TEST_CART_ENTITY.setValue("");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(0, bookService.getPostponedCount(principal));
+    }
+
+    @Test
+    void getPostponedCount_withValidPrincipalAndNotNullEditDateAndExpiredEditDate_getZero() {
+        TEST_CART_ENTITY.setEditDate(OffsetDateTime.now().minusDays(5L));
+        TEST_CART_ENTITY.setValue("");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(0, bookService.getPostponedCount(principal));
+    }
+
+    @Test
+    void getPostponedCount_withValidPrincipalAndNotNullEditDateAndActualEditDate_getFour() {
+        TEST_CART_ENTITY.setEditDate(OffsetDateTime.now());
+        TEST_CART_ENTITY.setValue("{\"cartString\":\"\",\"postponedString\":\"/aaaa/bbbb/cccc/dddd\"}");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(4, bookService.getPostponedCount(principal));
+    }
+
+    @Test
+    void getBookListInCart_withInvalidPrincipal_getUsernameNotFoundException() throws UsernameNotFoundException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(null);
+        assertThrows(UsernameNotFoundException.class, () -> bookService.getBookListInCart(principal));
+    }
+
+    @Test
+    void getBookListInCart_withValidPrincipalAndNullCartEntity_getEmptyArray() {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(null);
+        assertEquals(0, bookService.getBookListInCart(principal).size());
+    }
+
+    @Test
+    void getBookListInCart_withValidPrincipalAndNotNullCartEntity_getCartEntity() {
+        TEST_CART_ENTITY.setEditDate(OffsetDateTime.now());
+        TEST_CART_ENTITY.setValue("{\"cartString\":\"/lNv3IiN/QJFBcrET/fpeP1HkQ/CrAQQf\",\"postponedString\":\"\"}");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(4, bookService.getBookListInCart(principal).size());
+    }
+
+    @Test
+    void getBookListInPostponed_withInvalidPrincipal_getUsernameNotFoundException() throws UsernameNotFoundException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(null);
+        assertThrows(UsernameNotFoundException.class, () -> bookService.getBookListInPostponed(principal));
+    }
+
+    @Test
+    void getBookListInPostponed_withValidPrincipalAndNullCartEntity_getEmptyArray() {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(null);
+        assertEquals(0, bookService.getBookListInPostponed(principal).size());
+    }
+
+    @Test
+    void getBookListInPostponed_withValidPrincipalAndNotNullCartEntity_getCartEntity() {
+        TEST_CART_ENTITY.setEditDate(OffsetDateTime.now());
+        TEST_CART_ENTITY.setValue("{\"cartString\":\"\",\"postponedString\":\"/lNv3IiN/QJFBcrET/fpeP1HkQ/CrAQQf\"}");
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(cartRepositoryMock.findByUserEntity(any())).thenReturn(TEST_CART_ENTITY);
+        assertEquals(4, bookService.getBookListInPostponed(principal).size());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {""})
+    void getBookRate_withEmptySlug_getBookstoreAPiWrongParameterException(String slug) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRate(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null"})
+    void getBookRate_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.getBookRate(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void getBookRate_withNullPrincipal_getZero(String slug) throws BookstoreAPiWrongParameterException {
+        assertEquals(0, bookService.getBookRate(slug, null));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void getBookRate_withAnonymousUserPrincipal_getZero(String slug) throws BookstoreAPiWrongParameterException {
+        assertEquals(0, bookService.getBookRate(slug, "anonymousUser"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void getBookRate_withOAuth2Principal_getZero(String slug) throws BookstoreAPiWrongParameterException {
+        DefaultOidcUser mockDefaultOidcUser = mock(DefaultOidcUser.class);
+        assertEquals(0, bookService.getBookRate(slug, mockDefaultOidcUser));
+    }
+
+    @Test
+    void getBookRate() {
+    }
 }
