@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.controller;
 
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.BookRepository;
 import com.example.MyBookShopApp.security.UserEntityDetails;
 import com.example.MyBookShopApp.service.BookService;
@@ -89,7 +90,7 @@ public class BookShopCart {
                                                   @CookieValue(name = "cartContents", required = false) String cartContents,
                                                   @CookieValue(name = "postponedContents", required = false) String postponedContents,
                                                   HttpServletResponse response,
-                                                  Model model) {
+                                                  Model model) throws BookstoreAPiWrongParameterException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
@@ -114,7 +115,7 @@ public class BookShopCart {
                                                       @CookieValue(name = "cartContents", required = false) String cartContents,
                                                       @CookieValue(name = "postponedContents", required = false) String postponedContents,
                                                       HttpServletResponse response,
-                                                      Model model) {
+                                                      Model model) throws BookstoreAPiWrongParameterException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
@@ -144,7 +145,7 @@ public class BookShopCart {
                                          @CookieValue(name = "cartContents", required = false) String cartContents,
                                          @CookieValue(name = "postponedContents", required = false) String postponedContents,
                                          HttpServletResponse response,
-                                         Model model) {
+                                         Model model) throws BookstoreAPiWrongParameterException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {

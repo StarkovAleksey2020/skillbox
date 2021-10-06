@@ -240,7 +240,7 @@ public class BookService {
         return bookRepository.findBooksCountByAuthor(authorName);
     }
 
-    // t-d
+    
     public boolean removePostponedItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
         Gson gson = new Gson();
@@ -260,18 +260,17 @@ public class BookService {
         return false;
     }
 
-    public Cookie removePostponedItemTempUser(String slug, String postponedCookieString) {
-        if (postponedCookieString != null || !postponedCookieString.equals("")) {
-            ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(postponedCookieString.split("/")));
-            cookieBooks.remove(slug);
-            Cookie cookie = new Cookie("postponedContents", String.join("/", cookieBooks));
-            cookie.setPath("/");
-            return cookie;
-        }
-        return null;
+    public Cookie removePostponedItemTempUser(String slug, String postponedCookieString) throws BookstoreAPiWrongParameterException {
+        validateSlug(slug);
+        validateCookieString(postponedCookieString);
+        ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(postponedCookieString.split("/")));
+        cookieBooks.remove(slug);
+        Cookie cookie = new Cookie("postponedContents", String.join("/", cookieBooks));
+        cookie.setPath("/");
+        return cookie;
     }
 
-    // t-d
+    
     public boolean removeCartItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
         Gson gson = new Gson();
@@ -291,19 +290,17 @@ public class BookService {
         return false;
     }
 
-    public Cookie removeCartItemTempUser(String slug, String cartCookieString) {
-        if (cartCookieString != null || !cartCookieString.equals("")) {
-            ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(cartCookieString.split("/")));
-            cookieBooks.remove(slug);
-            Cookie cookie = new Cookie("cartContents", String.join("/", cookieBooks));
-            cookie.setPath("/");
-            return cookie;
-        }
-        return null;
+    public Cookie removeCartItemTempUser(String slug, String cartCookieString) throws BookstoreAPiWrongParameterException {
+        validateSlug(slug);
+        validateCookieString(cartCookieString);
+        ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(cartCookieString.split("/")));
+        cookieBooks.remove(slug);
+        Cookie cookie = new Cookie("cartContents", String.join("/", cookieBooks));
+        cookie.setPath("/");
+        return cookie;
     }
 
-
-    // t-d
+    
     public Boolean addPostponedItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
 
@@ -359,7 +356,9 @@ public class BookService {
         return false;
     }
 
-    public Cookie addPostponedItemTempUser(String slug, String postponedCookieString) {
+    public Cookie addPostponedItemTempUser(String slug, String postponedCookieString) throws BookstoreAPiWrongParameterException {
+        validateSlug(slug);
+
         if (postponedCookieString == null || postponedCookieString.equals("")) {
             Cookie cookie = new Cookie("postponedContents", slug);
             cookie.setMaxAge(2 * 60 * 60);
@@ -376,7 +375,7 @@ public class BookService {
         return null;
     }
 
-    // t-d
+    
     public boolean addCartItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
 
@@ -428,7 +427,9 @@ public class BookService {
         return false;
     }
 
-    public Cookie addCartItemTempUser(String slug, String cartContents) {
+    public Cookie addCartItemTempUser(String slug, String cartContents) throws BookstoreAPiWrongParameterException {
+        validateSlug(slug);
+
         if (cartContents == null || cartContents.equals("")) {
             Cookie cookie = new Cookie("cartContents", slug);
             cookie.setMaxAge(2 * 60 * 60);
@@ -471,7 +472,7 @@ public class BookService {
         return entity;
     }
 
-    // t-d
+    
     public Integer getCartCount(Object principal) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
@@ -519,7 +520,7 @@ public class BookService {
         }
     }
 
-    // t-d
+    
     public Integer getPostponedCount(Object principal) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
@@ -567,7 +568,7 @@ public class BookService {
         }
     }
 
-    // t-d
+    
     public List<BookEntity> getBookListInCart(Object principal) {
         UserEntity userEntity = validateUserPrincipal(principal);
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
@@ -581,7 +582,7 @@ public class BookService {
         return new ArrayList<>();
     }
 
-    //t-d
+
     public List<BookEntity> getBookListInPostponed(Object principal) {
         UserEntity userEntity = validateUserPrincipal(principal);
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
@@ -611,7 +612,7 @@ public class BookService {
         return bookRepository.findBookEntityBySlugIn(cookieSlugs);
     }
 
-    //
+    
     public Integer getBookRate(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
         if (validateJWTUserPrincipal(principal)) {
@@ -634,27 +635,34 @@ public class BookService {
         return true;
     }
 
-    public Integer setBookRate(String slug, Integer rate, Object principal) {
-        if (principal != null) {
-            if (!principal.equals("anonymousUser") && !principal.getClass().getName().contains("oidc")) {
-
-                BookEntity bookEntity = bookRepository.getBookBySlug(slug);
-                UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
-                List<Book2RateEntity> book2RateEntity = bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(bookEntity.getId(), userEntity.getId());
-                if (book2RateEntity == null || book2RateEntity.size() == 0) {
-                    Book2RateEntity entity = new Book2RateEntity();
-                    entity.setRate(rate);
-                    entity.setBookEntity(bookEntity);
-                    entity.setUserEntity(userEntity);
-                    bookRateRepository.save(entity);
-                } else {
-                    book2RateEntity.get(0).setRate(rate);
-                    bookRateRepository.save(book2RateEntity.get(0));
-                }
-                return rate;
+    
+    public Integer setBookRate(String slug, Integer rate, Object principal) throws BookstoreAPiWrongParameterException {
+        validateSlug(slug);
+        validateRate(rate);
+        if (validateJWTUserPrincipal(principal)) {
+            BookEntity bookEntity = bookRepository.getBookBySlug(slug);
+            UserEntity userEntity = userRepository.findByEmail(((UserEntityDetails) principal).getUsername());
+            List<Book2RateEntity> book2RateEntity = bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(bookEntity.getId(), userEntity.getId());
+            if (book2RateEntity == null || book2RateEntity.size() == 0) {
+                Book2RateEntity entity = new Book2RateEntity();
+                entity.setRate(rate);
+                entity.setBookEntity(bookEntity);
+                entity.setUserEntity(userEntity);
+                bookRateRepository.save(entity);
+            } else {
+                book2RateEntity.get(0).setRate(rate);
+                bookRateRepository.save(book2RateEntity.get(0));
             }
+            return rate;
         }
         return 0;
+    }
+
+    private void validateRate(Integer rate) throws BookstoreAPiWrongParameterException {
+        if (rate == null || rate < 0 || rate > 5) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
+
     }
 
     public Boolean createBookReview(String slug, String comment, UserEntity userEntity) throws BookstoreAPiWrongParameterException {
@@ -783,13 +791,16 @@ public class BookService {
         }
     }
 
+    
     public Boolean checkCredentials(Object principal) {
-
-        UserEntity userEntity = userRepository.findByEmail(principal.getClass().getName());
-
-        if (userEntity != null) {
-            return userEntity.getEmail().equals("admin@example.com");
-        } else {
+        try {
+            UserEntity userEntity = userRepository.findByEmail(principal.getClass().getName());
+            if (userEntity != null) {
+                return userEntity.getEmail().equals("admin@example.com");
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
             return false;
         }
     }
@@ -807,4 +818,11 @@ public class BookService {
             throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
     }
+
+    private void validateCookieString(String cookieString) throws BookstoreAPiWrongParameterException {
+        if (cookieString == null || cookieString.equals("")) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
+    }
+
 }

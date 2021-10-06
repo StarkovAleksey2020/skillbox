@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.service;
 
 import com.example.MyBookShopApp.entity.BookEntity;
+import com.example.MyBookShopApp.entity.book.links.Book2RateEntity;
 import com.example.MyBookShopApp.entity.book.links.Book2TagEntity;
 import com.example.MyBookShopApp.entity.cart.CartEntity;
 import com.example.MyBookShopApp.entity.user.UserEntity;
@@ -26,7 +27,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -54,11 +54,14 @@ class BookServiceTest {
     private UserEntityRepository userEntityRepository;
     private UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BookRateRepository bookRateRepository;
 
     private Integer DEFAULT_LIMIT = 10;
 
     private UserEntity TEST_USER_ENTITY = new UserEntity();
+    private UserEntity TEST_USER_ENTITY_ADMIN = new UserEntity();
     private CartEntity TEST_CART_ENTITY = new CartEntity();
+    private List<Book2RateEntity> TEST_BOOK_RATE_ENTITY_LIST = new ArrayList<>();
 
     private Object principal;
 
@@ -77,8 +80,11 @@ class BookServiceTest {
     @MockBean
     private UserRepository userRepositoryMock;
 
+    @MockBean
+    private BookRateRepository bookRateRepositoryMock;
+
     @Autowired
-    BookServiceTest(BookService bookService, BookRepository bookRepository, Book2TagRepository book2TagRepository, TagRepository tagRepository, UserEntityRepository userEntityRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    BookServiceTest(BookService bookService, BookRepository bookRepository, Book2TagRepository book2TagRepository, TagRepository tagRepository, UserEntityRepository userEntityRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, BookRateRepository bookRateRepository) {
         this.bookService = bookService;
         this.bookRepository = bookRepository;
         this.book2TagRepository = book2TagRepository;
@@ -86,6 +92,7 @@ class BookServiceTest {
         this.userEntityRepository = userEntityRepository;
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.bookRateRepository = bookRateRepository;
     }
 
     @BeforeEach
@@ -106,9 +113,18 @@ class BookServiceTest {
         TEST_USER_ENTITY.setId(1L);
         TEST_USER_ENTITY.setEmail("test9@example.com");
 
+        TEST_USER_ENTITY_ADMIN.setId(2L);
+        TEST_USER_ENTITY_ADMIN.setEmail("admin@example.com");
+
         TEST_CART_ENTITY.setUserEntity(TEST_USER_ENTITY);
         TEST_CART_ENTITY.setEditDate(OffsetDateTime.now());
         TEST_CART_ENTITY.setValue("{\"cartString\":\"\",\"postponedString\":\"\"}");
+
+        Book2RateEntity book2RateEntity = new Book2RateEntity();
+        book2RateEntity.setBookEntity(mock(BookEntity.class));
+        book2RateEntity.setUserEntity(mock(UserEntity.class));
+        book2RateEntity.setRate(3);
+        TEST_BOOK_RATE_ENTITY_LIST.add(book2RateEntity);
 
     }
 
@@ -1063,7 +1079,196 @@ class BookServiceTest {
         assertEquals(0, bookService.getBookRate(slug, mockDefaultOidcUser));
     }
 
-    @Test
-    void getBookRate() {
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void getBookRate_withValidPrincipalAndSlug_getThree(String slug) throws BookstoreAPiWrongParameterException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(any(), any())).thenReturn(TEST_BOOK_RATE_ENTITY_LIST);
+        assertEquals(3, bookService.getBookRate(slug, principal));
     }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN"})
+    void getBookRate_withValidPrincipalAndSlug_getZeroRate(String slug) throws BookstoreAPiWrongParameterException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(any(), any())).thenReturn(null);
+        assertEquals(0, bookService.getBookRate(slug, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({", 3"})
+    void setBookRate_withEmptySlugAndValidRate_getBookstoreAPiWrongParameterException(String slug, Integer rate) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.setBookRate(slug, rate, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null, 3"})
+    void setBookRate_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                         Integer rate) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.setBookRate(slug, rate, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN, 3"})
+    void setBookRate_withNullPrincipal_getZero(String slug, Integer rate) throws BookstoreAPiWrongParameterException {
+        assertEquals(0, bookService.setBookRate(slug, rate, null));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN, 3"})
+    void setBookRate_withAnonymousUserPrincipal_getZero(String slug, Integer rate) throws BookstoreAPiWrongParameterException {
+        assertEquals(0, bookService.setBookRate(slug, rate, "anonymousUser"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN, 3"})
+    void setBookRate_withOAuth2Principal_getZero(String slug, Integer rate) throws BookstoreAPiWrongParameterException {
+        DefaultOidcUser mockDefaultOidcUser = mock(DefaultOidcUser.class);
+        assertEquals(0, bookService.setBookRate(slug, rate, mockDefaultOidcUser));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN, 2"})
+    void setBookRate_withValidPrincipalAndSlugAndRate_getNewBookRateAndTwoRate(String slug, Integer rate) throws BookstoreAPiWrongParameterException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(any(), any())).thenReturn(null);
+        assertEquals(2, bookService.setBookRate(slug, rate, principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"lNv3IiN, 4"})
+    void setBookRate_withValidPrincipalAndSlugAndRate_getOldBookRateAndFourRate(String slug, Integer rate) throws BookstoreAPiWrongParameterException {
+        Mockito.when(userRepositoryMock.findByEmail(any())).thenReturn(TEST_USER_ENTITY);
+        Mockito.when(bookRateRepository.findBook2RateEntityByBookEntityAndUserEntity(any(), any())).thenReturn(TEST_BOOK_RATE_ENTITY_LIST);
+        assertEquals(4, bookService.setBookRate(slug, rate, principal));
+    }
+
+    @Test
+    void checkCredentials_withAnonymousUserPrincipal_getFalse() {
+        assertEquals(false, bookService.checkCredentials("anonymousUser"));
+    }
+
+    @Test
+    void checkCredentials_withNullPrincipal_getFalse() {
+        assertEquals(false, bookService.checkCredentials(null));
+    }
+
+    @Test
+    void checkCredentials_withOAuthPrincipal_getFalse() {
+        DefaultOidcUser mockDefaultOidcUser = mock(DefaultOidcUser.class);
+        assertEquals(false, bookService.checkCredentials(mockDefaultOidcUser));
+    }
+
+    @Test
+    void checkCredentials_withAdminPrincipal_getTrue() {
+        Mockito.when(userRepository.findByEmail(any())).thenReturn(TEST_USER_ENTITY_ADMIN);
+        assertEquals(true, bookService.checkCredentials(principal));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null, /aaaa"})
+    void removePostponedItemTempUser_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                         @ConvertWith(NullableConverter.class) String cookieString) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removePostponedItemTempUser(slug, cookieString));
+    }
+
+    @ParameterizedTest
+    @CsvSource({", /aaaa"})
+    void removePostponedItemTempUser_withEmptySlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                          @ConvertWith(NullableConverter.class) String cookieString) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removePostponedItemTempUser(slug, cookieString));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"aaaa, null"})
+    void removePostponedItemTempUser_withNullCookieString_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                                 @ConvertWith(NullableConverter.class) String cookieString) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removePostponedItemTempUser(slug, cookieString));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"aaaa,"})
+    void removePostponedItemTempUser_withEmptyCookieString_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                                  @ConvertWith(NullableConverter.class) String cookieString) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removePostponedItemTempUser(slug, cookieString));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"aaaa,/aaaa"})
+    void removePostponedItemTempUser_withValidParameters_getEmptyCookie(String slug, String cookieString) throws BookstoreAPiWrongParameterException {
+        assertFalse(bookService.removePostponedItemTempUser(slug, cookieString).toString().contains("aaaa"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null, /aaaa"})
+    void removeCartItemTempUser_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                    @ConvertWith(NullableConverter.class) String cookieString) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removeCartItemTempUser(slug, cookieString));
+    }
+
+    @ParameterizedTest
+    @CsvSource({", /aaaa"})
+    void removeCartItemTempUser_withEmptySlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                     @ConvertWith(NullableConverter.class) String cookieString) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removeCartItemTempUser(slug, cookieString));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"aaaa, null"})
+    void removeCartItemTempUser_withNullCookieString_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                            @ConvertWith(NullableConverter.class) String cookieString) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removeCartItemTempUser(slug, cookieString));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"aaaa,"})
+    void removeCartItemTempUser_withEmptyCookieString_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                             @ConvertWith(NullableConverter.class) String cookieString) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.removeCartItemTempUser(slug, cookieString));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"aaaa,/aaaa"})
+    void removeCartItemTempUser_withValidParameters_getEmptyCookie(String slug, String cookieString) throws BookstoreAPiWrongParameterException {
+        assertFalse(bookService.removeCartItemTempUser(slug, cookieString).toString().contains("aaaa"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null, /aaaa"})
+    void addPostponedItemTempUser_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                      @ConvertWith(NullableConverter.class) String postponedCookieString) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.addPostponedItemTempUser(slug, postponedCookieString));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"aaaa, "})
+    void addPostponedItemTempUser_withValidSlugAndEmptyCookie_getCookieWithSlug(String slug, String postponedCookieString) throws BookstoreAPiWrongParameterException {
+        assertTrue(bookService.addPostponedItemTempUser(slug, postponedCookieString).getValue().contains("aaaa"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"bbbb, /aaaa"})
+    void addPostponedItemTempUser_withValidSlugAndNotEmptyCookie_getCookieWithSlug(String slug, String postponedCookieString) throws BookstoreAPiWrongParameterException {
+        assertTrue(bookService.addPostponedItemTempUser(slug, postponedCookieString).getValue().contains("bbbb"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"null, /aaaa"})
+    void addCartItemTempUser_withNullSlug_getBookstoreAPiWrongParameterException(@ConvertWith(NullableConverter.class) String slug,
+                                                                                      @ConvertWith(NullableConverter.class) String cartCookieString) {
+        assertThrows(BookstoreAPiWrongParameterException.class, () -> bookService.addCartItemTempUser(slug, cartCookieString));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"aaaa, "})
+    void addCartItemTempUser_withValidSlugAndEmptyCookie_getCookieWithSlug(String slug, String cartCookieString) throws BookstoreAPiWrongParameterException {
+        assertTrue(bookService.addCartItemTempUser(slug, cartCookieString).getValue().contains("aaaa"));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"bbbb, /aaaa"})
+    void addCartItemTempUser_withValidSlugAndNotEmptyCookie_getCookieWithSlug(String slug, String cartCookieString) throws BookstoreAPiWrongParameterException {
+        assertTrue(bookService.addCartItemTempUser(slug, cartCookieString).getValue().contains("bbbb"));
+    }
+
 }

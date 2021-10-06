@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.controller;
 
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.service.BookService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,7 @@ public class BookRate {
     @PostMapping("/rateBook/{slug}/{rate}")
     public String handleBookRate(@PathVariable("slug") String slug,
                                  @PathVariable("rate") Integer rate,
-                                 Model model) {
+                                 Model model) throws BookstoreAPiWrongParameterException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         model.addAttribute("bookRate", bookService.setBookRate(slug, rate, principal));

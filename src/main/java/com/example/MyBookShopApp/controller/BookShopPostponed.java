@@ -112,7 +112,7 @@ public class BookShopPostponed {
                                                     @CookieValue(name = "cartContents", required = false) String cartContents,
                                                     @CookieValue(name = "postponedContents", required = false) String postponedContents,
                                                     HttpServletResponse response,
-                                                    Model model) {
+                                                    Model model) throws BookstoreAPiWrongParameterException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
@@ -142,7 +142,7 @@ public class BookShopPostponed {
                                          @CookieValue(name = "cartContents", required = false) String cartContents,
                                          @CookieValue(name = "postponedContents", required = false) String postponedContents,
                                          HttpServletResponse response,
-                                         Model model) {
+                                         Model model) throws BookstoreAPiWrongParameterException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {

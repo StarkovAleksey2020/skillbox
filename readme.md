@@ -34,3 +34,7 @@ call java -jar target/BookStore.jar
 ## Reference materials
 
 #### /notes/db_recreate.txt - procedure for rebuilding the database for Linux
+#### /notes/cacert.txt - setting up certificates (SSL)
+#### /notes/db_index_restore.txt - restoring Postgresql indexes
+#### /notes/exception_handling.txt - collection of links on the subject of Exception handling
+#### /notes/oauth.txt - collection of links on the subject of OAuth2
