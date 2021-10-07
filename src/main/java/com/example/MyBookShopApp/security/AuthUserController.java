@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.security;
 
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.exception.UserNotFoundException;
 import com.example.MyBookShopApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class AuthUserController {
 
     @PostMapping("/requestContactConfirmation")
     @ResponseBody
-    public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload) throws UserNotFoundException {
+    public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload) throws UserNotFoundException, BookstoreAPiWrongParameterException {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
         if (userService.isUserFound(payload.getContact())) {
             response.setResult("true");

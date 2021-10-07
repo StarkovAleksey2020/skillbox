@@ -38,3 +38,4 @@ call java -jar target/BookStore.jar
 #### /notes/db_index_restore.txt - restoring Postgresql indexes
 #### /notes/exception_handling.txt - collection of links on the subject of Exception handling
 #### /notes/oauth.txt - collection of links on the subject of OAuth2
+#### /notes/junit.txt - collection of links on the subject of unit-tests

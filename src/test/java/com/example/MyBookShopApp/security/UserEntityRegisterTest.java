@@ -5,9 +5,7 @@ import com.example.MyBookShopApp.utils.TestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -33,6 +31,7 @@ import javax.net.ssl.SSLSession;
 import java.security.Principal;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 class UserEntityRegisterTest {
@@ -43,9 +42,6 @@ class UserEntityRegisterTest {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private UserEntityRepository userEntityRepository;
     private final AuthenticationManager authenticationManager;
-
-    private String token;
-    private Object principal;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -82,8 +78,6 @@ class UserEntityRegisterTest {
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
 
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-//        token = getToken();
-//        principal = getPrincipal();
     }
 
     @AfterEach
@@ -104,7 +98,7 @@ class UserEntityRegisterTest {
         assertTrue(CoreMatchers.is(userEntity.getEmail()).matches(registrationForm.getEmail()));
         assertTrue(CoreMatchers.is(userEntity.getName()).matches(registrationForm.getName()));
 
-        Mockito.verify(userEntityRepositoryMock, Mockito.times(2))
+        Mockito.verify(userEntityRepositoryMock, Mockito.times(1))
                 .save((Mockito.any(UserEntity.class)));
     }
 
@@ -116,26 +110,6 @@ class UserEntityRegisterTest {
 
         UserEntity userEntity = userEntityRegister.registerNewUser(registrationForm);
         assertNotNull(userEntity);
-    }
-
-    @Test
-    public void testSignIn() {
-        String email = "test9@example.com";
-        String password = "1234567";
-        createTestUser(email, password);
-        String url = "https://localhost:8085/login";
-        HttpHeaders headers = new HttpHeaders();
-
-        ContactConfirmationPayload payload = new ContactConfirmationPayload();
-        payload.setContact(email);
-        payload.setCode(password);
-        HttpEntity<ContactConfirmationPayload> entity = new HttpEntity<>(payload, headers);
-
-        // act
-        ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-
-        // verify
-        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     private void createTestUser(String email, String password) {
@@ -162,25 +136,6 @@ class UserEntityRegisterTest {
         return objectMapper.readTree(result.getBody()).get("result").toString();
     }
 
-    @Test
-    void getPrincipalTest() {
-        String email = "test9@example.com";
-        String password = "1234567";
-        createTestUser(email, password);
-        String url = "https://localhost:8085/principal";
-        HttpHeaders headers = new HttpHeaders();
-
-        ContactConfirmationPayload payload = new ContactConfirmationPayload();
-        payload.setContact(email);
-        payload.setCode(password);
-
-        HttpEntity<ContactConfirmationPayload> entity = new HttpEntity<>(payload, headers);
-
-        // act
-        ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        assertNotNull(result);
-    }
-
     private Object getPrincipal() {
         String email = "test9@example.com";
         String password = "1234567";
@@ -200,7 +155,7 @@ class UserEntityRegisterTest {
 
     @Test
     void testGetCurrentUser() throws Exception {
-        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Principal mockPrincipal = mock(Principal.class);
         Mockito.when(mockPrincipal.getName()).thenReturn("test9@example.com");
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -214,4 +169,5 @@ class UserEntityRegisterTest {
         int status = response.getStatus();
         assertEquals(200, status);
     }
+
 }

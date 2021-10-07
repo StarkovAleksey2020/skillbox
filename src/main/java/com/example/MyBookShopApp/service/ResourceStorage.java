@@ -64,7 +64,7 @@ public class ResourceStorage {
     public MediaType getBookFileMime(String hash) throws BookstoreAPiWrongParameterException {
         if (hash != null && !hash.equals("")) {
             BookFileEntity bookFileEntity = bookFileRepository.findBookFileEntityByHash(hash);
-            String mimeType = URLConnection.guessContentTypeFromName(Paths.get(bookFileEntity.getPath()).getFileName().toString());
+            String mimeType = getMimeType(bookFileEntity);
             if (mimeType != null) {
                 return MediaType.parseMediaType(mimeType);
             } else {
@@ -75,10 +75,21 @@ public class ResourceStorage {
         }
     }
 
-    public byte[] getBookFileByteArray(String hash) throws IOException {
+    public byte[] getBookFileByteArray(String hash) throws IOException, BookstoreAPiWrongParameterException {
+        validateHash(hash);
         BookFileEntity bookFileEntity = bookFileRepository.findBookFileEntityByHash(hash);
         Path path = Paths.get(downloadPath, bookFileEntity.getPath());
         return Files.readAllBytes(path);
 
+    }
+
+    public String getMimeType(BookFileEntity bookFileEntity) {
+        return URLConnection.guessContentTypeFromName(Paths.get(bookFileEntity.getPath()).getFileName().toString());
+    }
+
+    private void validateHash(String hash) throws BookstoreAPiWrongParameterException {
+        if (hash == null || hash.equals("")) {
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
     }
 }

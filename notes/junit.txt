@@ -1,0 +1,18 @@
+Testing a Spring Multipart POST Request
+https://www.baeldung.com/spring-multipart-post-request-test
+
+Mock Final Classes and Methods with Mockito
+https://www.baeldung.com/mockito-final
+
+Mocking Static Methods With Mockito
+https://www.baeldung.com/mockito-mock-static-methods
+
+Testing an Abstract Class With JUnit
+https://www.baeldung.com/junit-test-abstract-class
+
+
+https://habr.com/ru/post/444982/
+
+
+Convert String to Byte Array and Reverse in Java
+https://www.baeldung.com/java-string-to-byte-array

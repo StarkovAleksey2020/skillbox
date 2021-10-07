@@ -68,8 +68,6 @@ class BookServiceTest {
     @Autowired
     private RestTemplate restTemplate;
 
-    //    @MockBean
-    //    private BookRepository bookRepositoryMock;
     @Autowired
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
@@ -97,11 +95,6 @@ class BookServiceTest {
 
     @BeforeEach
     void setUp() {
-//        BookEntity bookEntity = new BookEntity();
-//        bookEntity.setImage("/some/image/path");
-//        bookEntity.setTitle("Test Title");
-//        bookEntity.setDescription("Test Book Description");
-//        bookRepositoryMock.save(bookEntity);
         HostnameVerifier allHostsValid = new HostnameVerifier() {
             public boolean verify(String hostname, SSLSession session) {
                 return true;
