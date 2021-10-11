@@ -3,7 +3,6 @@ package com.example.MyBookShopApp.data;
 import lombok.Getter;
 import lombok.Setter;
 
-//@Data
 @Getter
 @Setter
 public class SearchWordDto {
