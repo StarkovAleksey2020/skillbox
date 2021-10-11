@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -67,8 +68,9 @@ public class AuthUserController {
     @PostMapping("/login")
     @ResponseBody
     public ContactConfirmationResponse handleLogin(@RequestBody ContactConfirmationPayload payload,
+                                                   HttpServletRequest httpServletRequest,
                                                    HttpServletResponse httpServletResponse) {
-        ContactConfirmationResponse loginResponse = userEntityRegister.jwtLogin(payload);
+        ContactConfirmationResponse loginResponse = userEntityRegister.jwtLogin(httpServletRequest, payload);
         Cookie cookie = new Cookie("token", loginResponse.getResult());
         httpServletResponse.addCookie(cookie);
         return loginResponse;

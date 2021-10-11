@@ -16,3 +16,6 @@ https://habr.com/ru/post/444982/
 
 Convert String to Byte Array and Reverse in Java
 https://www.baeldung.com/java-string-to-byte-array
+
+Spring Test & Security: How to mock authentication?
+https://stackoverflow.com/questions/15203485/spring-test-security-how-to-mock-authentication

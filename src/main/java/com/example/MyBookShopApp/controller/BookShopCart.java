@@ -20,6 +20,15 @@ import java.util.List;
 @RequestMapping("/books")
 public class BookShopCart {
 
+    private final BookRepository bookRepository;
+    private final BookService bookService;
+
+    @Autowired
+    public BookShopCart(BookRepository bookRepository, BookService bookService) {
+        this.bookRepository = bookRepository;
+        this.bookService = bookService;
+    }
+
     @ModelAttribute(name = "bookCart")
     public List<BookEntity> bookCart() {
         return new ArrayList<>();
@@ -49,15 +58,6 @@ public class BookShopCart {
             return bookService.getCartCountTempUser(cartContents);
         }
         return 0;
-    }
-
-    private final BookRepository bookRepository;
-    private final BookService bookService;
-
-    @Autowired
-    public BookShopCart(BookRepository bookRepository, BookService bookService) {
-        this.bookRepository = bookRepository;
-        this.bookService = bookService;
     }
 
     @GetMapping("/cart")

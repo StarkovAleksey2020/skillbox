@@ -16,7 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-//@TestPropertySource("/application-test.properties")
 class MainPageTests {
 
     private final MockMvc mockMvc;
@@ -67,4 +66,6 @@ class MainPageTests {
                 .andExpect(xpath("/html/body/div/div/main/div[2]/div/div[1]/div[2]/strong/a").string("Batman"));
 
     }
+
+
 }

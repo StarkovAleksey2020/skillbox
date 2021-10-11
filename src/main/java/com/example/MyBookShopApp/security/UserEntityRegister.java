@@ -6,14 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Service
 public class UserEntityRegister {
@@ -60,7 +65,15 @@ public class UserEntityRegister {
         return response;
     }
 
-    public ContactConfirmationResponse jwtLogin(ContactConfirmationPayload payload) {
+    public ContactConfirmationResponse jwtLogin(HttpServletRequest httpServletRequest, ContactConfirmationPayload payload) {
+
+        UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(payload.getContact(), payload.getCode());
+        Authentication auth = authenticationManager.authenticate(authReq);
+        SecurityContext sc = SecurityContextHolder.getContext();
+        sc.setAuthentication(auth);
+        HttpSession session = httpServletRequest.getSession(true);
+        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(payload.getContact(),
                 payload.getCode()));
         UserEntityDetails userEntityDetails = (UserEntityDetails) userDetailsService.loadUserByUsername(payload.getContact());
