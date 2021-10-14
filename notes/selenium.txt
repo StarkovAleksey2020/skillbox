@@ -1,0 +1,17 @@
+Selenium + Chrome Dev-tools makes a Perfect Browser Automation Recipe
+https://sahajamit.medium.com/selenium-chrome-dev-tools-makes-a-perfect-browser-automation-recipe-c35c7f6a2360
+
+How to Handle SSL Certificate in Selenium WebDriver
+https://www.guru99.com/ssl-certificate-error-handling-selenium.html
+
+!!!____how to ignore ssl errors in headless chrome java #1198
+https://github.com/testem/testem/issues/1198
+
+How to get Selenium to wait for a page to load
+https://www.browserstack.com/guide/selenium-wait-for-page-to-load
+
+https://www.browserstack.com/guide/selenium-wait-for-page-to-load
+https://stackoverflow.com/questions/11736027/webdriver-wait-for-element-using-java
+
+!!!____ChromeDriver in Fullscreen Mode
+https://stackoverflow.com/questions/9486442/chromedriver-in-fullscreen-mode

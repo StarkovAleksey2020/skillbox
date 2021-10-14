@@ -78,7 +78,7 @@ public class AuthUserController {
 
     @PostMapping("/principal")
     @ResponseBody
-    public Object handlePrincipal(@RequestBody ContactConfirmationPayload payload) {
+    public Object handlePrincipal(ContactConfirmationPayload payload) {
         return userEntityRegister.getPrincipal(payload);
     }
 

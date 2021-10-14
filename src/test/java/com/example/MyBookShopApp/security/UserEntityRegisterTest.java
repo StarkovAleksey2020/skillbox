@@ -17,6 +17,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -28,9 +29,11 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 
 @SpringBootTest
@@ -52,6 +55,9 @@ class UserEntityRegisterTest {
 
     @MockBean
     private UserEntityRepository userEntityRepositoryMock;
+
+    @MockBean
+    private UserEntityRegister userEntityRegisterMock;
 
     @Autowired
     public UserEntityRegisterTest(UserEntityRegister userEntityRegister, PasswordEncoder passwordEncoder, BCryptPasswordEncoder bCryptPasswordEncoder, UserEntityRepository userEntityRepository, AuthenticationManager authenticationManager) {
@@ -89,68 +95,8 @@ class UserEntityRegisterTest {
         registrationForm = null;
     }
 
-    @Test
-    void registerNewUser() {
-        UserEntity userEntity = userEntityRegister.registerNewUser(registrationForm);
-        assertNotNull(userEntity);
-        assertTrue(passwordEncoder.matches(registrationForm.getPassword(), userEntity.getPassword()));
-        assertTrue(CoreMatchers.is(userEntity.getPhone()).matches(registrationForm.getPhone()));
-        assertTrue(CoreMatchers.is(userEntity.getEmail()).matches(registrationForm.getEmail()));
-        assertTrue(CoreMatchers.is(userEntity.getName()).matches(registrationForm.getName()));
-
-        Mockito.verify(userEntityRepositoryMock, Mockito.times(1))
-                .save((Mockito.any(UserEntity.class)));
-    }
-
-    @Test
-    void registerNewUserFail() {
-        Mockito.doReturn(new UserEntity())
-                .when(userEntityRepositoryMock)
-                .findUserEntityByEmail(registrationForm.getEmail());
-
-        UserEntity userEntity = userEntityRegister.registerNewUser(registrationForm);
-        assertNotNull(userEntity);
-    }
-
     private void createTestUser(String email, String password) {
         userEntityRepositoryMock.save(TestUtil.createUser(email, password, bCryptPasswordEncoder, userEntityRepositoryMock));
-    }
-
-    private String getToken() throws JsonProcessingException {
-        String email = "test9@example.com";
-        String password = "1234567";
-        createTestUser(email, password);
-        String url = "https://localhost:8085/login";
-        HttpHeaders headers = new HttpHeaders();
-
-        ContactConfirmationPayload payload = new ContactConfirmationPayload();
-        payload.setContact(email);
-        payload.setCode(password);
-        HttpEntity<ContactConfirmationPayload> entity = new HttpEntity<>(payload, headers);
-
-        // act
-        ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        return objectMapper.readTree(result.getBody()).get("result").toString();
-    }
-
-    private Object getPrincipal() {
-        String email = "test9@example.com";
-        String password = "1234567";
-        createTestUser(email, password);
-        String url = "https://localhost:8085/principal";
-        HttpHeaders headers = new HttpHeaders();
-
-        ContactConfirmationPayload payload = new ContactConfirmationPayload();
-        payload.setContact(email);
-        payload.setCode(password);
-
-        HttpEntity<ContactConfirmationPayload> entity = new HttpEntity<>(payload, headers);
-
-        // act
-        return restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
     }
 
     @Test
@@ -170,4 +116,29 @@ class UserEntityRegisterTest {
         assertEquals(200, status);
     }
 
+    @Test
+    void jwtLogin_getNotNull() {
+        ContactConfirmationResponse mockContactConfirmationResponse = mock(ContactConfirmationResponse.class);
+        HttpServletRequest mockHttpServletRequest = mock(HttpServletRequest.class);
+        ContactConfirmationPayload mockContactConfirmationPayload = mock(ContactConfirmationPayload.class);
+        Mockito.when(userEntityRegisterMock.jwtLogin(any(), any())).thenReturn(mockContactConfirmationResponse);
+
+        assertNotNull(userEntityRegister.jwtLogin(mockHttpServletRequest, mockContactConfirmationPayload));
+    }
+
+    @Test
+    void login() {
+        ContactConfirmationResponse mockContactConfirmationResponse = mock(ContactConfirmationResponse.class);
+        ContactConfirmationPayload mockContactConfirmationPayload = mock(ContactConfirmationPayload.class);
+        Mockito.when(userEntityRegisterMock.login(Mockito.any())).thenReturn(mockContactConfirmationResponse);
+        assertNotNull(userEntityRegister.login(mockContactConfirmationPayload));
+    }
+
+    @Test
+    void getPrincipal() {
+        ContactConfirmationPayload mockContactConfirmationPayload = mock(ContactConfirmationPayload.class);
+        Principal mockPrincipal = mock(Principal.class);
+        Mockito.when(userEntityRegisterMock.getPrincipal(Mockito.any())).thenReturn(mockPrincipal);
+        assertNotNull(userEntityRegister.getPrincipal(mockContactConfirmationPayload));
+    }
 }

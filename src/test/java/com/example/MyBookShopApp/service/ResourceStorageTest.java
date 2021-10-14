@@ -99,7 +99,7 @@ class ResourceStorageTest {
     }
 
     @Test
-    public void getBookFileMime_withMockHash_getMediaType() throws BookstoreAPiWrongParameterException {
+    void getBookFileMime_withMockHash_getMediaType() throws BookstoreAPiWrongParameterException {
         MediaType mockMediaType = mock(MediaType.class);
         ResourceStorage mockResourceStorage = mock(ResourceStorage.class);
         when(mockResourceStorage.getBookFileMime(any())).thenReturn(mockMediaType);

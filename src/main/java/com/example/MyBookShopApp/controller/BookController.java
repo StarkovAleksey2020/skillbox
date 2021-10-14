@@ -97,7 +97,7 @@ public class BookController {
     @PostMapping("/{slug}/img/save")
     public String saveNewBookImage(@RequestParam("file") MultipartFile file,
                                    @PathVariable("slug") String slug,
-                                   Model model) throws IOException, ForbiddenException, InsufficientRightsToChangeCoverException {
+                                   Model model) throws IOException, InsufficientRightsToChangeCoverException {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Boolean isSufficientLevelOfAccess = bookService.checkCredentials(principal);

@@ -88,9 +88,7 @@ public class UserEntityRegister {
         Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (o instanceof DefaultOAuth2User) {
-            UserEntity userEntity = new UserEntity();
-
-            return userEntity;
+            return new UserEntity();
         } else {
             UserEntityDetails userEntityDetails =
                     (UserEntityDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

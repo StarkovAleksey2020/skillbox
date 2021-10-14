@@ -19,11 +19,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.nio.file.Paths;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -62,19 +64,15 @@ class BookControllerTest {
 
     @Test
     void getPostponedSize() throws Exception {
-        BookService mockBookService = mock(BookService.class);
-        when(mockBookService.getCartCount(Mockito.any())).thenReturn(5);
-        mockMvc.perform(get("/")
-                .flashAttr("postponedSize", 5));
+        mockMvc.perform(get("/"))
+                .andExpect(model().attributeExists("postponedSize"));
 
     }
 
     @Test
     void getCartContentsSize() throws Exception {
-        BookService mockBookService = mock(BookService.class);
-        when(mockBookService.getCartCount(Mockito.any())).thenReturn(3);
-        mockMvc.perform(get("/")
-                .flashAttr("cartContentsSize", 3));
+        mockMvc.perform(get("/"))
+                .andExpect(model().attributeExists("cartContentsSize"));
     }
 
     @Test

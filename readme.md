@@ -39,3 +39,4 @@ call java -jar target/BookStore.jar
 #### /notes/exception_handling.txt - collection of links on the subject of Exception handling
 #### /notes/oauth.txt - collection of links on the subject of OAuth2
 #### /notes/junit.txt - collection of links on the subject of unit-tests
+#### /notes/junit.txt - collection of links on the subject of selenium-tests

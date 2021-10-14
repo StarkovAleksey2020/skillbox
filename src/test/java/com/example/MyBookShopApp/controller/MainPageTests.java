@@ -26,7 +26,7 @@ class MainPageTests {
     }
     
     @Test
-    public void mainPageAccessTest() throws Exception {
+    void mainPageAccessTest() throws Exception {
         mockMvc.perform(get("/"))
                 .andDo(print())
                 .andExpect(content().string(containsString("")))
@@ -34,7 +34,7 @@ class MainPageTests {
     }
     
     @Test
-    public void accessOnlyAuthorizedPageFailTest() throws Exception {
+    void accessOnlyAuthorizedPageFailTest() throws Exception {
         mockMvc.perform(get("/my"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
@@ -42,7 +42,7 @@ class MainPageTests {
     }
 
     @Test
-    public void correctLoginTest() throws Exception {
+    void correctLoginTest() throws Exception {
         mockMvc.perform(formLogin("/signin").user("test@example.com").password("1234567"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
@@ -51,7 +51,7 @@ class MainPageTests {
 
     @Test
     @WithUserDetails("test@example.com")
-    public void testAuthenticatedAccessToProfilePage() throws Exception {
+    void testAuthenticatedAccessToProfilePage() throws Exception {
         mockMvc.perform(get("/profile"))
                 .andDo(print())
                 .andExpect(authenticated())
@@ -60,7 +60,7 @@ class MainPageTests {
     }
 
     @Test
-    public void testSearchQuery() throws Exception {
+    void testSearchQuery() throws Exception {
         mockMvc.perform(get("/search/Batman"))
                 .andDo(print())
                 .andExpect(xpath("/html/body/div/div/main/div[2]/div/div[1]/div[2]/strong/a").string("Batman"));

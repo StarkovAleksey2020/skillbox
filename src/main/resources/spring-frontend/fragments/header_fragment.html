@@ -100,29 +100,34 @@
                 <ul class="menu menu_main">
                     <li class="menu-item" id="mainId">
                         <a class="menu-link" th:href="@{/}" href="/index.html"
+                           id="pointMain"
                            th:onclick="testFunc('mainId')"
                            th:text="#{topbar.main}">Главная</a>
                     </li>
                     <li class="menu-item" id="genresId">
                         <a class="menu-link" href="/genres/index.html"
+                           id="pointGenres"
                            th:href="@{/genres}"
                            th:onclick="testFunc('genresId')"
                            th:text="#{topbar.genres}">Жанры</a>
                     </li>
                     <li class="menu-item" id="recentId">
                         <a class="menu-link" href="/books/recent.html"
+                           id="pointNew"
                            th:href="@{/recent}"
                            th:onclick="testFunc('recentId')"
                            th:text="#{topbar.recent}">Новинки</a>
                     </li>
                     <li class="menu-item" id="popularId">
                         <a class="menu-link" href="/books/popular.html"
+                           id="pointPopular"
                            th:href="@{/popular}"
                            th:onclick="testFunc('popularId')"
                            th:text="#{topbar.popular}">Популярное</a>
                     </li>
                     <li class="menu-item" id="authorsId">
                         <a class="menu-link" href="/authors/index.html"
+                           id="pointAuthors"
                            th:href="@{/authors}"
                            th:onclick="testFunc('authorsId')"
                            th:text="#{topbar.authors}">Авторы</a>

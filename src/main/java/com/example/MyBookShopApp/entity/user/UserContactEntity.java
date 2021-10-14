@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.entity.user;
 
 import com.example.MyBookShopApp.entity.enumiration.ContactType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -46,8 +47,8 @@ public class UserContactEntity {
     @ApiModelProperty(value = "Contact (e-mail or phone)")
     private String contact;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ApiModelProperty(value = "The identifier of the user this contact belongs to")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private UserEntity userEntityContact;
 }

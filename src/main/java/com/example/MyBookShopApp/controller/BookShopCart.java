@@ -20,12 +20,10 @@ import java.util.List;
 @RequestMapping("/books")
 public class BookShopCart {
 
-    private final BookRepository bookRepository;
     private final BookService bookService;
 
     @Autowired
-    public BookShopCart(BookRepository bookRepository, BookService bookService) {
-        this.bookRepository = bookRepository;
+    public BookShopCart(BookService bookService) {
         this.bookService = bookService;
     }
 

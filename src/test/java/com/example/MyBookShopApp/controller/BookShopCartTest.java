@@ -96,7 +96,7 @@ class BookShopCartTest {
     }
 
     @Test
-    public void handleRemoveBookFromCartRequest_withNullPrincipalAndNullSlug_get404() throws Exception {
+    void handleRemoveBookFromCartRequest_withNullPrincipalAndNullSlug_get404() throws Exception {
         String slug = "";
         mockMvc.perform(post("/books/changeBookStatus/cart/remove/" + slug)
                 .accept(MediaType.ALL))
@@ -105,7 +105,7 @@ class BookShopCartTest {
 
     @Test
     @WithUserDetails("test@example.com")
-    public void handleRemoveBookFromCartRequest_withNotNullPrincipalAndNotNullSlug_getRedirected() throws Exception {
+    void handleRemoveBookFromCartRequest_withNotNullPrincipalAndNotNullSlug_getRedirected() throws Exception {
 
         String slug = "bbbb";
 

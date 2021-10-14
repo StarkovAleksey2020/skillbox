@@ -85,8 +85,8 @@ public class UserEntity {
     @OneToMany(mappedBy = "userEntity")
     private List<Book2RateEntity> book2RateEntity;
 
-    @OneToOne(mappedBy = "userEntityContact")
-    private UserContactEntity userContact;
+    @OneToMany(mappedBy = "userEntityContact")
+    private List<UserContactEntity> userContact;
 
     @OneToOne(mappedBy = "userEntity")
     private CartEntity cartEntity;
