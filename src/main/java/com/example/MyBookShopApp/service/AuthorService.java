@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.service;
 
+import com.example.MyBookShopApp.aop.annotations.NullArgsCatchable;
 import com.example.MyBookShopApp.entity.AuthorEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.AuthorRepository;
@@ -32,6 +33,7 @@ public class AuthorService {
         }));
     }
 
+    @NullArgsCatchable
     public String getDescriptionVisible(String description) throws BookstoreAPiWrongParameterException {
         if (description != null) {
             String[] strings = description.split("\\.");
@@ -41,6 +43,7 @@ public class AuthorService {
         }
     }
 
+    @NullArgsCatchable
     public String getDescriptionHidden(String description) throws BookstoreAPiWrongParameterException {
         if (description != null) {
             String[] strings = description.split("\\.");

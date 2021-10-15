@@ -40,3 +40,5 @@ call java -jar target/BookStore.jar
 #### /notes/oauth.txt - collection of links on the subject of OAuth2
 #### /notes/junit.txt - collection of links on the subject of unit-tests
 #### /notes/junit.txt - collection of links on the subject of selenium-tests
+#### /notes/aop_info.txt - collection of links on the subject of AOP
+#### /notes/curl.txt - collection of links on the subject of curl
