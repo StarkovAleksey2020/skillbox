@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.aop;
 
+import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +16,11 @@ public class AuthorServiceAspect {
     public void NullArgPointerCatcherPointcut() {}
 
     @AfterThrowing(pointcut = "args(description) && NullArgPointerCatcherPointcut()", throwing = "ex")
-    public void NullArgPointerCatcherAdvice(String description, Exception ex) {
+    public void NullArgPointerCatcherAdvice(String description, Exception ex) throws BookstoreAPiWrongParameterException {
+        if (description == null) {
         logger.warning("ATTENTION, exception caught: " + ex.getMessage());
+        throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
     }
 
 }

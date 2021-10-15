@@ -34,27 +34,19 @@ public class AuthorService {
     }
 
     @NullArgsCatchable
-    public String getDescriptionVisible(String description) throws BookstoreAPiWrongParameterException {
-        if (description != null) {
+    public String getDescriptionVisible(String description) {
             String[] strings = description.split("\\.");
             return strings[0] + ". " + strings[1] + ".";
-        } else {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
     }
 
     @NullArgsCatchable
-    public String getDescriptionHidden(String description) throws BookstoreAPiWrongParameterException {
-        if (description != null) {
+    public String getDescriptionHidden(String description) {
             String[] strings = description.split("\\.");
             StringBuilder descriptionHidden = new StringBuilder();
             for (int i = 2; i < strings.length; i++) {
                 descriptionHidden.append(strings[i]).append(". ");
             }
             return descriptionHidden.toString();
-        } else {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
     }
 
 }
