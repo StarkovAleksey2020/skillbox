@@ -18,8 +18,8 @@ public class AuthorServiceAspect {
     @AfterThrowing(pointcut = "args(description) && NullArgPointerCatcherPointcut()", throwing = "ex")
     public void NullArgPointerCatcherAdvice(String description, Exception ex) throws BookstoreAPiWrongParameterException {
         if (description == null) {
-        logger.warning("ATTENTION, exception caught: " + ex.getMessage());
-        throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+            logger.warning("ATTENTION, BookstoreAPiWrongParameterException caught: " + ex.getMessage());
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
     }
 

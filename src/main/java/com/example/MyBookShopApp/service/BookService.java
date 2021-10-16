@@ -1,5 +1,7 @@
 package com.example.MyBookShopApp.service;
 
+import com.example.MyBookShopApp.aop.annotations.EmptyArgsCatchable;
+import com.example.MyBookShopApp.aop.annotations.EmptyOrLengthOneArgsCatchable;
 import com.example.MyBookShopApp.data.BookReviewRLDto;
 import com.example.MyBookShopApp.entity.AuthorEntity;
 import com.example.MyBookShopApp.entity.BookEntity;
@@ -71,10 +73,8 @@ public class BookService {
         return bookRepository.findAll();
     }
 
+    @EmptyArgsCatchable
     public List<BookEntity> getBooksByAuthor(String authorName) throws BookstoreAPiWrongParameterException {
-        if (authorName.equals("")) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
         AuthorEntity entity = authorRepository.findAuthorEntityByName(authorName);
         if (entity == null) {
             throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
@@ -82,17 +82,13 @@ public class BookService {
         return bookRepository.findBookEntitiesByAuthorSetContaining(entity);
     }
 
-
+    @EmptyOrLengthOneArgsCatchable
     public List<BookEntity> getBooksByTitle(String title) throws BookstoreAPiWrongParameterException {
-        if (title.equals("") || title.length() <= 1) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        List<BookEntity> bookEntities = bookRepository.findBookEntitiesByTitleContaining(title);
+        if (bookEntities.size() > 0) {
+            return bookEntities;
         } else {
-            List<BookEntity> bookEntities = bookRepository.findBookEntitiesByTitleContaining(title);
-            if (bookEntities.size() > 0) {
-                return bookEntities;
-            } else {
-                throw new BookstoreAPiWrongParameterException("No data found with specified parameters...");
-            }
+            throw new BookstoreAPiWrongParameterException("No data found with specified parameters...");
         }
     }
 
@@ -111,26 +107,18 @@ public class BookService {
         return bookRepository.getBestsellers();
     }
 
+
     public Page<BookEntity> getPageOfRecommendedBooks(Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
-        if (offset == null || limit == null) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findAll(nextPage);
     }
 
     public Page<BookEntity> getPageOfRecentBooks(Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
-        if (offset == null || limit == null) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findAllDesc(nextPage);
     }
 
     public Page<BookEntity> getPageOfSearchResultBooks(String searchWord, Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
-        if (searchWord == null || offset == null || limit == null) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findBookEntitiesByTitleContaining(searchWord, nextPage);
     }
@@ -171,17 +159,11 @@ public class BookService {
     }
 
     public Page<BookEntity> getPageOfPopularBooksOrdered(Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
-        if (offset == null || limit == null) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findBooksByPopularRate(nextPage);
     }
 
     public Page<BookEntity> getPageOfTaggedBooks(String tagName, Integer offset, Integer limit) throws BookstoreAPiWrongParameterException {
-        if (tagName == null || offset == null || limit == null) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
         Pageable nextPage = PageRequest.of(offset, limit);
         return bookRepository.findBooksByTagName(tagName, nextPage);
     }
@@ -233,14 +215,11 @@ public class BookService {
         return bookRepository.findBooksByFolder(folderId, nextPage);
     }
 
+
     public Integer getAuthorBooksCount(String authorName) throws BookstoreAPiWrongParameterException {
-        if (authorName == null) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
         return bookRepository.findBooksCountByAuthor(authorName);
     }
 
-    
     public boolean removePostponedItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
         Gson gson = new Gson();
@@ -270,7 +249,7 @@ public class BookService {
         return cookie;
     }
 
-    
+
     public boolean removeCartItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
         Gson gson = new Gson();
@@ -300,7 +279,7 @@ public class BookService {
         return cookie;
     }
 
-    
+
     public Boolean addPostponedItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
 
@@ -375,7 +354,7 @@ public class BookService {
         return null;
     }
 
-    
+
     public boolean addCartItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
 
@@ -472,7 +451,7 @@ public class BookService {
         return entity;
     }
 
-    
+
     public Integer getCartCount(Object principal) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
@@ -520,7 +499,7 @@ public class BookService {
         }
     }
 
-    
+
     public Integer getPostponedCount(Object principal) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
@@ -568,7 +547,7 @@ public class BookService {
         }
     }
 
-    
+
     public List<BookEntity> getBookListInCart(Object principal) {
         UserEntity userEntity = validateUserPrincipal(principal);
         CartEntity cartEntity = cartRepository.findByUserEntity(userEntity);
@@ -612,7 +591,7 @@ public class BookService {
         return bookRepository.findBookEntityBySlugIn(cookieSlugs);
     }
 
-    
+
     public Integer getBookRate(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
         if (validateJWTUserPrincipal(principal)) {
@@ -635,7 +614,7 @@ public class BookService {
         return true;
     }
 
-    
+
     public Integer setBookRate(String slug, Integer rate, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
         validateRate(rate);
@@ -791,7 +770,7 @@ public class BookService {
         }
     }
 
-    
+
     public Boolean checkCredentials(Object principal) {
         try {
             UserEntity userEntity = userRepository.findByEmail(principal.getClass().getName());
