@@ -1,9 +1,11 @@
 package com.example.MyBookShopApp.aop;
 
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.logging.Logger;
 
 @Aspect
@@ -11,6 +13,7 @@ import java.util.logging.Logger;
 public class BookServiceAspect {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Long durationMills;
 
     @Pointcut(value = "@annotation(com.example.MyBookShopApp.aop.annotations.EmptyArgsCatchable)")
     public void EmptyArgPointerCatcherPointcut() {
@@ -71,5 +74,31 @@ public class BookServiceAspect {
             throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
     }
+
+    @Pointcut(value = "@annotation(com.example.MyBookShopApp.aop.annotations.BookManagementPointer)")
+    public void handleBookItemManagementCatcherPointcut() {}
+
+    @Before(value = "handleBookItemManagementCatcherPointcut()")
+    public void handleBookItemManagementPointersBefore(JoinPoint joinPoint) {
+        logger.info("---- Book item handling started at: " + new Date() + ", joinPoint: " + joinPoint.toShortString());
+    }
+
+    @After(value = "handleBookItemManagementCatcherPointcut()")
+    public void handleBookItemManagementPointersAfter(JoinPoint joinPoint) {
+        logger.info("---- Book item handling finished at: " + new Date());
+    }
+
+    @Pointcut(value = "execution(* getBookRateTotal*(String))")
+    public void getStringArgsCatcherPointcut() {
+    }
+
+    @Before(value = "args(arg0) && getStringArgsCatcherPointcut()", argNames = "arg0")
+    public void handleStringArgParameterCatchable(String arg0) throws BookstoreAPiWrongParameterException {
+        if (arg0 == null || arg0.equals("")) {
+            logger.warning("ATTENTION, BookstoreAPiWrongParameterException: input String parameter empty or null");
+            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+        }
+    }
+
 
 }

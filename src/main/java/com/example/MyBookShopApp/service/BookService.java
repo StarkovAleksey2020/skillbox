@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.service;
 
+import com.example.MyBookShopApp.aop.annotations.BookManagementPointer;
 import com.example.MyBookShopApp.aop.annotations.EmptyArgsCatchable;
 import com.example.MyBookShopApp.aop.annotations.EmptyOrLengthOneArgsCatchable;
 import com.example.MyBookShopApp.data.BookReviewRLDto;
@@ -40,6 +41,8 @@ import java.util.logging.Logger;
 
 @Service
 public class BookService {
+
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
@@ -220,6 +223,7 @@ public class BookService {
         return bookRepository.findBooksCountByAuthor(authorName);
     }
 
+    @BookManagementPointer
     public boolean removePostponedItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
         Gson gson = new Gson();
@@ -233,12 +237,14 @@ public class BookService {
                 cartItemEntity.setPostponedString(cartItemEntity.getPostponedString().replace("/" + slug, ""));
                 cartEntity.setValue(gson.toJson(cartItemEntity));
                 cartRepository.save(cartEntity);
+                logger.info("**** Postponed item successfully removed from database. Item slug: " + slug);
                 return true;
             }
         }
         return false;
     }
 
+    @BookManagementPointer
     public Cookie removePostponedItemTempUser(String slug, String postponedCookieString) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
         validateCookieString(postponedCookieString);
@@ -246,10 +252,12 @@ public class BookService {
         cookieBooks.remove(slug);
         Cookie cookie = new Cookie("postponedContents", String.join("/", cookieBooks));
         cookie.setPath("/");
+        logger.info("**** Postponed item successfully removed from cookie. Item slug: " + slug);
         return cookie;
     }
 
 
+    @BookManagementPointer
     public boolean removeCartItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
         Gson gson = new Gson();
@@ -263,12 +271,14 @@ public class BookService {
                 cartItemEntity.setCartString(cartItemEntity.getCartString().replace("/" + slug, ""));
                 cartEntity.setValue(gson.toJson(cartItemEntity));
                 cartRepository.save(cartEntity);
+                logger.info("**** Cart item successfully removed from database. Item slug: " + slug);
                 return true;
             }
         }
         return false;
     }
 
+    @BookManagementPointer
     public Cookie removeCartItemTempUser(String slug, String cartCookieString) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
         validateCookieString(cartCookieString);
@@ -276,10 +286,12 @@ public class BookService {
         cookieBooks.remove(slug);
         Cookie cookie = new Cookie("cartContents", String.join("/", cookieBooks));
         cookie.setPath("/");
+        logger.info("**** Cart item successfully removed from cookie. Item slug: " + slug);
         return cookie;
     }
 
 
+    @BookManagementPointer
     public Boolean addPostponedItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
 
@@ -323,6 +335,7 @@ public class BookService {
                 cartRepository.save(cartEntity);
                 return true;
             }
+            logger.info("**** Postponed item successfully added to database. Item slug: " + slug);
         } else {
             CartEntity entity = createCartEntity(userEntity);
             CartItemEntity cartItemEntity = new CartItemEntity();
@@ -330,11 +343,13 @@ public class BookService {
             entity.setValue(gson.toJson(cartItemEntity));
             entity.setEditDate(OffsetDateTime.now());
             cartRepository.save(entity);
+            logger.info("**** Postponed item successfully added to database. Item slug: " + slug);
             return true;
         }
         return false;
     }
 
+    @BookManagementPointer
     public Cookie addPostponedItemTempUser(String slug, String postponedCookieString) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
 
@@ -342,6 +357,7 @@ public class BookService {
             Cookie cookie = new Cookie("postponedContents", slug);
             cookie.setMaxAge(2 * 60 * 60);
             cookie.setPath("/");
+            logger.info("**** Postponed item successfully added to cookie. Item slug: " + slug);
             return cookie;
         } else if (!postponedCookieString.contains(slug)) {
             StringJoiner stringJoiner = new StringJoiner("/");
@@ -349,12 +365,13 @@ public class BookService {
             Cookie cookie = new Cookie("postponedContents", stringJoiner.toString());
             cookie.setMaxAge(2 * 60 * 60);
             cookie.setPath("/");
+            logger.info("**** Postponed item successfully added to cookie. Item slug: " + slug);
             return cookie;
         }
         return null;
     }
 
-
+    @BookManagementPointer
     public boolean addCartItem(String slug, Object principal) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
 
@@ -394,6 +411,7 @@ public class BookService {
                 cartRepository.save(cartEntity);
                 return true;
             }
+            logger.info("**** Cart item successfully added to database. Item slug: " + slug);
         } else {
             CartEntity entity = createCartEntity(userEntity);
             CartItemEntity cartItemEntity = new CartItemEntity();
@@ -401,11 +419,13 @@ public class BookService {
             entity.setValue(gson.toJson(cartItemEntity));
             entity.setEditDate(OffsetDateTime.now());
             cartRepository.save(entity);
+            logger.info("**** Cart item successfully added to database. Item slug: " + slug);
             return true;
         }
         return false;
     }
 
+    @BookManagementPointer
     public Cookie addCartItemTempUser(String slug, String cartContents) throws BookstoreAPiWrongParameterException {
         validateSlug(slug);
 
@@ -413,6 +433,7 @@ public class BookService {
             Cookie cookie = new Cookie("cartContents", slug);
             cookie.setMaxAge(2 * 60 * 60);
             cookie.setPath("/");
+            logger.info("**** Cart item successfully added to cookie. Item slug: " + slug);
             return cookie;
         } else if (!cartContents.contains(slug)) {
             StringJoiner stringJoiner = new StringJoiner("/");
@@ -420,6 +441,7 @@ public class BookService {
             Cookie cookie = new Cookie("cartContents", stringJoiner.toString());
             cookie.setMaxAge(2 * 60 * 60);
             cookie.setPath("/");
+            logger.info("**** Cart item successfully added to cookie. Item slug: " + slug);
             return cookie;
         }
         return null;
@@ -699,9 +721,6 @@ public class BookService {
     }
 
     public Integer getBookRateTotal(String slug) throws BookstoreAPiWrongParameterException {
-        if (slug == null || slug.equals("")) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
         if (bookEntity != null) {
             List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
@@ -717,10 +736,6 @@ public class BookService {
     }
 
     public Integer getBookRateTotalCount(String slug) throws BookstoreAPiWrongParameterException {
-        if (slug == null || slug.equals("")) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
-
         BookEntity bookEntity = bookRepository.getBookBySlug(slug);
         if (bookEntity != null) {
             List<Book2RateEntity> book2RateEntities = bookRateRepository.findBook2RateEntitiesByBookEntity(bookEntity);
