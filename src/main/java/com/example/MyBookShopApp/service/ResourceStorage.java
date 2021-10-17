@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.service;
 
+import com.example.MyBookShopApp.aop.annotations.EmptyOrNullArgsCatchable;
 import com.example.MyBookShopApp.entity.book.file.BookFileEntity;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.repository.BookFileRepository;
@@ -52,31 +53,25 @@ public class ResourceStorage {
         return resourceURI;
     }
 
+    @EmptyOrNullArgsCatchable
     public Path getBookFilePath(String hash) throws BookstoreAPiWrongParameterException {
-        if (hash != null && !hash.equals("")) {
-            BookFileEntity bookFileEntity = bookFileRepository.findBookFileEntityByHash(hash);
-            return Paths.get(bookFileEntity.getPath());
-        } else {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
+        BookFileEntity bookFileEntity = bookFileRepository.findBookFileEntityByHash(hash);
+        return Paths.get(bookFileEntity.getPath());
     }
 
+    @EmptyOrNullArgsCatchable
     public MediaType getBookFileMime(String hash) throws BookstoreAPiWrongParameterException {
-        if (hash != null && !hash.equals("")) {
-            BookFileEntity bookFileEntity = bookFileRepository.findBookFileEntityByHash(hash);
-            String mimeType = getMimeType(bookFileEntity);
-            if (mimeType != null) {
-                return MediaType.parseMediaType(mimeType);
-            } else {
-                return MediaType.APPLICATION_OCTET_STREAM;
-            }
+        BookFileEntity bookFileEntity = bookFileRepository.findBookFileEntityByHash(hash);
+        String mimeType = getMimeType(bookFileEntity);
+        if (mimeType != null) {
+            return MediaType.parseMediaType(mimeType);
         } else {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
+            return MediaType.APPLICATION_OCTET_STREAM;
         }
     }
 
+    @EmptyOrNullArgsCatchable
     public byte[] getBookFileByteArray(String hash) throws IOException, BookstoreAPiWrongParameterException {
-        validateHash(hash);
         BookFileEntity bookFileEntity = bookFileRepository.findBookFileEntityByHash(hash);
         Path path = Paths.get(downloadPath, bookFileEntity.getPath());
         return Files.readAllBytes(path);
@@ -85,11 +80,5 @@ public class ResourceStorage {
 
     public String getMimeType(BookFileEntity bookFileEntity) {
         return URLConnection.guessContentTypeFromName(Paths.get(bookFileEntity.getPath()).getFileName().toString());
-    }
-
-    private void validateHash(String hash) throws BookstoreAPiWrongParameterException {
-        if (hash == null || hash.equals("")) {
-            throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
-        }
     }
 }

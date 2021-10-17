@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 public class BookServiceAspect {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    private Long durationMills;
 
     @Pointcut(value = "@annotation(com.example.MyBookShopApp.aop.annotations.EmptyArgsCatchable)")
     public void EmptyArgPointerCatcherPointcut() {
