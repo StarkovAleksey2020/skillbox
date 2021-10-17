@@ -34,13 +34,13 @@ public class AuthorService {
     }
 
     @NullArgsCatchable
-    public String getDescriptionVisible(String description) {
+    public String getDescriptionVisible(String description) throws BookstoreAPiWrongParameterException {
             String[] strings = description.split("\\.");
             return strings[0] + ". " + strings[1] + ".";
     }
 
     @NullArgsCatchable
-    public String getDescriptionHidden(String description) {
+    public String getDescriptionHidden(String description) throws BookstoreAPiWrongParameterException {
             String[] strings = description.split("\\.");
             StringBuilder descriptionHidden = new StringBuilder();
             for (int i = 2; i < strings.length; i++) {

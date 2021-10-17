@@ -12,15 +12,16 @@ public class AuthorServiceAspect {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
-    @Pointcut(value = "@annotation(com.example.MyBookShopApp.aop.annotations.NullArgsCatchable)")
+    @Pointcut(value = "execution(* *..*(String)) && @annotation(com.example.MyBookShopApp.aop.annotations.NullArgsCatchable)")
     public void NullArgPointerCatcherPointcut() {}
 
-    @AfterThrowing(pointcut = "args(description) && NullArgPointerCatcherPointcut()", throwing = "ex")
-    public void NullArgPointerCatcherAdvice(String description, Exception ex) throws BookstoreAPiWrongParameterException {
-        if (description == null) {
-            logger.warning("ATTENTION, BookstoreAPiWrongParameterException caught: " + ex.getMessage());
+    @Before(value = "args(arg0) && NullArgPointerCatcherPointcut()", argNames = "arg0")
+    public void NullArgPointerCatcherAdvice(String arg0) throws BookstoreAPiWrongParameterException {
+        if (arg0 == null) {
+            logger.warning("ATTENTION, BookstoreAPiWrongParameterException: input parameter are null");
             throw new BookstoreAPiWrongParameterException("Wrong values passed to one or more parameters");
         }
     }
+
 
 }
