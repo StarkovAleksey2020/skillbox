@@ -42,7 +42,7 @@ class BookShopPostponedTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handlePostponedRequest_withNotNullPrincipalAndEmptyPostponed_getEmptyPostponed() throws Exception {
         Mockito.when(bookServiceMock.getPostponedCount(Mockito.any())).thenReturn(0);
         MvcResult result = mockMvc.perform(get("/books/postponed")
@@ -52,7 +52,7 @@ class BookShopPostponedTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handlePostponedRequest_withNotNullPrincipalAndNotEmptyPostponed_getNotEmptyPostponed() throws Exception {
         Mockito.when(bookServiceMock.getPostponedCount(Mockito.any())).thenReturn(3);
         MvcResult result = mockMvc.perform(get("/books/postponed")
@@ -80,7 +80,7 @@ class BookShopPostponedTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handleRemoveBookFromPostponedRequest_withNotNullPrincipalAndNotNullSlug_getRedirected() throws Exception {
         String slug = "bbbb";
 
@@ -89,7 +89,7 @@ class BookShopPostponedTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handleBuyBookFromPostponedRequest_get302() throws Exception {
         String slug = "aaaa";
         mockMvc.perform(post("/books/changeBookStatus/postponed/buy/" + slug))
@@ -119,7 +119,7 @@ class BookShopPostponedTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handleChangeBookStatus_withNotNullPrincipalAndNotEmptySlug_get302() throws Exception {
         String slug = "aaaa";
         mockMvc.perform(post("/books/changeBookStatus/postponed/" + slug)

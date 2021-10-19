@@ -231,7 +231,7 @@ class MainPageSeleniumTests {
 
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"mail\"]")));
         driver.findElement(By.xpath("//*[@id=\"mail\"]")).click();
-        driver.findElement(By.xpath("//*[@id=\"mail\"]")).sendKeys("test@example.com");
+        driver.findElement(By.xpath("//*[@id=\"mail\"]")).sendKeys("test1@example.com");
 
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"sendauth\"]")));
         driver.findElement(By.xpath("//*[@id=\"sendauth\"]")).click();
@@ -260,7 +260,7 @@ class MainPageSeleniumTests {
 
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"mail\"]")));
         driver.findElement(By.xpath("//*[@id=\"mail\"]")).click();
-        driver.findElement(By.xpath("//*[@id=\"mail\"]")).sendKeys("test@example.com");
+        driver.findElement(By.xpath("//*[@id=\"mail\"]")).sendKeys("test1@example.com");
 
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id=\"sendauth\"]")));
         driver.findElement(By.xpath("//*[@id=\"sendauth\"]")).click();

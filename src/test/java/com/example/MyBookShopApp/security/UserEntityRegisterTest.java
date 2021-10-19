@@ -141,4 +141,14 @@ class UserEntityRegisterTest {
         Mockito.when(userEntityRegisterMock.getPrincipal(Mockito.any())).thenReturn(mockPrincipal);
         assertNotNull(userEntityRegister.getPrincipal(mockContactConfirmationPayload));
     }
+
+    @Test
+    void jwtLoginByPhoneNumber() {
+        ContactConfirmationResponse mockContactConfirmationResponse = mock(ContactConfirmationResponse.class);
+        HttpServletRequest mockHttpServletRequest = mock(HttpServletRequest.class);
+        ContactConfirmationPayload mockContactConfirmationPayload = mock(ContactConfirmationPayload.class);
+        Mockito.when(userEntityRegisterMock.jwtLoginByPhoneNumber(any(), any())).thenReturn(mockContactConfirmationResponse);
+
+        assertNotNull(userEntityRegister.jwtLoginByPhoneNumber(mockHttpServletRequest, mockContactConfirmationPayload));
+    }
 }

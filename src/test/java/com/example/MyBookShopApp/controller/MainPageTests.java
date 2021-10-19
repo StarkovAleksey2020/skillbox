@@ -43,14 +43,14 @@ class MainPageTests {
 
     @Test
     void correctLoginTest() throws Exception {
-        mockMvc.perform(formLogin("/signin").user("test@example.com").password("1234567"))
+        mockMvc.perform(formLogin("/signin").user("test1@example.com").password("1234567"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void testAuthenticatedAccessToProfilePage() throws Exception {
         mockMvc.perform(get("/profile"))
                 .andDo(print())

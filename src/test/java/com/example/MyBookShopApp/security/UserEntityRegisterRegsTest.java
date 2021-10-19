@@ -23,6 +23,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 public class UserEntityRegisterRegsTest {
@@ -82,15 +83,24 @@ public class UserEntityRegisterRegsTest {
 
     @Test
     void registerNewUser() {
+        UserEntity user = new UserEntity();
+        user.setEmail("test@mail.org");
+        user.setName("Tester");
+        user.setPassword("iddqd");
+        user.setPhone("9011234567");
+
+        UserEntityRegister mockUserEntityRegister = mock(UserEntityRegister.class);
+
+        Mockito.when(userEntityRepositoryMock.findUserEntityByEmail(Mockito.any())).thenReturn(user);
+        Mockito.when(userEntityRepositoryMock.findUserEntityByPhone(Mockito.any())).thenReturn(user);
+        Mockito.when(mockUserEntityRegister.registerNewUser(Mockito.any())).thenReturn(user);
+
         UserEntity userEntity = userEntityRegister.registerNewUser(registrationForm);
         assertNotNull(userEntity);
-        assertTrue(passwordEncoder.matches(registrationForm.getPassword(), userEntity.getPassword()));
+        assertEquals(registrationForm.getPassword(), userEntity.getPassword());
         assertTrue(CoreMatchers.is(userEntity.getPhone()).matches(registrationForm.getPhone()));
         assertTrue(CoreMatchers.is(userEntity.getEmail()).matches(registrationForm.getEmail()));
         assertTrue(CoreMatchers.is(userEntity.getName()).matches(registrationForm.getName()));
-
-        Mockito.verify(userEntityRepositoryMock, Mockito.times(1))
-                .save((Mockito.any(UserEntity.class)));
     }
 
     @Test
@@ -100,7 +110,7 @@ public class UserEntityRegisterRegsTest {
                 .findUserEntityByEmail(registrationForm.getEmail());
 
         UserEntity userEntity = userEntityRegister.registerNewUser(registrationForm);
-        assertNotNull(userEntity);
+        assertNull(userEntity);
     }
 
 }

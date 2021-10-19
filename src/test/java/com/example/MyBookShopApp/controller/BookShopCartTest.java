@@ -61,7 +61,7 @@ class BookShopCartTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handleCartRequest_withNotNullPrincipalAndNullCart_getEmptyCart() throws Exception {
         Mockito.when(bookServiceMock.getCartCount(Mockito.any())).thenReturn(0);
         MvcResult result = mockMvc.perform(get("/books/cart")
@@ -71,7 +71,7 @@ class BookShopCartTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handleCartRequest_withNotNullPrincipalAndNotNullCart_getNotEmptyCart() throws Exception {
         Mockito.when(bookServiceMock.getCartCount(Mockito.any())).thenReturn(3);
         MvcResult result = mockMvc.perform(get("/books/cart")
@@ -104,7 +104,7 @@ class BookShopCartTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handleRemoveBookFromCartRequest_withNotNullPrincipalAndNotNullSlug_getRedirected() throws Exception {
 
         String slug = "bbbb";
@@ -115,7 +115,7 @@ class BookShopCartTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handleMoveBookFromCartToKeptRequest_withNotNullPrincipalAndEmptySlug_get404() throws Exception {
         String slug = "";
         mockMvc.perform(post("/books/changeBookStatus/cart/kept/" + slug)
@@ -124,7 +124,7 @@ class BookShopCartTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handleMoveBookFromCartToKeptRequest_withNotNullPrincipalAndNotEmptySlug_get302() throws Exception {
         String slug = "aaaa";
         mockMvc.perform(post("/books/changeBookStatus/cart/kept/" + slug)
@@ -155,7 +155,7 @@ class BookShopCartTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handleChangeBookStatus_withNotNullPrincipalAndEmptySlug_get404() throws Exception {
         String slug = "";
         mockMvc.perform(post("/books/changeBookStatus/" + slug)
@@ -164,7 +164,7 @@ class BookShopCartTest {
     }
 
     @Test
-    @WithUserDetails("test@example.com")
+    @WithUserDetails("test1@example.com")
     void handleChangeBookStatus_withNotNullPrincipalAndNotEmptySlug_get302() throws Exception {
         String slug = "aaaa";
         mockMvc.perform(post("/books/changeBookStatus/" + slug)

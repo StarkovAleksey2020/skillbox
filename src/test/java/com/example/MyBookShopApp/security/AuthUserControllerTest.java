@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,6 +32,9 @@ class AuthUserControllerTest {
 
     @MockBean
     private UserService userServiceMock;
+
+    @MockBean
+    private SmsService smsServiceMock;
 
     @MockBean
     private UserEntityRepository userEntityRepositoryMock;
@@ -112,6 +116,7 @@ class AuthUserControllerTest {
         UserEntity mockUserEntity = mock(UserEntity.class);
 
         Mockito.when(userEntityRepositoryMock.findUserEntityByEmail(Mockito.any())).thenReturn(mockUserEntity);
+        Mockito.when(userEntityRepositoryMock.findUserEntityByPhone(Mockito.any())).thenReturn(mockUserEntity);
         Mockito.when(mockUserEntityRegister.registerNewUser(Mockito.any())).thenReturn(mockUserEntity);
 
         mockMvc.perform(post("/reg")
@@ -123,9 +128,24 @@ class AuthUserControllerTest {
     @Test
     @WithMockUser(username = "test@example.com", password = "1234567", roles = "USER")
     void handleLogin_getOk() throws Exception {
-        mockMvc.perform(get("/login")
-                .accept(MediaType.ALL))
-                .andExpect(status().isOk());
+        RegistrationForm registrationForm = new RegistrationForm();
+        registrationForm.setEmail("test@mail.org");
+        registrationForm.setName("Tester");
+        registrationForm.setPassword("iddqd");
+        registrationForm.setPhone("9011234567");
+
+        UserEntityRegister mockUserEntityRegister = mock(UserEntityRegister.class);
+
+        UserEntity mockUserEntity = mock(UserEntity.class);
+
+        Mockito.when(userEntityRepositoryMock.findUserEntityByEmail(Mockito.any())).thenReturn(mockUserEntity);
+        Mockito.when(userEntityRepositoryMock.findUserEntityByPhone(Mockito.any())).thenReturn(mockUserEntity);
+        Mockito.when(mockUserEntityRegister.registerNewUser(Mockito.any())).thenReturn(mockUserEntity);
+
+        mockMvc.perform(post("/login")
+                .content(objectMapper.writeValueAsString(registrationForm))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -139,5 +159,31 @@ class AuthUserControllerTest {
     void handleProfile() throws Exception {
         mockMvc.perform(get("/profile"))
                 .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser(username = "test@example.com", password = "1234567", roles = "USER")
+    void handleLoginByPhoneNumber() throws Exception {
+
+        RegistrationForm registrationForm = new RegistrationForm();
+        registrationForm.setEmail("test@mail.org");
+        registrationForm.setName("Tester");
+        registrationForm.setPassword("iddqd");
+        registrationForm.setPhone("9011234567");
+
+        UserEntityRegister mockUserEntityRegister = mock(UserEntityRegister.class);
+
+        UserEntity mockUserEntity = mock(UserEntity.class);
+
+        Mockito.when(userEntityRepositoryMock.findUserEntityByEmail(Mockito.any())).thenReturn(mockUserEntity);
+        Mockito.when(userEntityRepositoryMock.findUserEntityByPhone(Mockito.any())).thenReturn(mockUserEntity);
+        Mockito.when(mockUserEntityRegister.registerNewUser(Mockito.any())).thenReturn(mockUserEntity);
+
+        Mockito.when(smsServiceMock.verifyCode(Mockito.any())).thenReturn(true);
+
+        mockMvc.perform(post("/login-by-phone-number")
+                .content(objectMapper.writeValueAsString(registrationForm))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }
