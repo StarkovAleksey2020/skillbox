@@ -8,6 +8,7 @@ import com.example.MyBookShopApp.security.UserEntityDetails;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -73,7 +74,7 @@ public class JWTUtil {
         return entity == null;
     }
 
-    public Boolean validateToken(String token, UserEntityDetails userEntityDetails) throws JwtTokenMalformedException, JwtTokenMissingException {
+    public Boolean validateToken(String token, UserDetails userEntityDetails) throws JwtTokenMalformedException, JwtTokenMissingException {
         try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
         } catch (SignatureException e) {

@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
@@ -42,8 +43,15 @@ public class UserEntityRegister {
 
     public UserEntity registerNewUser(RegistrationForm registrationForm) {
 
-        UserEntity userEntity = new UserEntity();
-        if (userEntityRepository.findUserEntityByEmail(registrationForm.getEmail()) == null) {
+        UserEntity userByEmail = null;
+        if (registrationForm.getEmail() != null) {
+            userByEmail = userEntityRepository.findUserEntityByEmail(registrationForm.getEmail());
+        }
+
+        UserEntity userByPhone = userEntityRepository.findUserEntityByPhone(registrationForm.getPhone());
+
+        if (userByEmail == null && userByPhone == null) {
+            UserEntity userEntity = new UserEntity();
             userEntity.setName(registrationForm.getName());
             userEntity.setEmail(registrationForm.getEmail());
             userEntity.setPhone(registrationForm.getPhone());
@@ -52,8 +60,10 @@ public class UserEntityRegister {
             userEntity.setRegTime(LocalDateTime.now());
             userEntity.setHash(UUID.randomUUID().toString());
             userEntityRepository.save(userEntity);
+        } else {
+            return userByPhone;
         }
-        return userEntity;
+        return null;
     }
 
     public ContactConfirmationResponse login(ContactConfirmationPayload payload) {
@@ -101,5 +111,19 @@ public class UserEntityRegister {
                 payload.getCode()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    public ContactConfirmationResponse jwtLoginByPhoneNumber(HttpServletRequest httpServletRequest, ContactConfirmationPayload payload) {
+        RegistrationForm registrationForm = new RegistrationForm();
+        registrationForm.setPhone(payload.getContact());
+        registrationForm.setPassword(payload.getCode());
+        registerNewUser(registrationForm);
+
+        UserEntityDetails userEntityDetails = (UserEntityDetails) userDetailsService.loadUserByUsername(payload.getContact());
+        String jwtToken = jwtUtil.generateToken(userEntityDetails);
+
+        ContactConfirmationResponse response = new ContactConfirmationResponse();
+        response.setResult(jwtToken);
+        return response;
     }
 }

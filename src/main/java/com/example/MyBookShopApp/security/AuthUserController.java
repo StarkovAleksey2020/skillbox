@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.security;
 
+import com.example.MyBookShopApp.entity.SmsCode;
 import com.example.MyBookShopApp.exception.BookstoreAPiWrongParameterException;
 import com.example.MyBookShopApp.exception.UserNotFoundException;
 import com.example.MyBookShopApp.service.UserService;
@@ -20,11 +21,13 @@ public class AuthUserController {
 
     private final UserEntityRegister userEntityRegister;
     private final UserService userService;
+    private final SmsService smsService;
 
     @Autowired
-    public AuthUserController(UserEntityRegister userEntityRegister, UserService userService) {
+    public AuthUserController(UserEntityRegister userEntityRegister, UserService userService, SmsService smsService) {
         this.userEntityRegister = userEntityRegister;
         this.userService = userService;
+        this.smsService = smsService;
     }
 
     @GetMapping("/signin")
@@ -42,20 +45,38 @@ public class AuthUserController {
     @ResponseBody
     public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload) throws UserNotFoundException, BookstoreAPiWrongParameterException {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
-        if (userService.isUserFound(payload.getContact())) {
-            response.setResult("true");
+        response.setResult("true");
+
+        if (payload.getContact().contains("@")) {
+            if (userService.isUserFound(payload.getContact())) {
+                return response;
+            } else {
+                throw new UserNotFoundException("The specified user was not found");
+            }
         } else {
-            throw new UserNotFoundException("The specified user was not found");
+            String smsCodeString = smsService.sendSecretCodeSms(payload.getContact());
+            smsService.saveNewCode(new SmsCode(smsCodeString, 60));
+            return response;
         }
-        return response;
+
     }
 
     @PostMapping("/approveContact")
     @ResponseBody
     public ContactConfirmationResponse handleApproveContact(@RequestBody ContactConfirmationPayload payload) {
         ContactConfirmationResponse response = new ContactConfirmationResponse();
-        response.setResult("true");
-        return response;
+
+        if (smsService.verifyCode(payload.getCode())) {
+            response.setResult("true");
+            return response;
+        } else {
+            if (payload.getContact().contains("@")) {
+                response.setResult("true");
+                return response;
+            } else {
+                return new ContactConfirmationResponse();
+            }
+        }
     }
 
     @PostMapping("/reg")
@@ -74,6 +95,21 @@ public class AuthUserController {
         Cookie cookie = new Cookie("token", loginResponse.getResult());
         httpServletResponse.addCookie(cookie);
         return loginResponse;
+    }
+
+    @PostMapping("/login-by-phone-number")
+    @ResponseBody
+    public ContactConfirmationResponse handleLoginByPhoneNumber(@RequestBody ContactConfirmationPayload payload,
+                                                                HttpServletRequest httpServletRequest,
+                                                                HttpServletResponse httpServletResponse) {
+        if (smsService.verifyCode(payload.getCode())) {
+            ContactConfirmationResponse loginResponse = userEntityRegister.jwtLoginByPhoneNumber(httpServletRequest, payload);
+            Cookie cookie = new Cookie("token", loginResponse.getResult());
+            httpServletResponse.addCookie(cookie);
+            return loginResponse;
+        } else {
+            return null;
+        }
     }
 
     @PostMapping("/principal")

@@ -20,10 +20,16 @@ public class UserEntityDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         UserEntity userEntity = userEntityRepository.findUserEntityByEmail(s);
+
         if (userEntity != null) {
             return new UserEntityDetails(userEntity);
+        }
+
+        userEntity = userEntityRepository.findUserEntityByPhone(s);
+        if (userEntity != null) {
+            return new PhoneNumberUserEntityDetails(userEntity);
         } else {
-            throw new UsernameNotFoundException("user not found!");
+            throw new UsernameNotFoundException("user not found");
         }
     }
 }

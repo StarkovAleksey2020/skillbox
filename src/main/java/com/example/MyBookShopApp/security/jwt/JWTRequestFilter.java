@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -46,10 +47,10 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                 }
 
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserEntityDetails userEntityDetails = (UserEntityDetails) userEntityDetailService.loadUserByUsername(username);
-                    if (jwtUtil.validateToken(token, userEntityDetails)) {
+                    UserDetails userDetails = userEntityDetailService.loadUserByUsername(username);
+                    if (jwtUtil.validateToken(token, userDetails)) {
                         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                                userEntityDetails, null, userEntityDetails.getAuthorities());
+                                userDetails, null, userDetails.getAuthorities());
                         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     } else {

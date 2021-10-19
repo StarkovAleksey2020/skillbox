@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1001
+      author: codewizard
+      changes:
+        - createTable:
+            tableName: sms_keys
+            remarks: Таблица sms-кодов
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: sms_keys_id
+                    nullable: false
+              - column:
+                  name: code
+                  remarks: код
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expire_time
+                  remarks: время устаревания кода
+                  type: DATETIME
+                  constraints:
+                    nullable: false
